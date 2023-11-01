@@ -11,7 +11,7 @@
 					<a class="temp" href="/">Home</a>
 				</li>
 				<li>
-					<a class="temp" href="/bible">Next Page</a>
+					<a class="temp" href="/bible">Bible</a>
 				</li>
 			</ol>
 		</nav>
@@ -20,6 +20,6 @@
 
 <style>
     .footer{
-        margin-top: 5em;
+        margin-top: 3em;
     }
 </style>

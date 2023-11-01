@@ -98,114 +98,145 @@
             }
         }
     }
-
-    // function to choose between Alphabetical & Traditional
-    function chooseOrder(){
-        const traditional = document.getElementById("trad");
-        let sortedBooks = {col: "name", asceding: true};
-    }
-
-
-    </script>
     
-    <main class="m-class">
-        <h1>Welcome To FaithFocus</h1>
-        <h3>Begin Studying The Word Of God By Taking Notes</h3>
-    
-        <div class="select-book-chapter">
-            <div class="title">
-                <p> BEGIN READING</p>
-            </div>
+</script>
 
-            <div class="align">
 
-                <div class="bible-order">
-                    <label><input id="trad" type="radio" value="Traditional" name="radio-button"/>Trad.</label>
-                    <label><input id="alph" type="radio" value="Alphabetical" name="radio-button"/>Alph.</label>
+    <div class="page-wrap">
+        <img class="page-bg" src="/src/lib/images/book.jpg" alt="background-image">
+        <div class="page-content">
+
+            <main>
+                <div class = "title">
+                    <h1>Welcome To FaithFocus</h1>
+                    <h2>Begin Studying The Word Of God By Taking Notes</h2>
+                    <p> BEGIN READING</p>
                 </div>
-    
-                <div class="all-books">
-                    <select name="books" bind:value={selectedBook} on:change={populateChapters}>
-                        <option value="" disabled>Select a book</option>
-                        {#each Object.keys(books) as book}
-                            <option value={book}>{book}</option>
-                        {/each}
-                    </select>
-                </div>
-    
-                <div class="chapter-option">
-                    <select name="chapters">
-                        <option value="" disabled selected>Select a chapter</option>
-                        {#each chapters as chapter}
-                            <option value={chapter}>{chapter}</option>
-                        {/each}
-                    </select>
-                </div>
-            <!-- align divide -->
-            </div>
+            
+                <div class="select-book-chapter">
 
-            <div class = "search-button">
-                <a href="/bible">
-                    <button type="button">Search Button</button>
-                </a>
-            </div>
+                    <div class="align">
+                        
+                        <div class="bible-order">
+                            <label for="trad">Trad.</label>
+                            <input id="trad" type="radio" value="Traditional" name="radio-button"/>
+                            <label>Alph.</label>
+                            <input id="alph" type="radio" value="Alphabetical" name="radio-button"/>
+                        </div>
+            
+                        <div class="all-books">
+                            <select name="books" bind:value={selectedBook} on:change={populateChapters}>
+                                <option value="" disabled>Select a book</option>
+                                {#each Object.keys(books) as book}
+                                    <option value={book}>{book}</option>
+                                {/each}
+                            </select>
+                        </div>
+            
+                        <div class="chapter-option">
+                            <select name="chapters">
+                                <option value="" disabled selected>Select a chapter</option>
+                                {#each chapters as chapter}
+                                    <option value={chapter}>{chapter}</option>
+                                {/each}
+                            </select>
+                        </div>
 
-        <!-- select-book-chapter divide-->
+                    </div>
+
+                    <div class = "search-button">
+                        <a href="/bible">
+                            <button type="button">Search Button</button>
+                        </a>
+                    </div>
+
+                </div>
+            </main>
         </div>
-     </main>
+    </div>
     
    
     
-    <style>
-        h1, h3, .select-book-chapter {
-            text-align: center;
-        } 
-         .select-book-chapter {
-            margin-top: 50px;
-            background-color: grey;
-            height: 400px;
-        }
+<style>
+    .title{
+        font-weight: 200;
+        border: 1px solid black;
+        background-color: black;
+        opacity: 0.6;
+    }
 
-        /* Aligns .bible-order and .layout-option */
-        .align{
-            display: flex; /* Added flex to align items horizontally */
-            align-items: center; /* Center items vertically */
-            justify-content: center; /* Center items horizontally */
-        }
+    .title p{
+        font-size: 20px;
+    }
 
-        .bible-order input[type="radio"] {
-            display: block; /* Display radio buttons on top of each other */
-            margin-top: 12px; /* Adds space between buttons */
-        }
-
-        label{
-            margin-right: 20px;
-            line-height: 30px;
-        }
-
-        /* This is the `Begin Reading` section */
-        .title p {
-            font-size: 20px;
-            padding-top: 20px;
-        }
+    .select-book-chapter {
+        margin-top: 40px;
+        height: 400px;
+    }
+    .title, .select-book-chapter {
+        text-align: center;
+        color: #eff1f3;
+    }
 
 
-        select{
-            height: 50px;
-            width: 200px;
-            margin: 10px;
-        }
+    /* Aligns divs vertically */
+    .align{
+        display: flex; /* Added flex to align items horizontally */
+        align-items: center; /* Center items vertically */
+        justify-content: center; /* Center items horizontally */
+    }
 
-        .search-button button {
-            color: black;
-            background-color: white;
-            border: 1px solid white;
-            border-radius: 10px;
-            height: 30px;
-            width: 300px;
-            margin-top: 50px;
-        }
-    
-    </style>
+    .bible-order{
+        font-size: 20px;
+        color: black;
+        padding-bottom: 20px; /* Align radio buttons with selects */
+    }
+
+    .bible-order input[type="radio"] {
+        display: block; /* Display radio buttons on top of each other */
+        margin: 10px; /* Space between top and bottom button */
+    }
+    select{
+        height: 50px;
+        width: 200px;
+        margin: 10px;
+    }
+
+    .search-button button {
+        color:black;
+        background-color: white;
+        border: 1px solid white;
+        border-radius: 10px;
+        height: 30px;
+        width: 300px;
+        margin-top: 50px;
+    }
+
+    select, .search-button button{
+        font-size: 16px;
+    }
+
+    .page-wrap {
+        overflow: hidden;
+        position: relative;
+        border-radius: 15px;
+        background-color: rgba(0, 0, 0, 0.7); /* Adjust the background overlay color */
+    }
+
+    .page-bg {
+        opacity: 0.9;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%; /* Make sure the background covers the entire content */
+        object-fit: cover; /* Maintain image aspect ratio */
+    }
+
+    .page-content {
+        position: relative;
+    }
+        
+</style>
 
     

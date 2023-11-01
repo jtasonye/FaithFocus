@@ -98,7 +98,7 @@
             }
         }
     }
-    
+
 </script>
 
 
@@ -118,9 +118,9 @@
                     <div class="align">
                         
                         <div class="bible-order">
-                            <label for="trad">Trad.</label>
+                            <label for="trad">T.</label>
                             <input id="trad" type="radio" value="Traditional" name="radio-button"/>
-                            <label>Alph.</label>
+                            <label>A.</label>
                             <input id="alph" type="radio" value="Alphabetical" name="radio-button"/>
                         </div>
             
@@ -158,6 +158,16 @@
    
     
 <style>
+
+    /* primary color: light-blue */
+    /* color: #48cae4; */
+
+    /* secondary color - green */
+        /* color: #a4ae61; */
+
+    /* tertiary color - navy */
+        /* color: #444e82; */
+
     .title{
         font-weight: 200;
         border: 1px solid black;
@@ -175,7 +185,14 @@
     }
     .title, .select-book-chapter {
         text-align: center;
-        color: #eff1f3;
+         /* option 1: blue like notebook  */
+         color: #48cae4;
+
+        /* option 2: whitish */
+        /* color: #eff1f3; */
+
+        /* option 3: more like background */
+        /* color: #d4a373; */
     }
 
 
@@ -187,8 +204,8 @@
     }
 
     .bible-order{
-        font-size: 20px;
-        color: black;
+        font-size: 30px;
+        color: #444e82;
         padding-bottom: 20px; /* Align radio buttons with selects */
     }
 
@@ -203,7 +220,6 @@
     }
 
     .search-button button {
-        color:black;
         background-color: white;
         border: 1px solid white;
         border-radius: 10px;
@@ -213,6 +229,7 @@
     }
 
     select, .search-button button{
+        color:#444e82;
         font-size: 16px;
     }
 

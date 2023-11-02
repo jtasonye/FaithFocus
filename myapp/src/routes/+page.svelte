@@ -1,4 +1,22 @@
 <script lang>
+	import { onMount } from 'svelte';
+
+	let verseOfTheDay = 'Loading verse...';
+
+	// Function to fetch the verse of the day
+	function fetchVerse() {
+		fetch('https://bible-api.com/John+3:16')
+			.then((response) => response.json())
+			.then((data) => {
+				verseOfTheDay = `${data.verses[0].text} - ${data.reference}`;
+			})
+			.catch((error) => {
+				verseOfTheDay = 'Failed to load verse.';
+			});
+	}
+
+	// Call the fetchVerse function when the component is mounted
+	onMount(fetchVerse);
 	/** JSDoc comments used to provide type hints for the variable
 	 * `books`
 	 * @type {Object.<string, number>}
@@ -167,6 +185,11 @@
 						<button type="button">Search Button</button>
 					</a>
 				</div>
+
+				<div id="verse-of-the-day">
+					<h2>Verse of the Day</h2>
+					<p>{verseOfTheDay}</p>
+				</div>
 			</div>
 		</main>
 	</div>
@@ -225,6 +248,11 @@
 		height: 30px;
 		width: 300px;
 		margin-top: 50px;
+		transition: background-color 0.3s, color 0.3s;
+	}
+
+	.search-button button:hover {
+		background-color: #4285f4; /* New background color when hovered */
 	}
 
 	select,
@@ -251,5 +279,12 @@
 
 	.page-content {
 		position: relative;
+	}
+
+	#verse-of-the-day {
+		padding: 20px;
+		background-color: rgb(39, 34, 34);
+		border-radius: 15px;
+		margin: 20px;
 	}
 </style>

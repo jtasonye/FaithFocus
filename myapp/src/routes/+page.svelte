@@ -5,7 +5,6 @@
 
 	// Function to fetch the verse of the day
 	function fetchVerse() {
-		// Use HTTPS for secure requests and specify the type as JSON
 		fetch('https://labs.bible.org/api/?passage=votd&type=json')
 			.then((response) => response.json())
 			.then((data) => {

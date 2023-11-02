@@ -5,18 +5,29 @@
 
 	// Function to fetch the verse of the day
 	function fetchVerse() {
-		fetch('https://bible-api.com/John+3:16')
+		// Use HTTPS for secure requests and specify the type as JSON
+		fetch('https://labs.bible.org/api/?passage=votd&type=json')
 			.then((response) => response.json())
 			.then((data) => {
-				verseOfTheDay = `${data.verses[0].text} - ${data.reference}`;
+				// The API might return a list of verses, so we ensure we're accessing the first one.
+				if (data && data.length > 0) {
+					// Construct the verse with the text and reference
+					verseOfTheDay = `${data[0].text} - ${data[0].bookname} ${data[0].chapter}:${data[0].verse}`;
+				} else {
+					// Handle the case where data might not be in the expected format or is empty
+					verseOfTheDay = 'No verse found.';
+				}
 			})
 			.catch((error) => {
+				// Handle any errors that occurred during the fetch
 				verseOfTheDay = 'Failed to load verse.';
+				console.error(verseOfTheDay, error);
 			});
 	}
 
 	// Call the fetchVerse function when the component is mounted
 	onMount(fetchVerse);
+
 	/** JSDoc comments used to provide type hints for the variable
 	 * `books`
 	 * @type {Object.<string, number>}
@@ -281,53 +292,54 @@
 		position: relative;
 	}
 
-    .bible-order input[type="radio"] {
-        display: block; /* Display radio buttons on top of each other */
-        margin: 10px; /* Space between top and bottom button */
-    }
-    select{
-        height: 50px;
-        width: 200px;
-        margin: 10px;
-    }
+	.bible-order input[type='radio'] {
+		display: block; /* Display radio buttons on top of each other */
+		margin: 10px; /* Space between top and bottom button */
+	}
+	select {
+		height: 50px;
+		width: 200px;
+		margin: 10px;
+	}
 
-    .search-button button {
-        background-color: white;
-        border: 1px solid white;
-        border-radius: 10px;
-        height: 30px;
-        width: 300px;
-        margin-top: 50px;
-    }
+	.search-button button {
+		background-color: white;
+		border: 1px solid white;
+		border-radius: 10px;
+		height: 30px;
+		width: 300px;
+		margin-top: 50px;
+	}
 
-    select, .search-button button{
-        color:#444e82;
-        font-size: 16px;
-    }
+	select,
+	.search-button button {
+		color: #444e82;
+		font-size: 16px;
+	}
 
-    .page-wrap {
-        overflow: hidden;
-        position: relative;
-        border-radius: 15px;
-        background-color: rgba(0, 0, 0, 0.7); /* Adjust the background overlay color */
-    }
+	.page-wrap {
+		overflow: hidden;
+		position: relative;
+		border-radius: 15px;
+		background-color: rgba(0, 0, 0, 0.7); /* Adjust the background overlay color */
+	}
 
-    .page-bg {
-        opacity: 0.9;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%; /* Make sure the background covers the entire content */
-        object-fit: cover; /* Maintain image aspect ratio */
-        /* Add the blur effect */
-        filter: blur(2px);
-        -webkit-filter: blur(2px);
-    }
+	.page-bg {
+		opacity: 0.9;
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%; /* Make sure the background covers the entire content */
+		object-fit: cover; /* Maintain image aspect ratio */
+		/* Add the blur effect */
+		filter: blur(2px);
+		-webkit-filter: blur(2px);
+	}
 
-    .page-content {
-        position: relative;
-    }
+	.page-content {
+		position: relative;
+	}
 	#verse-of-the-day {
 		padding: 20px;
 		background-color: rgb(39, 34, 34);

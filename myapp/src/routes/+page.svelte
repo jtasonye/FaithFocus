@@ -5,18 +5,28 @@
 
 	// Function to fetch the verse of the day
 	function fetchVerse() {
-		fetch('https://bible-api.com/John+3:16')
+		fetch('https://labs.bible.org/api/?passage=votd&type=json')
 			.then((response) => response.json())
 			.then((data) => {
-				verseOfTheDay = `${data.verses[0].text} - ${data.reference}`;
+				// The API might return a list of verses, so we ensure we're accessing the first one.
+				if (data && data.length > 0) {
+					// Construct the verse with the text and reference
+					verseOfTheDay = `${data[0].text} - ${data[0].bookname} ${data[0].chapter}:${data[0].verse}`;
+				} else {
+					// Handle the case where data might not be in the expected format or is empty
+					verseOfTheDay = 'No verse found.';
+				}
 			})
 			.catch((error) => {
+				// Handle any errors that occurred during the fetch
 				verseOfTheDay = 'Failed to load verse.';
+				console.error(verseOfTheDay, error);
 			});
 	}
 
 	// Call the fetchVerse function when the component is mounted
 	onMount(fetchVerse);
+
 	/** JSDoc comments used to provide type hints for the variable
 	 * `books`
 	 * @type {Object.<string, number>}
@@ -263,7 +273,6 @@
 		border-radius: 10px;
         transition: background-color 0.3s, color 0.3s;
 	}
-
     .bible-order input[type="radio"] {
         display: block; /* Display radio buttons on top of each other */
         margin: 10px; /* Space between top and bottom button */

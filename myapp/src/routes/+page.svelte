@@ -196,12 +196,11 @@
 </div>
 
 <style>
-	.title {
-		font-weight: 200;
+    .title{
+        font-weight: 200;
 		border: 1px solid black;
-		background-color: black;
-		opacity: 0.6;
-	}
+        background: rgba(0,0,0,0.6);
+    }
 
 	.title p {
 		font-size: 20px;
@@ -211,10 +210,9 @@
 		margin-top: 40px;
 		height: 400px;
 	}
-	.title,
-	.select-book-chapter {
+	.title, .select-book-chapter {
 		text-align: center;
-		color: #eff1f3;
+        color: #7ad8fd;
 	}
 
 	/* Aligns divs vertically */
@@ -224,9 +222,12 @@
 		justify-content: center; /* Center items horizontally */
 	}
 
+    .bible-order, select, .search-button button{
+        color: #444e82;
+    }
 	.bible-order {
-		font-size: 20px;
-		color: black;
+        text-shadow: 1px 1px black;
+        font-size: 24px;
 		padding-bottom: 20px; /* Align radio buttons with selects */
 	}
 
@@ -240,76 +241,40 @@
 		margin: 10px;
 	}
 
+    .select-book-chapter, .search-button{
+        padding-left: 20px;
+    }
+
 	.search-button button {
-		color: black;
-		background-color: white;
-		border: 1px solid white;
-		border-radius: 10px;
 		height: 30px;
 		width: 300px;
 		margin-top: 50px;
-		transition: background-color 0.3s, color 0.3s;
 	}
 
-	.search-button button:hover {
-		background-color: #4285f4; /* New background color when hovered */
+	select:hover, .search-button button:hover {
+		background-color: #c6cf87; /* New background color when hovered */
 	}
 
-	select,
-	.search-button button {
+	select, .search-button button {
 		font-size: 16px;
-	}
-
-	.page-wrap {
-		overflow: hidden;
-		position: relative;
-		border-radius: 15px;
-		background-color: rgba(0, 0, 0, 0.7); /* Adjust the background overlay color */
-	}
-
-	.page-bg {
-		opacity: 0.9;
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%; /* Make sure the background covers the entire content */
-		object-fit: cover; /* Maintain image aspect ratio */
-	}
-
-	.page-content {
-		position: relative;
+        outline:none;
+        background-color: #EDEDE9;
+        border: 3px solid black;
+		border-radius: 10px;
+        transition: background-color 0.3s, color 0.3s;
 	}
 
     .bible-order input[type="radio"] {
         display: block; /* Display radio buttons on top of each other */
         margin: 10px; /* Space between top and bottom button */
     }
-    select{
-        height: 50px;
-        width: 200px;
-        margin: 10px;
-    }
-
-    .search-button button {
-        background-color: white;
-        border: 1px solid white;
-        border-radius: 10px;
-        height: 30px;
-        width: 300px;
-        margin-top: 50px;
-    }
-
-    select, .search-button button{
-        color:#444e82;
-        font-size: 16px;
-    }
 
     .page-wrap {
         overflow: hidden;
         position: relative;
         border-radius: 15px;
-        background-color: rgba(0, 0, 0, 0.7); /* Adjust the background overlay color */
+        /* Adjust the background overlay color  */
+        /* background-color: rgba(0, 0, 0, 0.7); */
     }
 
     .page-bg {
@@ -319,19 +284,30 @@
         top: 0;
         width: 100%;
         height: 100%; /* Make sure the background covers the entire content */
-        object-fit: cover; /* Maintain image aspect ratio */
+        /* object-fit: cover; Maintain image aspect ratio */
+        object-fit: cover;
         /* Add the blur effect */
         filter: blur(2px);
         -webkit-filter: blur(2px);
+        z-index: -1;
     }
 
     .page-content {
         position: relative;
+        z-index: 1;
     }
 	#verse-of-the-day {
+        color: #7ad8fd;
 		padding: 20px;
 		background-color: rgb(39, 34, 34);
 		border-radius: 15px;
 		margin: 20px;
+
+        /* color: #F5EBE0;
+		padding: 20px;
+		background-color: rgb(39, 34, 34);
+        background: rgba(0,0,0,0.8);
+		border-radius: 15px;
+		margin: 20px; */
 	}
 </style>

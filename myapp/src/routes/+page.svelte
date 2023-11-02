@@ -248,6 +248,9 @@
         width: 100%;
         height: 100%; /* Make sure the background covers the entire content */
         object-fit: cover; /* Maintain image aspect ratio */
+        /* Add the blur effect */
+        filter: blur(2px);
+        -webkit-filter: blur(2px);
     }
 
     .page-content {

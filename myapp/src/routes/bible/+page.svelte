@@ -137,7 +137,7 @@
 	#notes-panel {
 		width: 50%; /* Divide the container into two equal parts */
 		height: 100%; /* Fill the entire height of the container */
-		background-color: #f0f0f0;
+		background-color: #EDEDE9;
 		border: 1px solid #ccc; /* Adding a border for visual separation */
 		box-sizing: border-box; /* Include borders in width calculation */
 		overflow: auto; /* Enable scrolling if content overflows */

@@ -1,4 +1,4 @@
-<script lang>
+<script>
 	import { onMount } from 'svelte';
 
 	let verseOfTheDay = 'Loading verse...';
@@ -27,115 +27,142 @@
 	// Call the fetchVerse function when the component is mounted
 	onMount(fetchVerse);
 
-	/** JSDoc comments used to provide type hints for the variable
-	 * `books`
-	 * @type {Object.<string, number>}
-	 */
-	let books = {
-		// Old Testament
-		Genesis: 50,
-		Exodus: 40,
-		Leviticus: 27,
-		Numbers: 36,
-		Deuteronomy: 34,
-		Joshua: 24,
-		Judges: 21,
-		Ruth: 4,
-		'1 Samuel': 31,
-		'2 Samuel': 24,
-		'1 Kings': 22,
-		'2 Kings': 25,
-		'1 Chronicles': 29,
-		'2 Chronicles': 36,
-		Ezra: 10,
-		Nehemiah: 13,
-		Esther: 10,
-		Job: 42,
-		Psalms: 150,
-		Proverbs: 31,
-		Ecclesiastes: 12,
-		'Song of Songs': 8,
-		Isaiah: 66,
-		Jeremiah: 52,
-		Lamentations: 5,
-		Ezekiel: 48,
-		Daniel: 12,
-		Hosea: 14,
-		Joel: 3,
-		Amos: 9,
-		Obadiah: 1,
-		Jonah: 4,
-		Micah: 7,
-		Nahum: 3,
-		Habakkuk: 3,
-		Zephaniah: 3,
-		Haggai: 2,
-		Zechariah: 14,
-		Malachi: 4,
+    /** 
+     * @type {Object.<string, number>} 
+     * 
+     * Holds all book names and chapters in key value pairs
+     */
+    let bible = {
+       // Old Testament
+        Genesis: 50,
+        Exodus: 40,
+        Leviticus: 27,
+        Numbers: 36,
+        Deuteronomy: 34,
+        Joshua: 24,
+        Judges: 21,
+        Ruth: 4,
+        '1 Samuel': 31,
+        '2 Samuel': 24,
+        '1 Kings': 22,
+        '2 Kings': 25,
+        '1 Chronicles': 29,
+        '2 Chronicles': 36,
+        Ezra: 10,
+        Nehemiah: 13,
+        Esther: 10,
+        Job: 42,
+        Psalms: 150,
+        Proverbs: 31,
+        Ecclesiastes: 12,
+        'Song of Songs': 8,
+        Isaiah: 66,
+        Jeremiah: 52,
+        Lamentations: 5,
+        Ezekiel: 48,
+        Daniel: 12,
+        Hosea: 14,
+        Joel: 3,
+        Amos: 9,
+        Obadiah: 1,
+        Jonah: 4,
+        Micah: 7,
+        Nahum: 3,
+        Habakkuk: 3,
+        Zephaniah: 3,
+        Haggai: 2,
+        Zechariah: 14,
+        Malachi: 4,
 
-		// New Testament
-		Matthew: 28,
-		Mark: 16,
-		Luke: 24,
-		John: 21,
-		Acts: 28,
-		Romans: 16,
-		'1 Corinthians': 16,
-		'2 Corinthians': 16,
-		Galatians: 6,
-		Ephesians: 6,
-		Philippians: 4,
-		Colossians: 4,
-		'1 Thessalonians': 5,
-		'2 Thessalonians': 3,
-		'1 Timothy': 6,
-		'2 Timothy': 4,
-		Titus: 3,
-		Philemon: 1,
-		Hebrews: 13,
-		James: 5,
-		'1 Peter': 5,
-		'2 Peter': 3,
-		'1 John': 5,
-		'2 John': 1,
-		'3 John': 1,
-		Jude: 1,
-		Revalation: 22
-	};
+        // New Testament
+        Matthew: 28,
+        Mark: 16,
+        Luke: 24,
+        John: 21,
+        Acts: 28,
+        Romans: 16,
+        '1 Corinthians': 16,
+        '2 Corinthians': 16,
+        Galatians: 6,
+        Ephesians: 6,
+        Philippians: 4,
+        Colossians: 4,
+        '1 Thessalonians': 5,
+        '2 Thessalonians': 3,
+        '1 Timothy': 6,
+        '2 Timothy': 4,
+        Titus: 3,
+        Philemon: 1,
+        Hebrews: 13,
+        James: 5,
+        '1 Peter': 5,
+        '2 Peter': 3,
+        '1 John': 5,
+        '2 John': 1,
+        '3 John': 1,
+        Jude: 1,
+        Revalation: 22
+    };
 
-	/** JSDoc comments used to provide type hints for the variable
-	 * `selectedBook`
-	 * @type {string}
-	 */
-	let selectedBook = '';
+    let sortOrder = 'Traditional'; // Added variable to store the sort order
 
-	/** JSDoc comments used to provide type hints for the variable
-	 * `chapters`.
-	 * @type {string[]}
-	 */
-	let chapters = [];
+    // Reactive statement to update the order of the books based on sortOrder
+    $: orderedBooks = sortOrder === 'Traditional' ? Object.keys(bible) : 
+    Object.keys(bible).sort();
 
-	// Loads the chapter value according to the book
-	function populateChapters() {
-		chapters = [];
-		const selectedBookChapters = books[selectedBook];
-		if (selectedBookChapters) {
-			for (let i = 1; i <= selectedBookChapters; i++) {
-				chapters.push(`Chapter ${i}`);
-			}
-		}
-	}
+    // Function to update sortOrder when radio buttons change
+    // @ts-ignore
+    function updateSortOrder(order) {
+        sortOrder = order;
+    }
 
-	let sortOrder = 'Traditional'; // Added variable to store the sort order
+    /** 
+     * @type {string}
+     * 
+     * Holds selected book value to be passed into the API call
+     */
+    let selectedBook = '';
 
-	// Reactive statement to update the order of the books based on sortOrder
-	$: orderedBooks = sortOrder === 'Traditional' ? Object.keys(books) : Object.keys(books).sort();
+    /** 
+     * @type {string} 
+     * 
+     * Holds the selected chapter to be passed into the API call
+     */
+    let selectedChapter = '';
 
-	// Function to update sortOrder when radio buttons change
-	// @ts-ignore
-	function updateSortOrder(order) {
-		sortOrder = order;
-	}
+    /** 
+     * @type {string[]} 
+     * 
+     * Holds all the chapter numbers of each book
+     */
+    let allChaps = [];
+
+    /** Function that takes the selected book from the bible object
+     *  and retrieves the number of chapters to put into the allChaps array.
+     */
+    function populateBookChaps(){
+        allChaps = [];
+        const selectedBookChaps = bible[selectedBook];
+        if (selectedBookChaps)  {
+            for(let i = 1; i <= selectedBookChaps; i++){
+                allChaps.push(`${i}`);
+                // console.log(allChaps);
+            }
+        }
+    }
+
+    
+    function handleChapterChange(event) {
+        selectedChapter = event.target.value;
+        console.log("Selected Chapter:", selectedChapter);
+    }
+
+    function handleBookChange(event) {
+        selectedBook = event.target.value;
+        populateBookChaps(); // Populate chapters for the selected book
+        console.log("Selected Book:", selectedBook);
+    }
+
 </script>
 
 <div class="page-wrap">
@@ -158,7 +185,7 @@
 							value="Traditional"
 							name="radio-button"
 							checked
-							on:change={() => updateSortOrder('Traditional')}
+                            on:change={() => updateSortOrder('Traditional')}	
 						/>
 						<label>Alph.</label>
 						<input
@@ -166,27 +193,26 @@
 							type="radio"
 							value="Alphabetical"
 							name="radio-button"
-							on:change={() => updateSortOrder('Alphabetical')}
+                            on:change={() => updateSortOrder('Alphabetical')}
 						/>
 					</div>
 
-					<div class="all-books">
-						<select name="books" bind:value={selectedBook} on:change={populateChapters}>
-							<option value="" disabled>Select a book</option>
-							{#each orderedBooks as book}
-								<!-- Updated here -->
-								<option value={book}>{book}</option>
-							{/each}
-						</select>
+					<div class="bible-books">
+						<select name="books" bind:value={selectedBook} on:change={handleBookChange}>
+                            <option value="" disabled selected>Select a book</option>
+                            {#each orderedBooks as book}
+                                <option value={book}>{book}</option>
+                            {/each}
+                        </select>
 					</div>
 
-					<div class="chapter-option">
-						<select name="chapters">
-							<option value="" disabled selected>Select a chapter</option>
-							{#each chapters as chapter}
-								<option value={chapter}>{chapter}</option>
-							{/each}
-						</select>
+					<div class="bible-chapters">
+						<select name="chapters" bind:value={selectedChapter} on:change={handleChapterChange}>
+                            <option value="" disabled selected>Select a chapter</option>
+                            {#each allChaps as chapter}
+                                <option value={chapter}>{chapter}</option>
+                            {/each}
+                        </select>
 					</div>
 				</div>
 

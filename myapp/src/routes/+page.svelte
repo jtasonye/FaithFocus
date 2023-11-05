@@ -20,7 +20,7 @@
 			.catch((error) => {
 				// Handle any errors that occurred during the fetch
 				verseOfTheDay = 'Failed to load verse.';
-				console.error(verseOfTheDay, error);
+				// console.error(verseOfTheDay, error);
 			});
 	}
 
@@ -30,7 +30,7 @@
     /** 
      * @type {Object.<string, number>} 
      * 
-     * Holds all book names and chapters in key value pairs
+     * This object holds all book names and chapters in key value pairs.
      */
     let bible = {
        // Old Testament
@@ -119,21 +119,21 @@
     /** 
      * @type {string}
      * 
-     * Holds selected book value to be passed into the API call
+     * This variable holds selected book value to be passed into the API call.
      */
-    let selectedBook = '';
+    export let selectedBook = '';
 
     /** 
      * @type {string} 
      * 
-     * Holds the selected chapter to be passed into the API call
+     * This variable holds the selected chapter to be passed into the API call.
      */
-    let selectedChapter = '';
+    export let selectedChapter = '';
 
     /** 
      * @type {string[]} 
      * 
-     * Holds all the chapter numbers of each book
+     * This variable holds all the chapter numbers of each book.
      */
     let allChaps = [];
 
@@ -151,16 +151,32 @@
         }
     }
 
-    
+    /**
+     * @param {Event} event - The event object triggered on chapter selection.
+     * 
+     * This function handles the change event for selecting a chapter.
+     */
     function handleChapterChange(event) {
-        selectedChapter = event.target.value;
-        console.log("Selected Chapter:", selectedChapter);
+        const target = event.target;
+        if (target instanceof HTMLSelectElement) {
+            const selectedChapter = target.value;
+            console.log("Selected Chapter:", selectedChapter);
+        }
     }
 
+    /**
+     * @param {Event} event - The event object triggered on book selection.
+     * 
+     * Handles the change event for selecting a book.
+     * This function sets the selected book value and populates its chapters.
+     */
     function handleBookChange(event) {
-        selectedBook = event.target.value;
-        populateBookChaps(); // Populate chapters for the selected book
-        console.log("Selected Book:", selectedBook);
+        const target = event.target;
+        if (target instanceof HTMLSelectElement) {
+            const selectedBook = target.value;
+            populateBookChaps(); // Populate chapters for the selected book
+            console.log("Selected Book:", selectedBook);
+        }
     }
 
 </script>
@@ -198,7 +214,7 @@
 					</div>
 
 					<div class="bible-books">
-						<select name="books" bind:value={selectedBook} on:change={handleBookChange}>
+						<select name="books" bind:value={selectedBook} on:change|preventDefault={handleBookChange}>
                             <option value="" disabled selected>Select a book</option>
                             {#each orderedBooks as book}
                                 <option value={book}>{book}</option>
@@ -207,7 +223,7 @@
 					</div>
 
 					<div class="bible-chapters">
-						<select name="chapters" bind:value={selectedChapter} on:change={handleChapterChange}>
+						<select name="chapters" bind:value={selectedChapter} on:change|preventDefault={handleChapterChange}>
                             <option value="" disabled selected>Select a chapter</option>
                             {#each allChaps as chapter}
                                 <option value={chapter}>{chapter}</option>

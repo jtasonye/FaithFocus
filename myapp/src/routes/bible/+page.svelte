@@ -1,24 +1,31 @@
 <script>
 	import { onMount } from 'svelte';
 
-	/** @type {string} **/
-    export let selectedBook;
-	// console.log("selected book: ", selectedBook);
-    /** @type {string} **/
-    export let selectedChapter;
-	// console.log("selected chapter: ", selectedChapter);
+	import { selectedBook , selectedChapter } from '/myapp/src/routes/+page.svelte'
+
+	// let selectedBook = '';
+	// console.log("BP Selected book: ", selectedBook);
+
+    // let selectedChapter = '';
+	// console.log("BP Selected chapter: ", selectedChapter);
+
 
 	let verseText = 'Loading verse...';
 	
 	// Function to fetch the verse of the day
-	function fetchPassage() {
+	async function fetchPassage() {
     fetch('https://labs.bible.org/api/?passage=John+4&type=json')
+
+	// fetch('https://labs.bible.org/api/?passage=${selectedBook}+{selectedChapter}+&type=json')
+
         .then((response) => response.json())
         .then((data) => {
             if (data && data.length > 0) {
 				// Variable to put the verse number in front of the verse
                 const verses = data.map((verse, index) => {
                     return `${index + 1}. ${verse.text}`;
+
+
                 }).join('\n');
 
 				// These info will be in the buttons above in the header

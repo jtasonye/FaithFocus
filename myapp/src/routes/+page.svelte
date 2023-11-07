@@ -240,7 +240,7 @@
 
             <div class="search-button">
                 <a href="/bible">
-                    <button type="button">Search Button</button>
+                    <button type="button">Search</button>
                 </a>
             </div>
 
@@ -262,7 +262,8 @@
     .shade{
         margin-top:40px;
         background: rgba(0,0,0,0.6);
-        border-radius: 8px;
+
+        /* border-radius: 8px; */
     }
 
 	.title p {
@@ -277,7 +278,7 @@
     .vertical {
         width: 1px;
         height: 88px;
-        border-left: 1px solid #132C13;;
+        border-left: 1px solid #132C13;
         position:absolute;
         left: 50%;
     }
@@ -288,8 +289,8 @@
     }
 	.title, .select-book-chapter {
 		text-align: center;
-        /* color: #7ad8fd; */
-        color: #89CFF0;
+        color: #D4CCC3;
+        /* color: #89CFF0; */
 	}
 
 	/* Aligns divs vertically */
@@ -336,7 +337,7 @@
 	select, .search-button button {
 		font-size: 16px;
         outline:none;
-        border: 3px solid black;
+        border: 1px solid #7EA172;
 		border-radius: 40px;
         transition: background-color 0.3s, color 0.3s;
 	}

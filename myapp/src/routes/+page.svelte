@@ -178,27 +178,21 @@
             console.log("Selected Book:", selectedBook);
         }
     }
-
-
-
-
 </script>
 
 <div class="page-wrap">
-	<!-- <img class="page-bg" src="/src/lib/images/book.jpg" alt="background-image" /> -->
 	<div class="page-content">
 		<main>
             <img class="page-bg" src="/src/lib/images/book.jpg" alt="background-image" />
 			<div class="title">
                 <div class="shade" >
                     <h1>Welcome To Faith Focus</h1>
-				    <h2>Begin Studying The Word Of God By Taking Notes</h2>
+				    <h2>Study The Word Of God By Taking Notes</h2>
                 </div>
 			</div>
 		</main>
 	</div>
 
-    
     <div class="select-book-chapter">
         <div id = "select-header">Begin Reading</div>
 
@@ -286,13 +280,11 @@
         border-left: 1px solid #132C13;;
         position:absolute;
         left: 50%;
-        margin-left: 35px;
     }
 
     #select-header{
         font-size: 20px;
         color: #132C13;
-        margin-left: 35px;
     }
 	.title, .select-book-chapter {
 		text-align: center;
@@ -305,6 +297,7 @@
 		display: flex; /* Added flex to align items horizontally */
 		align-items: center; /* Center items vertically */
 		justify-content: center; /* Center items horizontally */
+        padding-right: 55px;;
 	}
 	.bible-order {
         color: #132C13;
@@ -320,7 +313,7 @@
 	select {
 		height: 50px;
 		width: 200px;
-		margin: 10px;
+		margin: 40px;
         color: white;
         text-align: center;
 	}
@@ -328,17 +321,11 @@
     .bible-books select, .bible-chapters select{
         background-color: #132C13;
     }
-
-    .select-book-chapter, .search-button{
-        padding-left: 20px;
-    }
-
 	.search-button button {
 		height: 30px;
 		width: 300px;
-		margin-left: 10px;
         color: white;
-        background-color: grey;
+        background-color: gray;
 	}
 
 	.bible-order input[type='radio']:hover, select:hover, .search-button button:hover {

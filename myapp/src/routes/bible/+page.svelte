@@ -161,7 +161,7 @@
 
 	<div id="notes-panel">
 		<header>
-			<p id="notes-header"> Your Notes - click on a verse to get started </p>
+			<p id="notes-header"> Your Notes </p>
 		</header>
 
 		<div>
@@ -175,7 +175,6 @@
 	.page-container {
 		display: flex;
 		height: 85vh; /* Set the height of the container */
-
 		border-radius: 15px;
 		min-width: 520px;
 	}
@@ -188,8 +187,6 @@
 	#bible-passage, #notes-panel {
 		width: 50%; /* Divids container into two equal parts */
 		height: 100%; /* Fills entire height of the container */
-		background-color: #EDEDE9;
-		border: 1px solid #ccc; /* Adding a border for visual separation */
 		box-sizing: border-box; /* Include borders in width calculation */
 		overflow: auto; /* Enable scrolling if content overflows */
 		border-radius: 15px;
@@ -199,6 +196,7 @@
 		border-right: 3px solid #ccc;
 		border-top: 3px solid #ccc;
 		border-bottom: 3px solid #ccc;
+		background-color: #EDEDE9;
 		text-align: center;
 	}
 
@@ -206,13 +204,17 @@
 		border-left: 3px solid #ccc;
 		border-top: 3px solid #ccc;
 		border-bottom: 3px solid #ccc;
+		background-color: #D4CCC3;
+	}
+
+	#notes-panel header{
+		background-color: #D9D9D9;
+  		border: 1px solid #D9D9D9;
 	}
 
 	#bible-passage header, #notes-panel header{
 		height: 50px;
   		width: 100%;
-		background-color: #D9D9D9;;
-  		border: 1px solid #D9D9D9;;
 		text-align: center;
 	}
 

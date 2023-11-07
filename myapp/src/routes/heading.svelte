@@ -19,11 +19,11 @@
 
   header {
     padding: 5px;
-    margin-left: 15px;
+    /* margin-left: 15px; */
 
     display:flex;
     align-items: center;
-    background-color: #7393B3;
+    background-color: white;
   }
 
   /* .bible{

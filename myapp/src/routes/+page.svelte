@@ -185,16 +185,19 @@
 </script>
 
 <div class="page-wrap">
-	<img class="page-bg" src="/src/lib/images/book.jpg" alt="background-image" />
+	<!-- <img class="page-bg" src="/src/lib/images/book.jpg" alt="background-image" /> -->
 	<div class="page-content">
 		<main>
+            <img class="page-bg" src="/src/lib/images/book.jpg" alt="background-image" />
 			<div class="title">
 				<h1>Welcome To FaithFocus</h1>
 				<h2>Begin Studying The Word Of God By Taking Notes</h2>
 				<!-- <p>BEGIN READING</p> -->
 			</div>
+		</main>
+	</div>
 
-			<div class="select-book-chapter">
+    <div class="select-book-chapter">
 				<div class="align">
 					<div class="bible-order">
 						<label for="trad">Trad.</label>
@@ -246,14 +249,17 @@
 					<p>{verseOfTheDay}</p>
 				</div>
 			</div>
-		</main>
-	</div>
 </div>
 
 <style>
     .title{
         font-weight: 200;
 		border: 1px solid black;
+        /* background: rgba(0,0,0,0.6); */
+        padding-bottom: 300px;
+    }
+
+    .title h1,h2{
         background: rgba(0,0,0,0.6);
     }
 

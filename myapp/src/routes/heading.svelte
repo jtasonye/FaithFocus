@@ -5,16 +5,32 @@
 <header>
   <div class="navbar">
     <a class="left-corner" href="/">
-      <img src="{logo}" alt="FaithFocus Logo" class="logo"> <!-- Added logo image -->
+      <img src="{logo}" alt="FaithFocus Logo" class="logo">
     </a>
   </div>
+
+  <!-- <div>
+    <a class = "bible" href="/bible">Bible</a>
+  </div> -->
+
 </header>
 
 <style>
+
   header {
     padding: 5px;
-    margin-left: 10px;
+    /* margin-left: 15px; */
+
+    display:flex;
+    align-items: center;
+    background-color: #132C13;
   }
+
+  /* .bible{
+    text-decoration: none;
+    color: black;
+    font-size: 30px;
+  } */
 
   .navbar {
     display: flex; /* Display the elements in a row */
@@ -31,5 +47,6 @@
       width: 150px;
       height: 50px;
   }
+
 </style>
 

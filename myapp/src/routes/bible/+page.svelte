@@ -203,6 +203,7 @@
 
 	#notes-panel{
 		border-left: 3px solid #ccc;
+		background-color: #D4CCC3;
 	}
 
 	#bible-passage header, #notes-panel header{

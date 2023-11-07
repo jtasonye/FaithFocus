@@ -19,7 +19,8 @@
 
 <style>
     footer{
-		background-color: white;
+		/* background-color: #93C572; */
+		background-color: #132C13;
 		height: 100px;
     }
 </style>

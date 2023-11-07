@@ -19,7 +19,7 @@
 
 <style>
     footer{
-		background-color: white;
+		background-color:#132C13;
 		height: 100px;
     }
 </style>

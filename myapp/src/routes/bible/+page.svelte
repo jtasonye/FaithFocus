@@ -176,7 +176,6 @@
 		display: flex;
 		height: 85vh; /* Set the height of the container */
 
-		border: 3px solid black;
 		border-radius: 15px;
 		min-width: 520px;
 	}
@@ -198,18 +197,22 @@
 
 	#bible-passage{
 		border-right: 3px solid #ccc;
+		border-top: 3px solid #ccc;
+		border-bottom: 3px solid #ccc;
 		text-align: center;
 	}
 
 	#notes-panel{
 		border-left: 3px solid #ccc;
+		border-top: 3px solid #ccc;
+		border-bottom: 3px solid #ccc;
 	}
 
 	#bible-passage header, #notes-panel header{
 		height: 50px;
   		width: 100%;
-		background-color: #c6cf87;
-  		border: 1px solid #c6cf87;
+		background-color: #D9D9D9;;
+  		border: 1px solid #D9D9D9;;
 		text-align: center;
 	}
 

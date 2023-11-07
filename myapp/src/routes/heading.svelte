@@ -23,7 +23,7 @@
 
     display:flex;
     align-items: center;
-    background-color: white;
+    background-color: #132C13;
   }
 
   /* .bible{

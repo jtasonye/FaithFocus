@@ -11,7 +11,7 @@
 				// The API might return a list of verses, so we ensure we're accessing the first one.
 				if (data && data.length > 0) {
 					// Construct the verse with the text and reference
-					verseOfTheDay = `${data[0].bookname} ${data[0].chapter}:${data[0].verse} - "${data[0].text}"`;
+					verseOfTheDay = `${data[0].bookname} ${data[0].chapter}:${data[0].verse} - ${data[0].text}`;
 				} else {
 					// Handle the case where data might not be in the expected format or is empty
 					verseOfTheDay = 'No verse found.';
@@ -190,65 +190,71 @@
 		<main>
             <img class="page-bg" src="/src/lib/images/book.jpg" alt="background-image" />
 			<div class="title">
-				<h1>Welcome To FaithFocus</h1>
-				<h2>Begin Studying The Word Of God By Taking Notes</h2>
-				<!-- <p>BEGIN READING</p> -->
+                <div class="shade" >
+                    <h1>Welcome To Faith Focus</h1>
+				    <h2>Begin Studying The Word Of God By Taking Notes</h2>
+                </div>
 			</div>
 		</main>
 	</div>
 
+    
     <div class="select-book-chapter">
-				<div class="align">
-					<div class="bible-order">
-						<label for="trad">Trad.</label>
-						<input
-							id="trad"
-							type="radio"
-							value="Traditional"
-							name="radio-button"
-							checked
-                            on:change={() => updateSortOrder('Traditional')}	
-						/>
-						<label>Alph.</label>
-						<input
-							id="alph"
-							type="radio"
-							value="Alphabetical"
-							name="radio-button"
-                            on:change={() => updateSortOrder('Alphabetical')}
-						/>
-					</div>
+        <div id = "select-header">Begin Reading</div>
 
-					<div class="bible-books">
-						<select name="books" bind:value={selectedBook} on:change|preventDefault={handleBookChange}>
-                            <option value="" disabled selected>Select a book</option>
-                            {#each orderedBooks as book}
-                                <option value={book}>{book}</option>
-                            {/each}
-                        </select>
-					</div>
+            <div class="align">
+                <div class="bible-order">
+                    <label for="trad">Trad.</label>
+                    <input
+                        id="trad"
+                        type="radio"
+                        value="Traditional"
+                        name="radio-button"
+                        checked
+                        on:change={() => updateSortOrder('Traditional')}	
+                    />
+                    <label>Alph.</label>
+                    <input
+                        id="alph"
+                        type="radio"
+                        value="Alphabetical"
+                        name="radio-button"
+                        on:change={() => updateSortOrder('Alphabetical')}
+                    />
+                </div>
 
-					<div class="bible-chapters">
-						<select name="chapters" bind:value={selectedChapter} on:change|preventDefault={handleChapterChange}>
-                            <option value="" disabled selected>Select a chapter</option>
-                            {#each allChaps as chapter}
-                                <option value={chapter}>{chapter}</option>
-                            {/each}
-                        </select>
-					</div>
-				</div>
+                <div class="bible-books">
+                    <select name="books" bind:value={selectedBook} on:change|preventDefault={handleBookChange}>
+                        <option value="" disabled selected>Select a book</option>
+                        {#each orderedBooks as book}
+                            <option value={book}>{book}</option>
+                        {/each}
+                    </select>
+                </div>
 
-				<div class="search-button">
-					<a href="/bible">
-						<button type="button">Search Button</button>
-					</a>
-				</div>
+                <div class="vertical"></div>
 
-				<div id="verse-of-the-day">
-					<h2>Verse of the Day</h2>
-					<p>{verseOfTheDay}</p>
-				</div>
-			</div>
+                <div class="bible-chapters">
+                    <select name="chapters" bind:value={selectedChapter} on:change|preventDefault={handleChapterChange}>
+                        <option value="" disabled selected>Select a chapter</option>
+                        {#each allChaps as chapter}
+                            <option value={chapter}>{chapter}</option>
+                        {/each}
+                    </select>
+                </div>
+            </div>
+
+            <div class="search-button">
+                <a href="/bible">
+                    <button type="button">Search Button</button>
+                </a>
+            </div>
+
+            <div id="verse-of-the-day">
+                <h2>Verse of the Day</h2>
+                <p>{verseOfTheDay}</p>
+            </div>
+        </div>
 </div>
 
 <style>
@@ -256,11 +262,13 @@
         font-weight: 200;
 		border: 1px solid black;
         /* background: rgba(0,0,0,0.6); */
-        padding-bottom: 300px;
+        padding-bottom: 250px;
     }
 
-    .title h1,h2{
+    .shade{
+        margin-top:40px;
         background: rgba(0,0,0,0.6);
+        border-radius: 8px;
     }
 
 	.title p {
@@ -268,9 +276,24 @@
 	}
 
 	.select-book-chapter {
-		margin-top: 40px;
-		height: 400px;
+		margin-top: 20px;
+        background-color: #EDEDE9;
 	}
+
+    .vertical {
+        width: 1px;
+        height: 88px;
+        border-left: 1px solid #132C13;;
+        position:absolute;
+        left: 50%;
+        margin-left: 35px;
+    }
+
+    #select-header{
+        font-size: 20px;
+        color: #132C13;
+        margin-left: 35px;
+    }
 	.title, .select-book-chapter {
 		text-align: center;
         /* color: #7ad8fd; */
@@ -283,11 +306,8 @@
 		align-items: center; /* Center items vertically */
 		justify-content: center; /* Center items horizontally */
 	}
-
-    .bible-order, select, .search-button button{
-        color: #444e82;
-    }
 	.bible-order {
+        color: #132C13;
         text-shadow: 1px 1px black;
         font-size: 24px;
 		padding-bottom: 20px; /* Align radio buttons with selects */
@@ -301,7 +321,13 @@
 		height: 50px;
 		width: 200px;
 		margin: 10px;
+        color: white;
+        text-align: center;
 	}
+
+    .bible-books select, .bible-chapters select{
+        background-color: #132C13;
+    }
 
     .select-book-chapter, .search-button{
         padding-left: 20px;
@@ -310,20 +336,21 @@
 	.search-button button {
 		height: 30px;
 		width: 300px;
-		margin-top: 50px;
+		margin-left: 10px;
+        color: white;
+        background-color: grey;
 	}
 
 	.bible-order input[type='radio']:hover, select:hover, .search-button button:hover {
-		background-color: #c6cf87;
+		background-color: #7EA172;
         cursor: pointer;
 	}
 
 	select, .search-button button {
 		font-size: 16px;
         outline:none;
-        background-color: #EDEDE9;
         border: 3px solid black;
-		border-radius: 10px;
+		border-radius: 40px;
         transition: background-color 0.3s, color 0.3s;
 	}
     .bible-order input[type="radio"] {
@@ -357,18 +384,11 @@
         z-index: 1;
     }
 	#verse-of-the-day {
-        /* color: #7ad8fd; */
-        color:#89CFF0;
+        color: #7ad8fd;
+        /* color:#89CFF0; */
 		padding: 20px;
 		background-color: rgb(39, 34, 34);
 		border-radius: 15px;
 		margin: 20px;
-
-        /* color: #F5EBE0;
-		padding: 20px;
-		background-color: rgb(39, 34, 34);
-        background: rgba(0,0,0,0.8);
-		border-radius: 15px;
-		margin: 20px; */
 	}
 </style>

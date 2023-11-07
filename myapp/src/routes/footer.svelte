@@ -1,11 +1,10 @@
 <script lang="ts">
 </script>
 
-<div class="footer">
-	<hr />
-
+<!-- <div class="footer"> -->
+	<!-- <hr /> -->
 	<footer>
-		<nav>
+		<!-- <nav>
 			<ol>
 				<li>
 					<a class="temp" href="/">Home</a>
@@ -14,12 +13,13 @@
 					<a class="temp" href="/bible">Bible</a>
 				</li>
 			</ol>
-		</nav>
+		</nav> -->
 	</footer>
-</div>
+<!-- </div> -->
 
 <style>
-    .footer{
-        margin-top: 3em;
+    footer{
+		background-color: #7393B3;
+		height: 100px;
     }
 </style>

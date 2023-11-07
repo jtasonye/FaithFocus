@@ -11,7 +11,7 @@
 				// The API might return a list of verses, so we ensure we're accessing the first one.
 				if (data && data.length > 0) {
 					// Construct the verse with the text and reference
-					verseOfTheDay = `${data[0].text} - ${data[0].bookname} ${data[0].chapter}:${data[0].verse}`;
+					verseOfTheDay = `${data[0].bookname} ${data[0].chapter}:${data[0].verse} - "${data[0].text}"`;
 				} else {
 					// Handle the case where data might not be in the expected format or is empty
 					verseOfTheDay = 'No verse found.';
@@ -121,14 +121,14 @@
      * 
      * This variable holds selected book value to be passed into the API call.
      */
-    export let selectedBook = '';
+    let selectedBook = '';
 
     /** 
      * @type {string} 
      * 
      * This variable holds the selected chapter to be passed into the API call.
      */
-    export let selectedChapter = '';
+    let selectedChapter = '';
 
     /** 
      * @type {string[]} 
@@ -179,6 +179,9 @@
         }
     }
 
+
+
+
 </script>
 
 <div class="page-wrap">
@@ -188,7 +191,7 @@
 			<div class="title">
 				<h1>Welcome To FaithFocus</h1>
 				<h2>Begin Studying The Word Of God By Taking Notes</h2>
-				<p>BEGIN READING</p>
+				<!-- <p>BEGIN READING</p> -->
 			</div>
 
 			<div class="select-book-chapter">
@@ -264,7 +267,8 @@
 	}
 	.title, .select-book-chapter {
 		text-align: center;
-        color: #7ad8fd;
+        /* color: #7ad8fd; */
+        color: #89CFF0;
 	}
 
 	/* Aligns divs vertically */
@@ -303,8 +307,9 @@
 		margin-top: 50px;
 	}
 
-	select:hover, .search-button button:hover {
-		background-color: #c6cf87; /* New background color when hovered */
+	.bible-order input[type='radio']:hover, select:hover, .search-button button:hover {
+		background-color: #c6cf87;
+        cursor: pointer;
 	}
 
 	select, .search-button button {
@@ -323,9 +328,7 @@
     .page-wrap {
         overflow: hidden;
         position: relative;
-        border-radius: 15px;
-        /* Adjust the background overlay color  */
-        /* background-color: rgba(0, 0, 0, 0.7); */
+        min-width: 520px;
     }
 
     .page-bg {
@@ -348,7 +351,8 @@
         z-index: 1;
     }
 	#verse-of-the-day {
-        color: #7ad8fd;
+        /* color: #7ad8fd; */
+        color:#89CFF0;
 		padding: 20px;
 		background-color: rgb(39, 34, 34);
 		border-radius: 15px;

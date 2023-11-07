@@ -1,9 +1,9 @@
 <script>
 	import { onMount } from 'svelte';
 
-	let selectedBook = " ";
+	let selectedBook = "";
 	// console.log("BP Selected book: ", selectedBook);
-    let selectedChapter = " ";
+    let selectedChapter = "";
 	// console.log("BP Selected chapter: ", selectedChapter);
 
 	// This is a variable to hold the entire fetched API chapter.
@@ -18,6 +18,7 @@
 	async function fetchPassage() {
 		try {
 			// Response holds the fetched API call
+			// const response = await fetch(`https://labs.bible.org/api/?passage=+${selectedBook.trim()}+${selectedChapter.trim()}&type=json`);
 			const response = await fetch("https://labs.bible.org/api/?passage=Genesis+1&type=json");
 
 			// Data is a variable that we can use to manipulate the whatever was fetched
@@ -35,7 +36,7 @@
 				}));
 				biblePassage = versesArray.map((verse, index) => {
 					return `<span class="clickable" data-index="${index}"> 
-						<sup>${index + 1}</sup> ${verse.text} </span>`;
+						<sup>${index + 1}</sup> ${verse.text} </span><br>`;
 				}).join(" ");
 				// Initialize an empty array to store notes for each verse
 				verseNotes = versesArray.map( () => [] );
@@ -52,6 +53,10 @@
 		await fetchPassage();
 		// Attach click event listeners to verses
 		addClickListeners();
+		// Attach hover event listeners to verses
+		addHoverListeners();
+		// Attach click event listeners to notes
+		addDeleteListeners();
 	});
 
 	function addClickListeners(){
@@ -75,30 +80,70 @@
 			// Add the note into the verseNotes array
 			verseNotes[verseIndex].push(`${selectedVerse.book} 
 			${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`);
-			updateNotesPanel();
+			updateNotesPanel();	
 		}
 		console.log(selectedVerse);
 		console.log(note);
 	}
 
+	function handleVerseHover(event) {
+    	// Change background color when the verse is hovered over
+    	event.target.style.backgroundColor = "lightgrey";
+		// Change the mouse cursor into a point
+		event.target.style.cursor = "pointer";
+	}
+
+	function handleVerseMouseOut(event) {
+		// Reset background color when the mouse leaves the verse
+		event.target.style.backgroundColor = "initial";
+	}
+
+	function addHoverListeners() {
+		document.querySelectorAll(".clickable").forEach(item => {
+			item.addEventListener("mouseover", handleVerseHover);
+			item.addEventListener("mouseout", handleVerseMouseOut);
+		});
+	}
 	
 	function updateNotesPanel() {
-		const notesBody = document.getElementById("notes-body");
-
+		const notesBody = document.getElementById("notes-list");
 		if (notesBody !== null) {
 			// Initialize an empty string to store the HTML content
 			let notesHTML = "";
 
 			// Loop through verseNotes to generate the HTML for notes
-			verseNotes.forEach(notes => {
-				notes.forEach(note => {
-					// Concatenate each note's HTML without adding a separator
-					notesHTML += `<p>${note}</p>`;
-				});
-			});
+			verseNotes.forEach((notes, verseIndex) => {
+            notes.forEach( (note, noteIndex) => {
+				// Concatenate each note's HTML without adding a separator
+                notesHTML += `<div data-index="${verseIndex}">
+                    <p note-index="${noteIndex}">${note}</p>
+                    <button class="edit">Edit Note</button>
+                    <button class="delete" data-index="${noteIndex}">Delete Note</button>
+                	</div>`;
+            	});
+        	});
+
 			// Set the inner HTML of notesBody to the generated notesHTML
 			notesBody.innerHTML = notesHTML;
+			addDeleteListeners();
 		}
+	}
+
+	function addDeleteListeners(){
+		// Get all the verses from class name "clickable" and add a click event
+		document.querySelectorAll(".delete").forEach(item => {
+			item.addEventListener("click", handleDeleteClick);
+		});
+	}
+
+	function handleDeleteClick(event) {
+		const noteIndex = event.target.getAttribute("data-index");
+		const selectedVerseIndex = event.target.parentNode.getAttribute("data-index");
+		const selectedNote = verseNotes[selectedVerseIndex];
+
+		// Remove the note based on the provided index
+		selectedNote.splice(noteIndex, 1);
+		updateNotesPanel();
 	}
 
 </script>
@@ -111,7 +156,7 @@
 		</header>
 
 		<!-- @html ignores inline css styling and outputs variable -->
-		<p> {@html biblePassage}</p>
+		<p id="passage-body"> {@html biblePassage}</p>
 	</div>
 
 	<div id="notes-panel">
@@ -119,7 +164,8 @@
 			<p id="notes-header"> Your Notes - click on a verse to get started </p>
 		</header>
 
-		<div id="notes-body">
+		<div>
+			<p id="notes-list"></p>
 			<!-- Notes will be dynamically added here -->
 		</div>
 	</div>
@@ -128,16 +174,21 @@
 <style>
 	.page-container {
 		display: flex;
-		height: 100vh; /* Set the height of the container to the full viewport height */
+		height: 85vh; /* Set the height of the container */
 
 		border: 3px solid black;
 		border-radius: 15px;
 		min-width: 520px;
 	}
 
+	/* Styles API fetched verses */
+	#passage-body{
+		letter-spacing: 1.0px;
+	}
+
 	#bible-passage, #notes-panel {
-		width: 50%; /* Divide the container into two equal parts */
-		height: 100%; /* Fill the entire height of the container */
+		width: 50%; /* Divids container into two equal parts */
+		height: 100%; /* Fills entire height of the container */
 		background-color: #EDEDE9;
 		border: 1px solid #ccc; /* Adding a border for visual separation */
 		box-sizing: border-box; /* Include borders in width calculation */
@@ -147,6 +198,7 @@
 
 	#bible-passage{
 		border-right: 3px solid #ccc;
+		text-align: center;
 	}
 
 	#notes-panel{
@@ -156,12 +208,12 @@
 	#bible-passage header, #notes-panel header{
 		height: 50px;
   		width: 100%;
-		background-color: blanchedalmond;
-  		border: 1px solid blanchedalmond;
+		background-color: #c6cf87;
+  		border: 1px solid #c6cf87;
 		text-align: center;
 	}
 
-	#notes-body{
+	#notes-list{
 		margin-left: 10px;
 	}
 </style>

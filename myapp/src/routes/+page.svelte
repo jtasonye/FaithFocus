@@ -1,6 +1,24 @@
 <script>
 	import { onMount } from 'svelte';
 
+    import { writable } from 'svelte/store';
+
+    // Create a writable store for selected book and chapter
+	export const selectedValues = writable({ selectedBook: '', selectedChapter: '' });
+
+    let selectedBook = '';
+    let selectedChapter = '';
+
+    function updateSelectedValues() {
+		if (selectedBook && selectedChapter) {
+			selectedValues.set({ selectedBook, selectedChapter });
+			// Redirect to the Bible page
+			window.location.href = '/bible';
+		} else {
+			alert('Please select both a book and a chapter.');
+		}
+	}
+
 	let verseOfTheDay = 'Loading verse...';
 
 	// Function to fetch the verse of the day
@@ -116,19 +134,19 @@
         sortOrder = order;
     }
 
-    /** 
-     * @type {string}
-     * 
-     * This variable holds selected book value to be passed into the API call.
-     */
-    export let selectedBook = '';
+    // /** 
+    //  * @type {string}
+    //  * 
+    //  * This variable holds selected book value to be passed into the API call.
+    //  */
+    // export let selectedBook = '';
 
-    /** 
-     * @type {string} 
-     * 
-     * This variable holds the selected chapter to be passed into the API call.
-     */
-    export let selectedChapter = '';
+    // /** 
+    //  * @type {string} 
+    //  * 
+    //  * This variable holds the selected chapter to be passed into the API call.
+    //  */
+    // export let selectedChapter = '';
 
     /** 
      * @type {string[]} 
@@ -180,7 +198,10 @@
     }
 
     function searchButton() {
-        const searchInput = document.querySelector(`#search`);  
+        const searchInput = document.querySelector(`#search`); 
+        updateSelectedValues();
+        
+        if(updateSelectedValues)
         // Make sure both selects are inputed
         if (selectedBook && selectedChapter) {
             window.location.href = `/bible`;

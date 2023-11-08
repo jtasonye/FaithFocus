@@ -1,9 +1,9 @@
 <script>
 	import { onMount } from 'svelte';
 
-	let selectedBook = "";
+	let selectedBook = "Genesis";
 	// console.log("BP Selected book: ", selectedBook);
-    let selectedChapter = "";
+    let selectedChapter = "2";
 	// console.log("BP Selected chapter: ", selectedChapter);
 
 	// This is a variable to hold the entire fetched API chapter.
@@ -18,8 +18,8 @@
 	async function fetchPassage() {
 		try {
 			// Response holds the fetched API call
-			// const response = await fetch(`https://labs.bible.org/api/?passage=${selectedBook.trim()}+${selectedChapter.trim()}&type=json`);
-			const response = await fetch("https://labs.bible.org/api/?passage=Genesis+1&type=json");
+			const response = await fetch(`https://labs.bible.org/api/?passage=${selectedBook}+${selectedChapter}&type=json`);
+			// const response = await fetch("https://labs.bible.org/api/?passage=Genesis+1&type=json");
 
 			// Data is a variable that we can use to manipulate the whatever was fetched
 			// Type json allows us to use variable names for book, chapter, etc

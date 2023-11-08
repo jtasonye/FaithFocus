@@ -121,14 +121,14 @@
      * 
      * This variable holds selected book value to be passed into the API call.
      */
-    let selectedBook = '';
+    export let selectedBook = '';
 
     /** 
      * @type {string} 
      * 
      * This variable holds the selected chapter to be passed into the API call.
      */
-    let selectedChapter = '';
+    export let selectedChapter = '';
 
     /** 
      * @type {string[]} 
@@ -174,15 +174,20 @@
         const target = event.target;
         if (target instanceof HTMLSelectElement) {
             const selectedBook = target.value;
-            populateBookChaps(); // Populate chapters for the selected book
+            populateBookChaps();
             console.log("Selected Book:", selectedBook);
         }
     }
 
-    function searchButton(){
-		const searchInput = document.querySelector(`#search`);
-        window.location.href=`/bible?passage=${selectedBook}+${selectedChapter}`;
-	}
+    function searchButton() {
+        const searchInput = document.querySelector(`#search`);  
+        // Make sure both selects are inputed
+        if (selectedBook && selectedChapter) {
+            window.location.href = `/bible`;
+        } else {
+            alert('Please select both a book and a chapter.');
+        }
+    }
 
 </script>
 
@@ -245,9 +250,7 @@
             </div>
 
             <div class="search-button">
-                <!-- <a href="/bible"> -->
                     <button type="button" id="search" on:click={searchButton}>Search</button>
-                <!-- </a> -->
             </div>
 
             <div id="verse-of-the-day">

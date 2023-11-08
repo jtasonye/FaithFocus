@@ -181,9 +181,14 @@
 
     function searchButton() {
         const searchInput = document.querySelector(`#search`); 
+
+        const selectedBook = document.getElementById('books').value;
+        const selectedChapter = document.getElementById('chapters').value;
+    
         // Make sure both selects are inputed
         if (selectedBook && selectedChapter) {
-            window.location.href = `/bible`;
+            window.location.href=`/bible?book=${selectedBook}&chapter=${selectedChapter}`;
+            // window.location.href = `/bible`;
         } else {
             alert('Please select both a book and a chapter.');
         }
@@ -229,7 +234,7 @@
                 </div>
 
                 <div class="bible-books">
-                    <select name="books" bind:value={selectedBook} on:change|preventDefault={handleBookChange}>
+                    <select id="books" bind:value={selectedBook} on:change|preventDefault={handleBookChange}>
                         <option value="" disabled selected>Select a book</option>
                         {#each orderedBooks as book}
                             <option value={book}>{book}</option>
@@ -240,7 +245,7 @@
                 <div class="vertical"></div>
 
                 <div class="bible-chapters">
-                    <select name="chapters" bind:value={selectedChapter} on:change|preventDefault={handleChapterChange}>
+                    <select id="chapters" bind:value={selectedChapter} on:change|preventDefault={handleChapterChange}>
                         <option value="" disabled selected>Select a chapter</option>
                         {#each allChaps as chapter}
                             <option value={chapter}>{chapter}</option>

@@ -1,9 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
 
+	let book = '';
+  	let chapter = '';
+
 	// Reactive declaration to get the selected book and chapter from the store
-	let selectedBook = '';
-	let selectedChapter = '';
+	// let selectedBook = '';
+	// let selectedChapter = '';
 
 	// This is a variable to hold the entire fetched API chapter.
 	let biblePassage = "Loading passage...";
@@ -17,8 +20,10 @@
 	async function fetchPassage() {
 		try {
 			// Response holds the fetched API call
+			// const response = await fetch("https://labs.bible.org/api/?passage=Genesis+1&type=json");
 			// const response = await fetch(`https://labs.bible.org/api/?passage=${selectedBook}+${selectedChapter}&type=json`);
-			const response = await fetch("https://labs.bible.org/api/?passage=Genesis+1&type=json");
+			
+			const response = await fetch(`https://labs.bible.org/api/?passage=${book}+${chapter}&type=json`);
 
 			// Data is a variable that we can use to manipulate the whatever was fetched
 			// Type json allows us to use variable names for book, chapter, etc
@@ -49,6 +54,10 @@
 
 	// Call the fetchPassage function when the component is mounted
 	onMount(async () => {
+		const url = new URL(window.location.href);
+		book = url.searchParams.get('book') || '';
+    	chapter = url.searchParams.get('chapter') || '';
+
 		await fetchPassage();
 		// Attach click event listeners to verses
 		addClickListeners();

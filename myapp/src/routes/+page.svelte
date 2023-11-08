@@ -179,10 +179,10 @@
         }
     }
 
-    function searchButton(){
-		const searchInput = document.querySelector(`#search`);
-        window.location.href=`/bible?passage=${selectedBook}+${selectedChapter}`;
-	}
+    // function searchButton(){
+	// 	const searchInput = document.querySelector(`#search`);
+    //     window.location.href=`/bible?passage=${selectedBook}+${selectedChapter}`;
+	// }
 
 </script>
 
@@ -245,9 +245,9 @@
             </div>
 
             <div class="search-button">
-                <!-- <a href="/bible"> -->
-                    <button type="button" id="search" on:click={searchButton}>Search</button>
-                <!-- </a> -->
+                <a href="/bible">
+                    <button type="button" id="search">Search</button>
+                </a>
             </div>
 
             <div id="verse-of-the-day">

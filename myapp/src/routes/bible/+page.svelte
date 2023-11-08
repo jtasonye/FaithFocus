@@ -1,9 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
 
-	// Import necessary functions from Svelte
-	import { selectedValues } from './page.svelte';
-
 	// Reactive declaration to get the selected book and chapter from the store
 	let selectedBook = '';
 	let selectedChapter = '';
@@ -16,15 +13,6 @@
 
 	// This variable is any array that stores all the notes taken.
 	let verseNotes = [];
-
-	// Subscribe to changes in the store values
-	selectedValues.subscribe((values) => {
-		selectedBook = values.selectedBook;
-		selectedChapter = values.selectedChapter;
-		if (selectedBook && selectedChapter) {
-			fetchPassage();
-		}
-	});
 
 	async function fetchPassage() {
 		try {

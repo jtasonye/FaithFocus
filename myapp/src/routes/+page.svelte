@@ -121,14 +121,14 @@
      * 
      * This variable holds selected book value to be passed into the API call.
      */
-    let selectedBook = '';
+    export let selectedBook = '';
 
     /** 
      * @type {string} 
      * 
      * This variable holds the selected chapter to be passed into the API call.
      */
-    let selectedChapter = '';
+    export let selectedChapter = '';
 
     /** 
      * @type {string[]} 
@@ -174,15 +174,22 @@
         const target = event.target;
         if (target instanceof HTMLSelectElement) {
             const selectedBook = target.value;
-            populateBookChaps(); // Populate chapters for the selected book
+            populateBookChaps();
             console.log("Selected Book:", selectedBook);
         }
     }
 
-    // function searchButton(){
-	// 	const searchInput = document.querySelector(`#search`);
-    //     window.location.href=`/bible?passage=${selectedBook}+${selectedChapter}`;
-	// }
+    function searchButton() {
+        const selectedBook = document.getElementById('books').value;
+        const selectedChapter = document.getElementById('chapters').value;
+        // Make sure both selects are inputed
+        if (selectedBook && selectedChapter) {
+            window.location.href=`/bible?book=${selectedBook}&chapter=${selectedChapter}`;
+            // window.location.href = `/bible`;
+        } else {
+            alert('Please select both a book and a chapter.');
+        }
+    }
 
 </script>
 
@@ -224,7 +231,7 @@
                 </div>
 
                 <div class="bible-books">
-                    <select name="books" bind:value={selectedBook} on:change|preventDefault={handleBookChange}>
+                    <select id="books" bind:value={selectedBook} on:change|preventDefault={handleBookChange}>
                         <option value="" disabled selected>Select a book</option>
                         {#each orderedBooks as book}
                             <option value={book}>{book}</option>
@@ -235,7 +242,7 @@
                 <div class="vertical"></div>
 
                 <div class="bible-chapters">
-                    <select name="chapters" bind:value={selectedChapter} on:change|preventDefault={handleChapterChange}>
+                    <select id="chapters" bind:value={selectedChapter} on:change|preventDefault={handleChapterChange}>
                         <option value="" disabled selected>Select a chapter</option>
                         {#each allChaps as chapter}
                             <option value={chapter}>{chapter}</option>
@@ -245,9 +252,7 @@
             </div>
 
             <div class="search-button">
-                <a href="/bible">
-                    <button type="button" id="search">Search</button>
-                </a>
+                    <button type="button" id="search" on:click={searchButton}>Search</button>
             </div>
 
             <div id="verse-of-the-day">
@@ -319,8 +324,10 @@
 	}
 	select {
 		height: 50px;
-		width: 200px;
-		margin: 40px;
+        width: 200px;
+        margin: 40px;
+		/* width: 165px; */
+		/* margin: 15px; */
         color: white;
         text-align: center;
 	}
@@ -355,7 +362,6 @@
     .page-wrap {
         overflow: hidden;
         position: relative;
-        min-width: 520px;
     }
 
     .page-bg {

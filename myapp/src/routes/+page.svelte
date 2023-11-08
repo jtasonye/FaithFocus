@@ -178,6 +178,12 @@
             console.log("Selected Book:", selectedBook);
         }
     }
+
+    function searchButton(){
+		const searchInput = document.querySelector(`#search`);
+        window.location.href=`/bible?passage=${selectedBook}+${selectedChapter}`;
+	}
+
 </script>
 
 <div class="page-wrap">
@@ -239,9 +245,9 @@
             </div>
 
             <div class="search-button">
-                <a href="/bible">
-                    <button type="button">Search</button>
-                </a>
+                <!-- <a href="/bible"> -->
+                    <button type="button" id="search" on:click={searchButton}>Search</button>
+                <!-- </a> -->
             </div>
 
             <div id="verse-of-the-day">
@@ -372,7 +378,7 @@
         z-index: 1;
     }
 	#verse-of-the-day {
-        color: #7ad8fd;
+        color: #D4CCC3;
         /* color:#89CFF0; */
 		padding: 20px;
 		background-color: rgb(39, 34, 34);

@@ -18,7 +18,7 @@
 	async function fetchPassage() {
 		try {
 			// Response holds the fetched API call
-			// const response = await fetch(`https://labs.bible.org/api/?passage=+${selectedBook.trim()}+${selectedChapter.trim()}&type=json`);
+			// const response = await fetch(`https://labs.bible.org/api/?passage=${selectedBook.trim()}+${selectedChapter.trim()}&type=json`);
 			const response = await fetch("https://labs.bible.org/api/?passage=Genesis+1&type=json");
 
 			// Data is a variable that we can use to manipulate the whatever was fetched

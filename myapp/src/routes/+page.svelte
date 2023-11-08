@@ -180,11 +180,8 @@
     }
 
     function searchButton() {
-        const searchInput = document.querySelector(`#search`); 
-
         const selectedBook = document.getElementById('books').value;
         const selectedChapter = document.getElementById('chapters').value;
-    
         // Make sure both selects are inputed
         if (selectedBook && selectedChapter) {
             window.location.href=`/bible?book=${selectedBook}&chapter=${selectedChapter}`;
@@ -327,8 +324,10 @@
 	}
 	select {
 		height: 50px;
-		width: 200px;
-		margin: 40px;
+        width: 200px;
+        margin: 40px;
+		/* width: 165px; */
+		/* margin: 15px; */
         color: white;
         text-align: center;
 	}
@@ -363,7 +362,6 @@
     .page-wrap {
         overflow: hidden;
         position: relative;
-        min-width: 520px;
     }
 
     .page-bg {

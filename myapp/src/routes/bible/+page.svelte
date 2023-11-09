@@ -1,12 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
 
+	// Initialize book and chapter to get parameters from 
+	// window.location.href
 	let book = '';
   	let chapter = '';
-
-	// Reactive declaration to get the selected book and chapter from the store
-	// let selectedBook = '';
-	// let selectedChapter = '';
 
 	// This is a variable to hold the entire fetched API chapter.
 	let biblePassage = "Loading passage...";

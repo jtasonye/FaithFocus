@@ -180,11 +180,8 @@
     }
 
     function searchButton() {
-        const searchInput = document.querySelector(`#search`); 
-
         const selectedBook = document.getElementById('books').value;
         const selectedChapter = document.getElementById('chapters').value;
-    
         // Make sure both selects are inputed
         if (selectedBook && selectedChapter) {
             window.location.href=`/bible?book=${selectedBook}&chapter=${selectedChapter}`;
@@ -199,7 +196,7 @@
 <div class="page-wrap">
 	<div class="page-content">
 		<main>
-            <img class="page-bg" src="/src/lib/images/book.jpg" alt="background-image" />
+            <img class="page-bg" src="/src/lib/images/book.png" alt="background-image" />
 			<div class="title">
                 <div class="shade" >
                     <h1>Welcome To Faith Focus</h1>
@@ -327,8 +324,8 @@
 	}
 	select {
 		height: 50px;
-		width: 200px;
-		margin: 40px;
+        width: 200px;
+        margin: 40px;
         color: white;
         text-align: center;
 	}
@@ -363,7 +360,6 @@
     .page-wrap {
         overflow: hidden;
         position: relative;
-        min-width: 520px;
     }
 
     .page-bg {
@@ -393,4 +389,11 @@
 		border-radius: 15px;
 		margin: 20px;
 	}
+
+    @media (max-width: 653px){
+        select {
+            width: 165px;
+		    margin: 15px;
+        }
+    }
 </style>

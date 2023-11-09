@@ -473,4 +473,9 @@
 	#notes-list {
 		margin-left: 10px;
 	}
+
+	/* This ensures items fit in mobile view */
+    @media (max-width: 653px){
+		
+    }
 </style>

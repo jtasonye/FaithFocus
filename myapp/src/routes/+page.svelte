@@ -1,6 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
 
+    import bookImage from '/src/lib/images/book.png';
+
 	let verseOfTheDay = 'Loading verse...';
 
 	// Function to fetch the verse of the day
@@ -194,7 +196,8 @@
 <div class="page-wrap">
 	<div class="page-content">
 		<main>
-      <img class="page-bg" src="/src/lib/images/book.png" alt="background-image" />
+      <!-- <img class="page-bg" src="/src/lib/images/book.png" alt="background-image" /> -->
+        <img class="page-bg" src="{bookImage}" alt="background-image" />
 			<div class="title">
 				<div class="shade">
 					<h1>Welcome To Faith Focus</h1>
@@ -395,6 +398,7 @@
 		margin: 20px;
 	}
 
+    /* This ensures items fit in mobile view */
     @media (max-width: 653px){
         select {
             width: 165px;

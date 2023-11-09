@@ -96,14 +96,14 @@
 		);
 
 		// Check to see that after removing the the unnecessary spaces, the input is not empty
-		if (note != null && note.trim() != ' ') {
+		if (note != null && note.trim() != "") {
 			// Add the note into the verseNotes array
 			verseNotes[verseIndex].push(`${selectedVerse.book} 
 			${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`);
 			updateNotesPanel();
 		}
-		console.log(selectedVerse);
-		console.log(note);
+		// console.log(selectedVerse);
+		// console.log(note);
 	}
 
 	function handleVerseHover(event) {
@@ -298,6 +298,7 @@
 		const target = event.target;
 		if (target instanceof HTMLSelectElement) {
 			const selectedChapter = target.value;
+			searchButton();
 			console.log('Selected Chapter:', selectedChapter);
 		}
 	}
@@ -354,31 +355,29 @@
 					/>
 				</div>
 
-				<div class="bible-books">
-					<select id="books" bind:value={selectedBook} on:change|preventDefault={handleBookChange}>
-						<option value="" disabled selected>Select a book</option>
-						{#each orderedBooks as book}
-							<option value={book}>{book}</option>
-						{/each}
-					</select>
+				
+				<div class = "stack">
+
+					<div class="bible-books">
+						<select id="books" bind:value={selectedBook} on:change|preventDefault={handleBookChange}>
+							<option value="" disabled selected>Select a book</option>
+							{#each orderedBooks as book}
+								<option value={book}>{book}</option>
+							{/each}
+						</select>
+					</div>
+
+					<div class="bible-chapters">
+						<select id="chapters" bind:value={selectedChapter} on:change|preventDefault={handleChapterChange}>
+							<option value="" disabled selected>Select a chapter</option>
+							{#each allChaps as chapter}
+								<option value={chapter}>{chapter}</option>
+							{/each}
+						</select>
+					</div>
+
 				</div>
 
-				<div class="bible-chapters">
-					<select
-						id="chapters"
-						bind:value={selectedChapter}
-						on:change|preventDefault={handleChapterChange}
-					>
-						<option value="" disabled selected>Select a chapter</option>
-						{#each allChaps as chapter}
-							<option value={chapter}>{chapter}</option>
-						{/each}
-					</select>
-				</div>
-
-				<div class="search-button">
-					<button type="button" id="search" on:click={searchButton}>Search</button>
-				</div>
 			</div>
 		</header>
 
@@ -388,7 +387,8 @@
 
 	<div id="notes-panel">
 		<header>
-			<p id="notes-header">Your Notes</p>
+			<p id="notes-header"> Your Notes </p>
+			<p> Click a verse to start taking notes !</p>
 		</header>
 
 		<div id="notes-list">
@@ -410,23 +410,49 @@
 		gap: 10px;
 	}
 
-	.bible-books select,
-	.bible-chapters select,
-	.search-button button {
+	.bible-order {
+		margin-left: 20px;
+	}
+
+	/*   Div for me   */
+
+	.bible-order input[type='radio'] {
+		display: block; /* Display radio buttons on top of each other */
+		margin: 5px; /* Space between top and bottom button */
+	}
+	select {
+		width: 206px;
+		background-color: #132c13;
+		color: white;
+		text-align: center;
 		margin: 0;
 		height: 40px;
 	}
+	.search-button button {
+		color: white;
+		background-color: gray;
+	}
 
-	.search-button {
-		display: flex;
-		align-items: center;
+	.bible-order input[type='radio']:hover,
+	select:hover,
+	.search-button button:hover {
+		background-color: #7ea172;
+		cursor: pointer;
+	}
+	
+	select, .search-button button {
+		font-size: 16px;
+		outline: none;
+		border: 1px solid #7ea172;
+		border-radius: 40px;
+		transition: background-color 0.3s, color 0.3s;
 	}
 
 	.page-container {
 		display: flex;
-		height: 85vh; /* Set the height of the container */
+		height: 95vh; /* Set the height of the container */
+		width: 100vw;
 		border-radius: 15px;
-		min-width: 520px;
 	}
 
 	/* Styles API fetched verses */
@@ -468,14 +494,35 @@
 		height: 50px;
 		width: 100%;
 		text-align: center;
+		padding-bottom: 40px;
 	}
 
 	#notes-list {
 		margin-left: 10px;
 	}
 
+	.bible-books, .bible-chapters {
+		display: inline-block;
+		margin: 5px;
+	}
+
 	/* This ensures items fit in mobile view */
     @media (max-width: 653px){
-		
+		.bible-books, .bible-chapters {
+			display: block;
+			width: 100%;
+		}
+
+		select {
+			width: 165px;
+		    margin-bottom: 5px;
+        }
+
+        .bible-order {
+            color: #132c13;
+			display: none;
+        }
+
     }
+
 </style>

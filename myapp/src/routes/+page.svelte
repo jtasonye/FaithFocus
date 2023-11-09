@@ -1,6 +1,5 @@
 <script>
 	import { onMount } from 'svelte';
-
     import bookImage from '/src/lib/images/book.png';
 
 	let verseOfTheDay = 'Loading verse...';
@@ -26,8 +25,9 @@
 			});
 	}
 
-	// Call the fetchVerse function when the component is mounted
-	onMount(fetchVerse);
+    onMount(async () => {
+		await fetchVerse();
+	});
 
 	/**
 	 * @type {Object.<string, number>}
@@ -278,8 +278,6 @@
 	.shade {
 		margin-top: 40px;
 		background: rgba(0, 0, 0, 0.6);
-
-		/* border-radius: 8px; */
 	}
 
 	.title p {
@@ -307,7 +305,6 @@
 	.select-book-chapter {
 		text-align: center;
 		color: #d4ccc3;
-		/* color: #89CFF0; */
 	}
 
 	/* Aligns divs vertically */
@@ -330,14 +327,11 @@
 	}
 	select {
 		height: 50px;
-    width: 200px;
-    margin: 40px;
-    color: white;
-    text-align: center;
-	}
-
-	.bible-books select, .bible-chapters select {
-		background-color: #132c13;
+        width: 200px;
+        margin: 40px;
+        background-color: #132c13;
+        color: white;
+        text-align: center;
 	}
 	.search-button button {
 		height: 30px;
@@ -359,10 +353,6 @@
 		border: 1px solid #7ea172;
 		border-radius: 40px;
 		transition: background-color 0.3s, color 0.3s;
-	}
-	.bible-order input[type='radio'] {
-		display: block; /* Display radio buttons on top of each other */
-		margin: 10px; /* Space between top and bottom button */
 	}
 
 	.page-wrap {
@@ -403,6 +393,18 @@
         select {
             width: 165px;
 		    margin: 15px;
+        }
+
+        .bible-order {
+            color: #132c13;
+            text-shadow: 1px 1px black;
+            font-size: 24px;
+            visibility: hidden;
+        }
+
+        .bible-order input[type='radio'] {
+            display: block; /* Display radio buttons on top of each other */
+            margin: 10px; /* Space between top and bottom button */
         }
     }
 </style>

@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 
-	// Initialize book and chapter to get parameters from 
+	// Initialize book and chapter to get parameters from
 	// window.location.href
 	let book = '';
 	let chapter = '';
@@ -96,14 +96,12 @@
 		);
 
 		// Check to see that after removing the the unnecessary spaces, the input is not empty
-		if (note != null && note.trim() != "") {
+		if (note != null && note.trim() != '') {
 			// Add the note into the verseNotes array
 			verseNotes[verseIndex].push(`${selectedVerse.book} 
 			${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`);
 			updateNotesPanel();
 		}
-		// console.log(selectedVerse);
-		// console.log(note);
 	}
 
 	function handleVerseHover(event) {
@@ -137,7 +135,7 @@
 					// Concatenate each note's HTML without adding a separator
 					notesHTML += `<div data-index="${verseIndex}">
                     <p note-index="${noteIndex}">${note}</p>
-                    <button class="edit">Edit Note</button>
+                    <button class="edit" data-index="${noteIndex}">Edit Note</button>
                     <button class="delete" data-index="${noteIndex}">Delete Note</button>
                 	</div>`;
 				});
@@ -146,6 +144,7 @@
 			// Set the inner HTML of notesBody to the generated notesHTML
 			notesBody.innerHTML = notesHTML;
 			addDeleteListeners();
+			addEditListeners();
 		}
 	}
 
@@ -154,6 +153,30 @@
 		document.querySelectorAll('.delete').forEach((item) => {
 			item.addEventListener('click', handleDeleteClick);
 		});
+	}
+
+	function addEditListeners() {
+		document.querySelectorAll('.edit').forEach((item) => {
+			item.addEventListener('click', handleEditClick);
+		});
+	}
+
+	function handleEditClick(event) {
+		const noteIndex = event.target.getAttribute('data-index');
+		const verseIndex = event.target.parentNode.getAttribute('data-index');
+		const fullNote = verseNotes[verseIndex][noteIndex];
+
+		// Split the string by " - " and take the second part, which is the actual note content.
+		const noteContent = fullNote.split(' - ')[1];
+
+		// Allow the user to only edit the note content
+		const newNoteContent = prompt('Edit your note:', noteContent);
+
+		if (newNoteContent != null && newNoteContent.trim() != '') {
+			// Update the note in the verseNotes array with the new content
+			verseNotes[verseIndex][noteIndex] = `${fullNote.split(' - ')[0]} - ${newNoteContent}`;
+			updateNotesPanel();
+		}
 	}
 
 	function handleDeleteClick(event) {
@@ -355,11 +378,13 @@
 					/>
 				</div>
 
-				
-				<div class = "stack">
-
+				<div class="stack">
 					<div class="bible-books">
-						<select id="books" bind:value={selectedBook} on:change|preventDefault={handleBookChange}>
+						<select
+							id="books"
+							bind:value={selectedBook}
+							on:change|preventDefault={handleBookChange}
+						>
 							<option value="" disabled selected>Select a book</option>
 							{#each orderedBooks as book}
 								<option value={book}>{book}</option>
@@ -368,16 +393,18 @@
 					</div>
 
 					<div class="bible-chapters">
-						<select id="chapters" bind:value={selectedChapter} on:change|preventDefault={handleChapterChange}>
+						<select
+							id="chapters"
+							bind:value={selectedChapter}
+							on:change|preventDefault={handleChapterChange}
+						>
 							<option value="" disabled selected>Select a chapter</option>
 							{#each allChaps as chapter}
 								<option value={chapter}>{chapter}</option>
 							{/each}
 						</select>
 					</div>
-
 				</div>
-
 			</div>
 		</header>
 
@@ -387,8 +414,8 @@
 
 	<div id="notes-panel">
 		<header>
-			<p id="notes-header"> Your Notes </p>
-			<p> Click a verse to start taking notes !</p>
+			<p id="notes-header">Your Notes</p>
+			<p>Click a verse to start taking notes !</p>
 		</header>
 
 		<div id="notes-list">
@@ -439,8 +466,9 @@
 		background-color: #7ea172;
 		cursor: pointer;
 	}
-	
-	select, .search-button button {
+
+	select,
+	.search-button button {
 		font-size: 16px;
 		outline: none;
 		border: 1px solid #7ea172;
@@ -501,28 +529,28 @@
 		margin-left: 10px;
 	}
 
-	.bible-books, .bible-chapters {
+	.bible-books,
+	.bible-chapters {
 		display: inline-block;
 		margin: 5px;
 	}
 
 	/* This ensures items fit in mobile view */
-    @media (max-width: 653px){
-		.bible-books, .bible-chapters {
+	@media (max-width: 653px) {
+		.bible-books,
+		.bible-chapters {
 			display: block;
 			width: 100%;
 		}
 
 		select {
 			width: 165px;
-		    margin-bottom: 5px;
-        }
+			margin-bottom: 5px;
+		}
 
-        .bible-order {
-            color: #132c13;
+		.bible-order {
+			color: #132c13;
 			display: none;
-        }
-
-    }
-
+		}
+	}
 </style>

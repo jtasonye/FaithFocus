@@ -194,7 +194,7 @@
 <div class="page-wrap">
 	<div class="page-content">
 		<main>
-			<img class="page-bg" src="/src/lib/images/book.jpg" alt="background-image" />
+      <img class="page-bg" src="/src/lib/images/book.png" alt="background-image" />
 			<div class="title">
 				<div class="shade">
 					<h1>Welcome To Faith Focus</h1>
@@ -327,16 +327,13 @@
 	}
 	select {
 		height: 50px;
-		width: 200px;
-		margin: 40px;
-		/* width: 165px; */
-		/* margin: 15px; */
-		color: white;
-		text-align: center;
+    width: 200px;
+    margin: 40px;
+    color: white;
+    text-align: center;
 	}
 
-	.bible-books select,
-	.bible-chapters select {
+	.bible-books select, .bible-chapters select {
 		background-color: #132c13;
 	}
 	.search-button button {
@@ -353,8 +350,7 @@
 		cursor: pointer;
 	}
 
-	select,
-	.search-button button {
+	select, .search-button button {
 		font-size: 16px;
 		outline: none;
 		border: 1px solid #7ea172;
@@ -398,4 +394,11 @@
 		border-radius: 15px;
 		margin: 20px;
 	}
+
+    @media (max-width: 653px){
+        select {
+            width: 165px;
+		    margin: 15px;
+        }
+    }
 </style>

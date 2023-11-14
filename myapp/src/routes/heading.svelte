@@ -19,8 +19,6 @@
 
   header {
     padding: 5px;
-    /* margin-left: 15px; */
-
     display:flex;
     align-items: center;
     background-color: #132C13;

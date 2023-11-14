@@ -131,6 +131,7 @@
 
 	function updateNotesPanel() {
 		const notesBody = document.getElementById('notes-list');
+
 		if (notesBody !== null) {
 			// Initialize an empty string to store the HTML content
 			let notesHTML = '';
@@ -139,20 +140,101 @@
 			verseNotes.forEach((notes, verseIndex) => {
 				notes.forEach((note, noteIndex) => {
 					// Concatenate each note's HTML without adding a separator
-					notesHTML += `<div data-index="${verseIndex}">
-                    <p note-index="${noteIndex}">${note}</p>
-                    <button class="edit" data-index="${noteIndex}">Edit Note</button>
-                    <button class="delete" data-index="${noteIndex}">Delete Note</button>
-                	</div>`;
+					notesHTML += 
+					`<div class="note" data-index="${verseIndex}">
+            		   <p note-index="${noteIndex}">${note}</p>
+            		   <button class="edit" data-index="${noteIndex}">Edit Note</button>
+            		   <button class="delete" data-index="${noteIndex}">Delete Note</button>
+        			</div>`;
 				});
 			});
 
 			// Set the inner HTML of notesBody to the generated notesHTML
 			notesBody.innerHTML = notesHTML;
+
+			// Select all note elements
+			const noteElements = document.querySelectorAll('.note');
+
+			// Loop through the selected note elements to apply styles
+			noteElements.forEach((noteElement) => {
+				// Check if noteElement is an HTMLElement
+				if (noteElement instanceof HTMLElement) {
+					// Apply styles to each note element as needed
+					noteElement.style.border = '1px solid #ccc';
+					noteElement.style.borderRadius = '8px';
+					noteElement.style.padding = '10px';
+					noteElement.style.margin = '10px 0';
+					noteElement.style.backgroundColor = '#edede9';
+					noteElement.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+					noteElement.style.width = '85%';
+				}
+			});
+
+			// Select all delete elements
+			const deleteElements = document.querySelectorAll('.delete');
+
+			function handleDeleteHover(event) {
+				// Change background color when the button is hovered over
+				event.target.style.backgroundColor = '#FF4433';
+				// Change the mouse cursor into a point
+				event.target.style.cursor = 'pointer';
+			}
+
+			function handleDeleteMouseOut(event) {
+				// Reset background color when the mouse leaves the button
+				event.target.style.backgroundColor = '#FAA0A0';
+			}
+
+			// Loop through the selected note elements to apply styles
+			deleteElements.forEach((deleteElement) => {
+				deleteElement.addEventListener('mouseover', handleDeleteHover);
+				deleteElement.addEventListener('mouseout', handleDeleteMouseOut);
+				// Check if noteElement is an HTMLElement
+				if (deleteElement instanceof HTMLElement) {
+					// Apply styles to each note element as needed
+					deleteElement.style.backgroundColor = '#FAA0A0';
+					deleteElement.style.borderRadius = '8px';
+					// noteElement.style.padding = '10px';
+					// noteElement.style.margin = '10px 0';
+					// noteElement.style.width = '85%';
+				}
+			});
+
+			// Select all delete elements
+			const editElements = document.querySelectorAll('.edit');
+
+			function handleEditHover(event) {
+				// Change background color when the button is hovered over
+				event.target.style.backgroundColor = '#6495ED';
+				// Change the mouse cursor into a point
+				event.target.style.cursor = 'pointer';
+			}
+
+			function handleEditMouseOut(event) {
+				// Reset background color when the mouse leaves the button
+				event.target.style.backgroundColor = '#A7C7E7';
+			}
+
+			// Loop through the selected note elements to apply styles
+			editElements.forEach((editElement) => {
+				editElement.addEventListener('mouseover', handleEditHover);
+				editElement.addEventListener('mouseout', handleEditMouseOut);
+				// Check if noteElement is an HTMLElement
+				if (editElement instanceof HTMLElement) {
+					// Apply styles to each note element as needed
+					editElement.style.backgroundColor = '#A7C7E7';
+					editElement.style.borderRadius = '8px';
+					// noteElement.style.padding = '10px';
+					// noteElement.style.margin = '10px 0'
+					// noteElement.style.width = '85%';
+				}
+			});
+
 			addDeleteListeners();
 			addEditListeners();
 		}
 	}
+
 
 	function addDeleteListeners() {
 		// Get all the verses from class name "clickable" and add a click event
@@ -175,10 +257,10 @@
 		// Split the string by " - " and take the second part, which is the actual note content.
 		const noteContent = fullNote.split(' - ')[1];
 
-		// Allow the user to only edit the note content
-		const newNoteContent = prompt('Edit your note:', noteContent);
-
 		const selectedVerse = versesArray[verseIndex];
+
+		// Allow the user to only edit the note content
+		const newNoteContent = prompt(`Edit your note for ${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber}`, noteContent);
 
 		// Get current date to use as a time stamp
 		var today = new Date();
@@ -190,7 +272,7 @@
 		if (newNoteContent != null && newNoteContent.trim() != '') {
 			// Update the note in the verseNotes array with the new content
 			// verseNotes[verseIndex][noteIndex] = `${fullNote.split(' - ')[0]} - ${newNoteContent}`;
-			verseNotes[verseIndex][noteIndex] = `You edited ${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} on ${newDate} <br /> - ${newNoteContent}`;
+			verseNotes[verseIndex][noteIndex] = `You edited a note for ${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} on ${newDate} <br /> - ${newNoteContent}`;
 			updateNotesPanel();
 		}
 	}
@@ -431,7 +513,7 @@
 	<div id="notes-panel">
 		<header>
 			<p id="notes-header">Your Notes</p>
-			<p>Click a verse to start taking notes !</p>
+			<p>Click on a verse to start taking notes !</p>
 		</header>
 
 		<div id="notes-list">

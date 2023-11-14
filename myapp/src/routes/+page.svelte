@@ -187,7 +187,10 @@
 		if (selectedBook && selectedChapter) {
 			window.location.href = `/bible?book=${selectedBook}&chapter=${selectedChapter}`;
 			// window.location.href = `/bible`;
-		} else {
+		} else if (selectedBook && !selectedChapter){
+			alert('Please select a chapter.');
+		}
+		else {
 			alert('Please select both a book and a chapter.');
 		}
 	}
@@ -336,7 +339,7 @@
 	.search-button button {
 		height: 30px;
 		width: 300px;
-		color: white;
+		color: #edede9;
 		background-color: gray;
 	}
 

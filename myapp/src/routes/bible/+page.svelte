@@ -97,9 +97,15 @@
 
 		// Check to see that after removing the the unnecessary spaces, the input is not empty
 		if (note != null && note.trim() != '') {
+			// Get current date to use as a time stamp
+			var today = new Date();
+			var month = today.getMonth() + 1;
+			var day = today.getDate();
+			var year = today.getFullYear();
+			var newDate = month + "-" + day + "-" + year;
 			// Add the note into the verseNotes array
-			verseNotes[verseIndex].push(`${selectedVerse.book} 
-			${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`);
+			verseNotes[verseIndex].push(` You added a note for ${selectedVerse.book} 
+			${selectedVerse.chapter}:${selectedVerse.verseNumber} on ${newDate} <br /> - ${note}`);
 			updateNotesPanel();
 		}
 	}
@@ -172,9 +178,19 @@
 		// Allow the user to only edit the note content
 		const newNoteContent = prompt('Edit your note:', noteContent);
 
+		const selectedVerse = versesArray[verseIndex];
+
+		// Get current date to use as a time stamp
+		var today = new Date();
+		var month = today.getMonth() + 1;
+		var day = today.getDate();
+		var year = today.getFullYear();
+		var newDate = month + "-" + day + "-" + year;
+
 		if (newNoteContent != null && newNoteContent.trim() != '') {
 			// Update the note in the verseNotes array with the new content
-			verseNotes[verseIndex][noteIndex] = `${fullNote.split(' - ')[0]} - ${newNoteContent}`;
+			// verseNotes[verseIndex][noteIndex] = `${fullNote.split(' - ')[0]} - ${newNoteContent}`;
+			verseNotes[verseIndex][noteIndex] = `You edited ${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} on ${newDate} <br /> - ${newNoteContent}`;
 			updateNotesPanel();
 		}
 	}
@@ -442,7 +458,6 @@
 	}
 
 	/*   Div for me   */
-
 	.bible-order input[type='radio'] {
 		display: block; /* Display radio buttons on top of each other */
 		margin: 5px; /* Space between top and bottom button */
@@ -450,6 +465,7 @@
 	select {
 		width: 206px;
 		background-color: #132c13;
+		/* color: #edede9; */
 		color: white;
 		text-align: center;
 		margin: 0;

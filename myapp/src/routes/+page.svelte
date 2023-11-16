@@ -215,6 +215,7 @@
 
 		<div class="align">
 			<div class="bible-order">
+				<div class="tooltip">
 				<label for="trad">Trad.</label>
 				<input
 					id="trad"
@@ -224,7 +225,12 @@
 					checked
 					on:change={() => updateSortOrder('Traditional')}
 				/>
-				<label>Alph.</label>
+				<span class="tooltiptext">Traditional Sort</span>
+				</div>
+
+
+				<div class="tooltip">
+				<label for="alph">Alph.</label>
 				<input
 					id="alph"
 					type="radio"
@@ -232,6 +238,9 @@
 					name="radio-button"
 					on:change={() => updateSortOrder('Alphabetical')}
 				/>
+				<span class="tooltiptext">Alphabetical Sort</span>
+				</div>
+
 			</div>
 
 			<div class="bible-books">
@@ -271,25 +280,37 @@
 </div>
 
 <style>
+	/* .title {
+		font-weight: 200;
+		border: 1px solid black;
+		background: rgba(0,0,0,0.6);
+		padding-bottom: 250px;
+	} */
 	.title {
 		font-weight: 200;
 		border: 1px solid black;
-		/* background: rgba(0,0,0,0.6); */
-		padding-bottom: 250px;
+		padding-bottom: 200px;
+		/* padding-bottom: 250px; */
+		text-align: center; /* Center text */
+		/* color: #dda15e; */
+		color: #e6cf7b;
+	}
+	.title h1 {
+		margin-top: 200px;  /* Makes title be in center */
+		font-size: 90px; 
+		margin-bottom: 100px; 
+		text-shadow: 3px 3px black;
 	}
 
-	.shade {
-		margin-top: 40px;
-		background: rgba(0, 0, 0, 0.6);
-	}
-
-	.title p {
-		font-size: 20px;
+	.title h2 {
+		font-size: 40px;
+		text-shadow: 3px 1px black;
+		/* margin-bottom: 100px; */
 	}
 
 	.select-book-chapter {
 		margin-top: 20px;
-		background-color: #edede9;
+		background-color: #eee5cf;
 	}
 
 	.vertical {
@@ -307,7 +328,6 @@
 	.title,
 	.select-book-chapter {
 		text-align: center;
-		color: #d4ccc3;
 	}
 
 	/* Aligns divs vertically */
@@ -328,19 +348,48 @@
 		display: block; /* Display radio buttons on top of each other */
 		margin: 10px; /* Space between top and bottom button */
 	}
+
+	.tooltip {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+	  top: -5px;
+  	  right: 105%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+	  font-size: 15px;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
 	select {
 		height: 50px;
         width: 200px;
         margin: 40px;
         background-color: #132c13;
-        color: white;
+        color: #eee5cf;
         text-align: center;
 	}
 	.search-button button {
 		height: 30px;
 		width: 300px;
-		color: #edede9;
-		background-color: gray;
+		color: #eee5cf;
+		background-color: #132c13;
 	}
 
 	.bible-order input[type='radio']:hover,
@@ -364,7 +413,8 @@
 	}
 
 	.page-bg {
-		opacity: 0.9;
+		/* opacity: 0.9; */
+		/* background-color: rgba(0,0,0,0.9); */
 		position: absolute;
 		left: 0;
 		top: 0;

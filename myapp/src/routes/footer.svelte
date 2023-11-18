@@ -1,25 +1,20 @@
 <script lang="ts">
 </script>
 
-<!-- <div class="footer"> -->
-	<!-- <hr /> -->
-	<footer>
-		<!-- <nav>
-			<ol>
-				<li>
-					<a class="temp" href="/">Home</a>
-				</li>
-				<li>
-					<a class="temp" href="/bible">Bible</a>
-				</li>
-			</ol>
-		</nav> -->
-	</footer>
-<!-- </div> -->
+<footer>
+
+</footer>
 
 <style>
     footer{
-		background-color:#132C13;
-		height: 100px;
+		background-color: var(--hdrcolor);
+		position:fixed;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		/* height: 20px; */
+		height: 2.5vh;
+		text-align: center;	
+		z-index: 1;
     }
 </style>

@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-    import bookImage from '/src/lib/images/book.png';
+    import bgImage from '/src/lib/images/road.png';
 
 	let verseOfTheDay = 'Loading verse...';
 
@@ -27,6 +27,7 @@
 
     onMount(async () => {
 		await fetchVerse();
+		bgImage
 	});
 
 	/**
@@ -115,6 +116,18 @@
 	// @ts-ignore
 	function updateSortOrder(order) {
 		sortOrder = order;
+
+		// Update button styles based on sortOrder
+		const tradButton = document.getElementById('trad');
+      	const alphButton = document.getElementById('alph');
+
+		if (sortOrder === 'Traditional') {
+        	tradButton.style.backgroundColor = 'var(--slctcolor)'; // Blue color for Traditional
+        	alphButton.style.backgroundColor = ''; // Reset Alphabetical button color
+      	} else {
+        	alphButton.style.backgroundColor = 'var(--slctcolor)'; // Red color for Alphabetical
+        	tradButton.style.backgroundColor = ''; // Reset Traditional button color
+      	}
 	}
 
 	/**
@@ -146,7 +159,7 @@
 		const selectedBookChaps = bible[selectedBook];
 		if (selectedBookChaps) {
 			for (let i = 1; i <= selectedBookChaps; i++) {
-				allChaps.push(`${i}`);
+				allChaps.push(`Chapter ${i}`);
 				// console.log(allChaps);
 			}
 		}
@@ -181,230 +194,294 @@
 	}
 
 	function searchButton() {
+		// @ts-ignore
 		const selectedBook = document.getElementById('books').value;
+		// @ts-ignore
 		const selectedChapter = document.getElementById('chapters').value;
 		// Make sure both selects are inputed
 		if (selectedBook && selectedChapter) {
 			window.location.href = `/bible?book=${selectedBook}&chapter=${selectedChapter}`;
 			// window.location.href = `/bible`;
-		} else {
+		} else if (selectedBook && !selectedChapter){
+			alert('Please select a chapter.');
+		}
+		else {
 			alert('Please select both a book and a chapter.');
 		}
 	}
 </script>
 
 <div class="page-wrap">
+	<img class="page-bg" src="{bgImage}" alt="Image of David and Goliath" />
+
 	<div class="page-content">
-		<main>
-      <!-- <img class="page-bg" src="/src/lib/images/book.png" alt="background-image" /> -->
-        <img class="page-bg" src="{bookImage}" alt="background-image" />
-			<div class="title">
-				<div class="shade">
-					<h1>Welcome To Faith Focus</h1>
-					<h2>Study The Word Of God By Taking Notes</h2>
+
+		<div class="title">
+			<h1><strong>Embark on Your Spiritual Journey with Faith Focus</strong></h1>
+			<h2><strong>Select a book and chapter to get started</strong></h2>
+		</div>
+
+		<div class="selection-container">
+	
+				<div class="align">
+					<div class="bible-order">
+						
+						<div class="tooltip">
+							<button id="trad" on:click={() => updateSortOrder('Traditional')}>TRD</button>
+							<span class="tooltiptext">Biblical Canon Sort</span>
+						</div>
+		
+						<div class="tooltip">
+							<button id="alph" on:click={() => updateSortOrder('Alphabetical')}>ALPH</button>
+							<span class="tooltiptext">Alphabetical Sort</span>
+						</div>
+		
+					</div>
+		
+					<div class="bible-books">
+						<select id="books" bind:value={selectedBook} on:change|preventDefault={handleBookChange}>
+							<option value="" disabled selected>Select a book</option>
+							{#each orderedBooks as book}
+								<option value={book}>{book}</option>
+							{/each}
+						</select>
+					</div>
+		
+					<div class="vertical" />
+		
+					<div class="bible-chapters">
+						<select
+							id="chapters"
+							bind:value={selectedChapter}
+							on:change|preventDefault={handleChapterChange}
+						>
+							<option value="" disabled selected>Select a chapter</option>
+							{#each allChaps as chapter}
+								<option value={chapter}>{chapter}</option>
+							{/each}
+						</select>
+					</div>
 				</div>
+	
+			<div class="search-button">
+				<button type="button" id="search" on:click={searchButton}>Search</button>
 			</div>
-		</main>
-	</div>
-
-	<div class="select-book-chapter">
-		<div id="select-header">Begin Reading</div>
-
-		<div class="align">
-			<div class="bible-order">
-				<label for="trad">Trad.</label>
-				<input
-					id="trad"
-					type="radio"
-					value="Traditional"
-					name="radio-button"
-					checked
-					on:change={() => updateSortOrder('Traditional')}
-				/>
-				<label>Alph.</label>
-				<input
-					id="alph"
-					type="radio"
-					value="Alphabetical"
-					name="radio-button"
-					on:change={() => updateSortOrder('Alphabetical')}
-				/>
+	
+			<div id="verse-of-the-day">
+				<h2>Verse of the Day</h2>
+				<p>{verseOfTheDay}</p>
 			</div>
-
-			<div class="bible-books">
-				<select id="books" bind:value={selectedBook} on:change|preventDefault={handleBookChange}>
-					<option value="" disabled selected>Select a book</option>
-					{#each orderedBooks as book}
-						<option value={book}>{book}</option>
-					{/each}
-				</select>
-			</div>
-
-			<div class="vertical" />
-
-			<div class="bible-chapters">
-				<select
-					id="chapters"
-					bind:value={selectedChapter}
-					on:change|preventDefault={handleChapterChange}
-				>
-					<option value="" disabled selected>Select a chapter</option>
-					{#each allChaps as chapter}
-						<option value={chapter}>{chapter}</option>
-					{/each}
-				</select>
-			</div>
-		</div>
-
-		<div class="search-button">
-			<button type="button" id="search" on:click={searchButton}>Search</button>
-		</div>
-
-		<div id="verse-of-the-day">
-			<h2>Verse of the Day</h2>
-			<p>{verseOfTheDay}</p>
 		</div>
 	</div>
+	
 </div>
+<!-- <footer>
+	hellooo
+</footer> -->
+
+
 
 <style>
+	@import url('https://fonts.cdnfonts.com/css/varela-round-3');
 	.title {
-		font-weight: 200;
-		border: 1px solid black;
-		/* background: rgba(0,0,0,0.6); */
-		padding-bottom: 250px;
+		/* text-align: center; */
+		color: var(--bgcolor);
+		text-shadow: 2px 1px black;
+		font-weight: 900;
+		font-family: 'Varela Round', sans-serif;
 	}
 
-	.shade {
-		margin-top: 40px;
-		background: rgba(0, 0, 0, 0.6);
+	.title h1 {
+		/* margin-top: 60px; */
+		font-size: 50px;
+		/* margin-top: 290px; */
+		margin-top: 30vh;
+		margin-bottom: 0vh;
 	}
 
-	.title p {
-		font-size: 20px;
+	.title h2 {
+		/* margin-top: 15px; */
+		margin-top: 2vh;
+		font-size: 30px;
 	}
 
-	.select-book-chapter {
-		margin-top: 20px;
-		background-color: #edede9;
-	}
-
-	.vertical {
-		width: 1px;
-		height: 88px;
-		border-left: 1px solid #132c13;
-		position: absolute;
-		left: 50%;
-	}
-
-	#select-header {
-		font-size: 20px;
-		color: #132c13;
-	}
-	.title,
-	.select-book-chapter {
+	.title, .selection-container {
 		text-align: center;
-		color: #d4ccc3;
 	}
 
-	/* Aligns divs vertically */
+	.selection-container {
+		/* margin-top: 20px;
+		background-color: #eee5cf; */
+	}
+
 	.align {
-		display: flex; /* Added flex to align items horizontally */
-		align-items: center; /* Center items vertically */
-		justify-content: center; /* Center items horizontally */
-		padding-right: 55px;
-	}
-	.bible-order {
-		color: #132c13;
-		text-shadow: 1px 1px black;
-		font-size: 24px;
-		padding-bottom: 20px; /* Align radio buttons with selects */
+		display: flex;
+		/* Align horizontally */
+		align-items: center; 
+		/* Align vertically */
+		justify-content:center;
+		/* padding-right: 55px; */
+		padding-right: 10vh;
 	}
 
-	.bible-order input[type='radio'] {
-		display: block; /* Display radio buttons on top of each other */
-		margin: 10px; /* Space between top and bottom button */
-	}
-	select {
-		height: 50px;
-        width: 200px;
-        margin: 40px;
-        background-color: #132c13;
-        color: white;
-        text-align: center;
-	}
-	.search-button button {
-		height: 30px;
-		width: 300px;
-		color: white;
-		background-color: gray;
-	}
-
-	.bible-order input[type='radio']:hover,
-	select:hover,
-	.search-button button:hover {
-		background-color: #7ea172;
+	.bible-order button {
+		display: block;
 		cursor: pointer;
+		width: 70px;
+		margin: 15px;
 	}
 
-	select, .search-button button {
+	.tooltip {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 250px;
+      background-color: #333;
+      color: white;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+	  top: -5px;
+  	  right: 105%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+	  font-size: 20px;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+
+	select {
+		text-align: center;
+		height: 50px;
+		width: 250px;
+		margin: 0px 20px;
+		-webkit-appearance: none;
+  		-moz-appearance: none;
+  		text-indent: 5px;
+  		/* text-overflow: ''; */
+	}
+
+	.search-button button {
+		height: 35px;
+		width: 300px;
+		/* margin: 20px 0 0 20px; */
+		margin: 4vh 4.5vh 0 4vh;
+	}
+
+	select,
+	.search-button button,
+	.bible-order button {
 		font-size: 16px;
+		font-family: 'Varela Round', sans-serif;
 		outline: none;
-		border: 1px solid #7ea172;
+		border: 2px solid var(--hovcolor);
 		border-radius: 40px;
 		transition: background-color 0.3s, color 0.3s;
+		color: white;
+		background-color: var(--hdrcolor);
+	}
+
+	.bible-order button:hover,
+	select:hover,
+	.search-button button:hover {
+		background-color: var(--hovcolor);
+		cursor: pointer;
 	}
 
 	.page-wrap {
 		overflow: hidden;
 		position: relative;
-	}
+		width: 100%;
+		height: 100vh;
+  	}
 
 	.page-bg {
-		opacity: 0.9;
-		position: absolute;
-		left: 0;
-		top: 0;
 		width: 100%;
-		height: 100%; /* Make sure the background covers the entire content */
-		/* object-fit: cover; Maintain image aspect ratio */
+		height: 100%;
 		object-fit: cover;
-		/* Add the blur effect */
-		filter: blur(2px);
-		-webkit-filter: blur(2px);
 		z-index: -1;
+		position: absolute;
 	}
 
 	.page-content {
-		position: relative;
+		position:relative;
 		z-index: 1;
 	}
+
+
 	#verse-of-the-day {
-		color: #d4ccc3;
-		/* color:#89CFF0; */
+		/* color: #d4ccc3; */
+		/*
 		padding: 20px;
 		background-color: rgb(39, 34, 34);
 		border-radius: 15px;
-		margin: 20px;
+		margin: 150px;
+		margin: 90px; */
+
+		color: var(--slctcolor);
+		font-size: 20px;
+		font-weight: 900;
+		text-shadow: 2px 1px black;
+		border-radius: 15px;
+		/* margin: 110px; */
+		margin: 15vh;
+		background-color: rgb(39, 34, 34, 0.7);
+		/* 730 & 654 */
 	}
 
-    /* This ensures items fit in mobile view */
-    @media (max-width: 653px){
-        select {
-            width: 165px;
-		    margin: 15px;
-        }
+	@media (max-width: 730px) {
+		.title h1 {
+			margin-top: 200px;
+			font-size: 30px;
+		}
 
-        .bible-order {
-            color: #132c13;
-            text-shadow: 1px 1px black;
-            font-size: 24px;
-            visibility: hidden;
-        }
+		.title h2 {
+			font-size: 20px;
+		}
 
-        .bible-order input[type='radio'] {
-            display: block; /* Display radio buttons on top of each other */
-            margin: 10px; /* Space between top and bottom button */
-        }
-    }
+		.bible-order {
+			display: none;
+		}
+
+		.align {
+			padding-right: 0px;
+		}
+
+		select {
+			width: 155px;
+			/* margin: 0px 10px 0 10px; */
+		}
+
+		.search-button button {
+			margin: 5vh 4.5vh 0 5vh;
+		}
+		.page-bg {
+			width: 100%;
+      		height: 980px; 
+		}
+
+		#verse-of-the-day {
+			margin: 5vh;
+			font-size: 20px;
+		}
+	}
+
+	/* iPhone SE */
+	/* Max-width: if [device width] is less than or equal to, then apply style */
+	@media (max-width: 380px) {
+		.title h1 {
+			margin-top: 100px;
+		}
+	}
+
 </style>

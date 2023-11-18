@@ -1,3 +1,16 @@
-body{
-    background-color: #eee5cf;
+:root {
+    --bgcolor: #c2b294;
+    --hdrcolor: #132c13;
+
+    --hovcolor: #7ea172;
+    --slctcolor: #8A9A5B;
+    --clrstwo: #908564;
+    --clrsthree: #6a6748;
 }
+
+body{
+    /* background-color: var(--bgcolor); */
+    background-color: white;
+}
+
+

@@ -10,9 +10,11 @@
 	let biblePassage = 'Loading passage...';
 
 	// This variable is an array that stores individual verses fetched from the API.
+	// @ts-ignore
 	let versesArray = [];
 
 	// This variable is any array that stores all the notes taken.
+	// @ts-ignore
 	let verseNotes = [];
 
 	async function fetchPassage() {
@@ -31,6 +33,7 @@
 
 			if (data && data.length > 0) {
 				// Breaking chapter into verses and putting it in array to manipulate individually
+				// @ts-ignore
 				versesArray = data.map((verse) => ({
 					// All keys are names we created, all values are from json file
 					book: verse.bookname,
@@ -45,6 +48,7 @@
 
 				// Convert the verses array into HTML, marking each verse clickable.
 				biblePassage = versesArray
+					// @ts-ignore
 					.map((verse, index) => {
 						return `<span class="clickable" data-index="${index}"> 
 						<sup>${index + 1}</sup> ${verse.text} </span><br>`;
@@ -84,10 +88,12 @@
 		});
 	}
 
+	// @ts-ignore
 	function handleVerseClick(event) {
 		// Get index number of the clicked verse
 		const verseIndex = event.target.getAttribute('data-index');
 		// Get the verse information in versesArray using verseIndex
+		// @ts-ignore
 		const selectedVerse = versesArray[verseIndex];
 
 		// Add notes using window.prompt()
@@ -98,12 +104,14 @@
 		// Check to see that after removing the the unnecessary spaces, the input is not empty
 		if (note != null && note.trim() != '') {
 			// Add the note into the verseNotes array
+			// @ts-ignore
 			verseNotes[verseIndex].push(`${selectedVerse.book} 
 			${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`);
 			updateNotesPanel();
 		}
 	}
 
+	// @ts-ignore
 	function handleVerseHover(event) {
 		// Change background color when the verse is hovered over
 		event.target.style.backgroundColor = 'lightgrey';
@@ -111,6 +119,7 @@
 		event.target.style.cursor = 'pointer';
 	}
 
+	// @ts-ignore
 	function handleVerseMouseOut(event) {
 		// Reset background color when the mouse leaves the verse
 		event.target.style.backgroundColor = 'initial';
@@ -131,7 +140,9 @@
 			let notesHTML = '';
 
 			// Loop through verseNotes to generate the HTML for notes
+			// @ts-ignore
 			verseNotes.forEach((notes, verseIndex) => {
+				// @ts-ignore
 				notes.forEach((note, noteIndex) => {
 					// Concatenate each note's HTML without adding a separator
 					notesHTML += 
@@ -167,16 +178,15 @@
 			// Select all delete elements
 			const deleteElements = document.querySelectorAll('.delete');
 
+			// @ts-ignore
 			function handleDeleteHover(event) {
-				// Change background color when the button is hovered over
-				event.target.style.backgroundColor = '#FF4433';
-				// Change the mouse cursor into a point
+				event.target.style.backgroundColor = 'var(--hovcolor)';
 				event.target.style.cursor = 'pointer';
 			}
 
+			// @ts-ignore
 			function handleDeleteMouseOut(event) {
-				// Reset background color when the mouse leaves the button
-				event.target.style.backgroundColor = '#FAA0A0';
+				event.target.style.backgroundColor = 'initial';
 			}
 
 			// Loop through the selected note elements to apply styles
@@ -185,28 +195,26 @@
 				deleteElement.addEventListener('mouseout', handleDeleteMouseOut);
 				// Check if noteElement is an HTMLElement
 				if (deleteElement instanceof HTMLElement) {
-					// Apply styles to each note element as needed
-					deleteElement.style.backgroundColor = '#FAA0A0';
-					deleteElement.style.borderRadius = '8px';
+					// deleteElement.style.backgroundColor = '#FAA0A0';
+					deleteElement.style.borderRadius = '40px';
 					// noteElement.style.padding = '10px';
 					// noteElement.style.margin = '10px 0';
 					// noteElement.style.width = '85%';
 				}
 			});
 
-			// Select all delete elements
+			// Select all of the edit elements
 			const editElements = document.querySelectorAll('.edit');
 
+			// @ts-ignore
 			function handleEditHover(event) {
-				// Change background color when the button is hovered over
-				event.target.style.backgroundColor = '#6495ED';
-				// Change the mouse cursor into a point
+				event.target.style.backgroundColor = 'var(--hovcolor)';
 				event.target.style.cursor = 'pointer';
 			}
 
+			// @ts-ignore
 			function handleEditMouseOut(event) {
-				// Reset background color when the mouse leaves the button
-				event.target.style.backgroundColor = '#A7C7E7';
+				event.target.style.backgroundColor = 'initial';
 			}
 
 			// Loop through the selected note elements to apply styles
@@ -215,9 +223,8 @@
 				editElement.addEventListener('mouseout', handleEditMouseOut);
 				// Check if noteElement is an HTMLElement
 				if (editElement instanceof HTMLElement) {
-					// Apply styles to each note element as needed
-					editElement.style.backgroundColor = '#A7C7E7';
-					editElement.style.borderRadius = '8px';
+					// editElement.style.backgroundColor = '#A7C7E7';
+					editElement.style.borderRadius = '40px';
 					// noteElement.style.padding = '10px';
 					// noteElement.style.margin = '10px 0'
 					// noteElement.style.width = '85%';
@@ -243,29 +250,33 @@
 		});
 	}
 
+	// @ts-ignore
 	function handleEditClick(event) {
 		const noteIndex = event.target.getAttribute('data-index');
 		const verseIndex = event.target.parentNode.getAttribute('data-index');
+		// @ts-ignore
 		const fullNote = verseNotes[verseIndex][noteIndex];
 
 		// Split the string by " - " and take the second part, which is the actual note content.
 		const noteContent = fullNote.split(' - ')[1];
-
+		// @ts-ignore
 		const selectedVerse = versesArray[verseIndex];
 
 		// Allow the user to only edit the note content
 		const newNoteContent = prompt(`Edit your note for ${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber}`, noteContent);
 
 		if (newNoteContent != null && newNoteContent.trim() != '') {
-			// Update the note in the verseNotes array with the new content
+			// Update the note in the verseNotes array with the new content 
+			// @ts-ignore
 			verseNotes[verseIndex][noteIndex] = `${fullNote.split(' - ')[0]} - ${newNoteContent}`;
 			updateNotesPanel();
 		}
 	}
-
+	// @ts-ignore
 	function handleDeleteClick(event) {
 		const noteIndex = event.target.getAttribute('data-index');
 		const selectedVerseIndex = event.target.parentNode.getAttribute('data-index');
+		// @ts-ignore
 		const selectedNote = verseNotes[selectedVerseIndex];
 
 		// Remove the note based on the provided index
@@ -359,6 +370,22 @@
 	// @ts-ignore
 	function updateSortOrder(order) {
 		sortOrder = order;
+
+		// Update button styles based on sortOrder
+		const tradButton = document.getElementById('trad');
+      	const alphButton = document.getElementById('alph');
+
+		if (sortOrder === 'Traditional') {
+			// @ts-ignore
+        	tradButton.style.backgroundColor = 'var(--slctcolor)'; 
+			// @ts-ignore
+        	alphButton.style.backgroundColor = '';
+      	} else {
+			  // @ts-ignore
+        	alphButton.style.backgroundColor = 'var(--slctcolor)'; 
+			// @ts-ignore
+        	tradButton.style.backgroundColor = ''; 
+      	}
 	}
 
 	/**
@@ -390,7 +417,7 @@
 		const selectedBookChaps = bible[selectedBook];
 		if (selectedBookChaps) {
 			for (let i = 1; i <= selectedBookChaps; i++) {
-				allChaps.push(`${i}`);
+				allChaps.push(`Chapter ${i}`);
 				// console.log(allChaps);
 			}
 		}
@@ -426,7 +453,9 @@
 	}
 
 	function searchButton() {
+		// @ts-ignore
 		const selectedBook = document.getElementById('books').value;
+		// @ts-ignore
 		const selectedChapter = document.getElementById('chapters').value;
 		// Make sure both selects are inputed
 		if (selectedBook && selectedChapter) {
@@ -442,24 +471,10 @@
 	<div id="bible-passage">
 		<header>
 			<div class="align">
+
 				<div class="bible-order">
-					<label for="trad">Trad.</label>
-					<input
-						id="trad"
-						type="radio"
-						value="Traditional"
-						name="radio-button"
-						checked
-						on:change={() => updateSortOrder('Traditional')}
-					/>
-					<label>Alph.</label>
-					<input
-						id="alph"
-						type="radio"
-						value="Alphabetical"
-						name="radio-button"
-						on:change={() => updateSortOrder('Alphabetical')}
-					/>
+					<button id="trad" on:click={() => updateSortOrder('Traditional')}>TRD</button>
+					<button id="alph" on:click={() => updateSortOrder('Alphabetical')}>ALPH</button>
 				</div>
 
 				<div class="stack">
@@ -509,55 +524,56 @@
 </div>
 
 <style>
-	.select-book-chapter {
-		margin-top: 20px;
-		background-color: #edede9;
-	}
-
+	@import url('https://fonts.cdnfonts.com/css/varela-round-3');
 	.align {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 10px;
+		/* gap: 10px; */
 	}
 
 	.bible-order {
-		margin-left: 20px;
+		margin-right: 0px;
+		margin-left: 15px;
 	}
 
 	/*   Div for me   */
-	.bible-order input[type='radio'] {
+	.bible-order button {
 		display: block; /* Display radio buttons on top of each other */
 		margin: 5px; /* Space between top and bottom button */
+		width: 70px;
+		/* margin: 15px 70px 15px 70px; */
+		/* margin: 15px 10px 0px -200px; */
 	}
 	select {
-		width: 206px;
-		background-color: #132c13;
-		/* color: #edede9; */
-		color: white;
+		/* width: 200px; */
+		width: 170px;
 		text-align: center;
 		margin: 0;
 		height: 40px;
+		-webkit-appearance: none;
+  		-moz-appearance: none;
+  		text-indent: 5px;
 	}
-	.search-button button {
-		color: white;
-		background-color: gray;
-	}
-
-	.bible-order input[type='radio']:hover,
+	
+	.bible-order button:hover,
 	select:hover,
 	.search-button button:hover {
-		background-color: #7ea172;
+		background-color: var(--hovcolor);
 		cursor: pointer;
 	}
 
 	select,
-	.search-button button {
+	.search-button button,
+	.bible-order button {
 		font-size: 16px;
+		font-family: 'Varela Round', sans-serif;
 		outline: none;
-		border: 1px solid #7ea172;
+		border: 2px solid var(--hovcolor);
 		border-radius: 40px;
 		transition: background-color 0.3s, color 0.3s;
+		color: white;
+		background-color: var(--hdrcolor);
 	}
 
 	.page-container {
@@ -574,7 +590,7 @@
 
 	#bible-passage,
 	#notes-panel {
-		width: 50%; /* Divids container into two equal parts */
+		/* width: 50%; Divids container into two equal parts */
 		height: 100%; /* Fills entire height of the container */
 		box-sizing: border-box; /* Include borders in width calculation */
 		overflow: auto; /* Enable scrolling if content overflows */
@@ -582,21 +598,28 @@
 	}
 
 	#bible-passage {
-		border-right: 3px solid #ccc;
+		/* border-right: 3px solid #ccc;
 		border-top: 3px solid #ccc;
-		border-bottom: 3px solid #ccc;
-		background-color: #edede9;
+		border-bottom: 3px solid #ccc; */
+
+		/* background-color: #edede9; */
+		background-color: #f4f3ee;
 		text-align: center;
+		width: 62%
 	}
 
 	#notes-panel {
-		border-left: 3px solid #ccc;
+		/* border-left: 3px solid #ccc;
 		border-top: 3px solid #ccc;
-		border-bottom: 3px solid #ccc;
-		background-color: #d4ccc3;
+		border-bottom: 3px solid #ccc; */
+
+		/* background-color: #d4ccc3; */
+		background-color: #cad2c5;
+		width: 38%;
 	}
 
 	#notes-panel header {
+		font-family: 'Varela Round', sans-serif;
 		background-color: #d9d9d9;
 		border: 1px solid #d9d9d9;
 	}
@@ -620,21 +643,27 @@
 	}
 
 	/* This ensures items fit in mobile view */
-	@media (max-width: 653px) {
+	@media (max-width: 654px) {
 		.bible-books,
 		.bible-chapters {
 			display: block;
 			width: 100%;
 		}
 
-		select {
-			width: 165px;
-			margin-bottom: 5px;
+		.stack {
+			margin-right: 30px;
 		}
 
-		.bible-order {
-			color: #132c13;
-			display: none;
+		select {
+			width: 140px;
+			/* margin-bottom: 5px; */
+		}
+
+		.bible-order button {
+			color: white;
+			margin: 0px 0px 0px 5px;
+			/* display: none; */
+			/* Comment to see change */
 		}
 	}
 </style>

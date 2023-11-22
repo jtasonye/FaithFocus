@@ -122,11 +122,15 @@
       	const alphButton = document.getElementById('alph');
 
 		if (sortOrder === 'Traditional') {
+			// @ts-ignore
         	tradButton.style.backgroundColor = 'var(--slctcolor)'; // Blue color for Traditional
-        	alphButton.style.backgroundColor = ''; // Reset Alphabetical button color
+        	// @ts-ignore
+			alphButton.style.backgroundColor = ''; // Reset Alphabetical button color
       	} else {
+			// @ts-ignore
         	alphButton.style.backgroundColor = 'var(--slctcolor)'; // Red color for Alphabetical
-        	tradButton.style.backgroundColor = ''; // Reset Traditional button color
+        	// @ts-ignore
+			tradButton.style.backgroundColor = ''; // Reset Traditional button color
       	}
 	}
 
@@ -228,7 +232,7 @@
 						
 						<div class="tooltip">
 							<button id="trad" on:click={() => updateSortOrder('Traditional')}>TRD</button>
-							<span class="tooltiptext">Biblical Canon Sort</span>
+							<span class="tooltiptext"> Bible Canon Sort</span>
 						</div>
 		
 						<div class="tooltip">
@@ -273,20 +277,30 @@
 			</div>
 		</div>
 	</div>
-	
 </div>
-<!-- <footer>
-	hellooo
-</footer> -->
+<footer>
+</footer>
 
 
 
 <style>
 	@import url('https://fonts.cdnfonts.com/css/varela-round-3');
+
+	footer {
+		background-color: var(--hdrcolor);
+		position:fixed;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		/* height: 20px; */
+		height: 2.5vh;
+		text-align: center;	
+		z-index: 1;
+	}
 	.title {
 		/* text-align: center; */
 		color: var(--bgcolor);
-		text-shadow: 2px 1px black;
+		/* color: #d7ceaf; */
 		font-weight: 900;
 		font-family: 'Varela Round', sans-serif;
 	}
@@ -297,12 +311,14 @@
 		/* margin-top: 290px; */
 		margin-top: 30vh;
 		margin-bottom: 0vh;
+		text-shadow: 3px 1px black;
 	}
 
 	.title h2 {
 		/* margin-top: 15px; */
 		margin-top: 2vh;
 		font-size: 30px;
+		text-shadow: 3px 1px black;
 	}
 
 	.title, .selection-container {
@@ -338,17 +354,17 @@
 
     .tooltip .tooltiptext {
       visibility: hidden;
-      width: 250px;
+      width: 100px;
       background-color: #333;
       color: white;
       text-align: center;
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 5px;
       position: absolute;
       z-index: 1;
 	  top: -5px;
   	  right: 105%;
-      margin-left: -60px;
+      margin-left: -30px;
       opacity: 0;
       transition: opacity 0.3s;
 	  font-size: 20px;
@@ -372,10 +388,10 @@
 	}
 
 	.search-button button {
-		height: 35px;
+		height: 40px;
 		width: 300px;
 		/* margin: 20px 0 0 20px; */
-		margin: 4vh 4.5vh 0 4vh;
+		margin: 4vh 4.5vh 1vh 4vh;
 	}
 
 	select,
@@ -429,6 +445,7 @@
 		margin: 90px; */
 
 		color: var(--slctcolor);
+		/* color: #d7ceaf; */
 		font-size: 20px;
 		font-weight: 900;
 		text-shadow: 2px 1px black;
@@ -480,7 +497,7 @@
 	/* Max-width: if [device width] is less than or equal to, then apply style */
 	@media (max-width: 380px) {
 		.title h1 {
-			margin-top: 100px;
+			margin-top: 150px;
 		}
 	}
 

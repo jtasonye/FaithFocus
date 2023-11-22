@@ -46,7 +46,7 @@
 				selectedBook = book;
 				selectedChapter = chapter;
 
-				// Convert the verses array into HTML, marking each verse clickable.
+				// Convert the verses array into HTML, making each verse clickable.
 				biblePassage = versesArray
 					// @ts-ignore
 					.map((verse, index) => {
@@ -114,7 +114,8 @@
 	// @ts-ignore
 	function handleVerseHover(event) {
 		// Change background color when the verse is hovered over
-		event.target.style.backgroundColor = 'lightgrey';
+		// event.target.style.backgroundColor = 'lightgrey';
+		event.target.style.backgroundColor = '#cad2c5';
 		// Change the mouse cursor into a point
 		event.target.style.cursor = 'pointer';
 	}
@@ -156,6 +157,7 @@
 
 			// Set the inner HTML of notesBody to the generated notesHTML
 			notesBody.innerHTML = notesHTML;
+
 
 			// Select all note elements
 			const noteElements = document.querySelectorAll('.note');
@@ -522,9 +524,23 @@
 		</div>
 	</div>
 </div>
+<footer>
+</footer>
 
 <style>
 	@import url('https://fonts.cdnfonts.com/css/varela-round-3');
+
+	footer {
+		background-color: var(--hdrcolor);
+		/* position:fixed; */
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		/* height: 20px; */
+		height: 2.5vh;
+		text-align: center;	
+		z-index: 1;
+	}
 	.align {
 		display: flex;
 		align-items: center;

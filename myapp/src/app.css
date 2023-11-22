@@ -10,7 +10,8 @@
 
 body{
     /* background-color: var(--bgcolor); */
-    background-color: white;
+    /* background-color: white; */
+    background-color: var(--hdrcolor);
 }
 
 

@@ -90,39 +90,73 @@
 
 	// @ts-ignore
 	function handleVerseClick(event) {
-		// Get index number of the clicked verse
 		const verseIndex = event.target.getAttribute('data-index');
-		// Get the verse information in versesArray using verseIndex
-		// @ts-ignore
 		const selectedVerse = versesArray[verseIndex];
 
-		// Add notes using window.prompt()
-		const note = prompt(
-			`What note would you like to add for ${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} ?`
+		const action = prompt(
+			"What would you like to do with this verse?\n - Type 'highlight' to highlight the verse\n - Type 'unhighlight' to remove the highlight\n - Type 'notes' to add a note."
 		);
 
-		// Check to see that after removing the the unnecessary spaces, the input is not empty
+		if (action === 'highlight') {
+			highlightVerse(event.target);
+		} else if (action === 'unhighlight') {
+			unhighlightVerse(event.target);
+		} else if (action === 'notes') {
+			addNoteForVerse(selectedVerse, verseIndex);
+		}
+	}
+
+	// @ts-ignore
+	function highlightVerse(verseElement) {
+		verseElement.classList.add('highlighted');
+	}
+
+	// @ts-ignore
+	function unhighlightVerse(verseElement) {
+		verseElement.classList.remove('highlighted');
+	}
+
+	function addNoteForVerse(selectedVerse, verseIndex) {
+		// Check if a note already exists for this verse
+		if (verseNotes[verseIndex].length > 0) {
+			// Prompt the user to decide on overwriting the note or cancelling
+			const overwrite = confirm(
+				'A note already exists for this verse. Do you want to overwrite it?'
+			);
+			if (!overwrite) {
+				return; // Exit the function if the user chooses not to overwrite
+			}
+		}
+
+		// Prompt for the new note
+		const note = prompt(
+			`What note would you like to add for ${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber}?`
+		);
+
 		if (note != null && note.trim() != '') {
-			// Add the note into the verseNotes array
-			// @ts-ignore
-			verseNotes[verseIndex].push(`${selectedVerse.book} 
-			${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`);
+			// Replace the existing note or add a new one
+			verseNotes[verseIndex] = [
+				`${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`
+			];
 			updateNotesPanel();
 		}
 	}
 
 	// @ts-ignore
+	// Update the handleVerseHover and handleVerseMouseOut functions
 	function handleVerseHover(event) {
-		// Change background color when the verse is hovered over
-		event.target.style.backgroundColor = 'lightgrey';
-		// Change the mouse cursor into a point
+		if (!event.target.classList.contains('highlighted')) {
+			event.target.style.backgroundColor = 'yellow';
+		}
 		event.target.style.cursor = 'pointer';
 	}
 
 	// @ts-ignore
 	function handleVerseMouseOut(event) {
-		// Reset background color when the mouse leaves the verse
-		event.target.style.backgroundColor = 'initial';
+		if (!event.target.classList.contains('highlighted')) {
+			event.target.style.backgroundColor = 'initial';
+		}
+		event.target.style.cursor = 'pointer';
 	}
 
 	function addHoverListeners() {
@@ -145,8 +179,7 @@
 				// @ts-ignore
 				notes.forEach((note, noteIndex) => {
 					// Concatenate each note's HTML without adding a separator
-					notesHTML += 
-					`<div class="note" data-index="${verseIndex}">
+					notesHTML += `<div class="note" data-index="${verseIndex}">
             		   <p note-index="${noteIndex}">${note}</p>
             		   <button class="edit" data-index="${noteIndex}">Edit Note</button>
             		   <button class="delete" data-index="${noteIndex}">Delete Note</button>
@@ -236,7 +269,6 @@
 		}
 	}
 
-
 	function addDeleteListeners() {
 		// Get all the verses from class name "clickable" and add a click event
 		document.querySelectorAll('.delete').forEach((item) => {
@@ -263,10 +295,13 @@
 		const selectedVerse = versesArray[verseIndex];
 
 		// Allow the user to only edit the note content
-		const newNoteContent = prompt(`Edit your note for ${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber}`, noteContent);
+		const newNoteContent = prompt(
+			`Edit your note for ${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber}`,
+			noteContent
+		);
 
 		if (newNoteContent != null && newNoteContent.trim() != '') {
-			// Update the note in the verseNotes array with the new content 
+			// Update the note in the verseNotes array with the new content
 			// @ts-ignore
 			verseNotes[verseIndex][noteIndex] = `${fullNote.split(' - ')[0]} - ${newNoteContent}`;
 			updateNotesPanel();
@@ -373,19 +408,19 @@
 
 		// Update button styles based on sortOrder
 		const tradButton = document.getElementById('trad');
-      	const alphButton = document.getElementById('alph');
+		const alphButton = document.getElementById('alph');
 
 		if (sortOrder === 'Traditional') {
 			// @ts-ignore
-        	tradButton.style.backgroundColor = 'var(--slctcolor)'; 
+			tradButton.style.backgroundColor = 'var(--slctcolor)';
 			// @ts-ignore
-        	alphButton.style.backgroundColor = '';
-      	} else {
-			  // @ts-ignore
-        	alphButton.style.backgroundColor = 'var(--slctcolor)'; 
+			alphButton.style.backgroundColor = '';
+		} else {
 			// @ts-ignore
-        	tradButton.style.backgroundColor = ''; 
-      	}
+			alphButton.style.backgroundColor = 'var(--slctcolor)';
+			// @ts-ignore
+			tradButton.style.backgroundColor = '';
+		}
 	}
 
 	/**
@@ -471,7 +506,6 @@
 	<div id="bible-passage">
 		<header>
 			<div class="align">
-
 				<div class="bible-order">
 					<button id="trad" on:click={() => updateSortOrder('Traditional')}>TRD</button>
 					<button id="alph" on:click={() => updateSortOrder('Alphabetical')}>ALPH</button>
@@ -552,10 +586,15 @@
 		margin: 0;
 		height: 40px;
 		-webkit-appearance: none;
-  		-moz-appearance: none;
-  		text-indent: 5px;
+		-moz-appearance: none;
+		text-indent: 5px;
 	}
-	
+
+	/* Style for highlighted verses */
+	.highlighted {
+		background-color: yellow !important;
+	}
+
 	.bible-order button:hover,
 	select:hover,
 	.search-button button:hover {
@@ -605,7 +644,7 @@
 		/* background-color: #edede9; */
 		background-color: #f4f3ee;
 		text-align: center;
-		width: 62%
+		width: 62%;
 	}
 
 	#notes-panel {

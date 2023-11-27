@@ -123,12 +123,12 @@
 
 		if (sortOrder === 'Traditional') {
 			// @ts-ignore
-        	tradButton.style.backgroundColor = 'var(--slctcolor)'; // Blue color for Traditional
+        	tradButton.style.backgroundColor = 'var(--slctcolor)';
         	// @ts-ignore
 			alphButton.style.backgroundColor = ''; // Reset Alphabetical button color
       	} else {
 			// @ts-ignore
-        	alphButton.style.backgroundColor = 'var(--slctcolor)'; // Red color for Alphabetical
+        	alphButton.style.backgroundColor = 'var(--slctcolor)';
         	// @ts-ignore
 			tradButton.style.backgroundColor = ''; // Reset Traditional button color
       	}

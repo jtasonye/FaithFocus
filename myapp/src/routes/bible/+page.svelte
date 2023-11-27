@@ -13,7 +13,7 @@
 	// @ts-ignore
 	let versesArray = [];
 
-	// This variable is any array that stores all the notes taken.
+	// This variable is an array that stores all the notes taken.
 	// @ts-ignore
 	let verseNotes = [];
 
@@ -66,11 +66,29 @@
 		}
 	}
 
+	// Function to save notes to local storage
+	function saveNotesToLocalStorage() {
+    	localStorage.setItem('verseNotes', JSON.stringify(verseNotes));
+		updateNotesPanel();
+  	}
+
+	// Function to load notes from local storage
+	function loadNotesFromLocalStorage() {
+		const savedNotes = localStorage.getItem('verseNotes');
+		if (savedNotes) {
+			verseNotes = JSON.parse(savedNotes);
+			updateNotesPanel();
+		}
+	}
+
 	// Call the fetchPassage function when the component is mounted
 	onMount(async () => {
 		const url = new URL(window.location.href);
 		book = url.searchParams.get('book') || '';
 		chapter = url.searchParams.get('chapter') || '';
+
+		// Load notes from local storage when the component is mounted
+		loadNotesFromLocalStorage();
 
 		await fetchPassage();
 		// Attach click event listeners to verses
@@ -107,7 +125,11 @@
 			// @ts-ignore
 			verseNotes[verseIndex].push(`${selectedVerse.book} 
 			${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`);
-			updateNotesPanel();
+
+			
+			// Update the notes in local storage after adding a new note
+			saveNotesToLocalStorage();
+			// updateNotesPanel();
 		}
 	}
 
@@ -157,7 +179,6 @@
 
 			// Set the inner HTML of notesBody to the generated notesHTML
 			notesBody.innerHTML = notesHTML;
-
 
 			// Select all note elements
 			const noteElements = document.querySelectorAll('.note');
@@ -271,7 +292,10 @@
 			// Update the note in the verseNotes array with the new content 
 			// @ts-ignore
 			verseNotes[verseIndex][noteIndex] = `${fullNote.split(' - ')[0]} - ${newNoteContent}`;
-			updateNotesPanel();
+
+			// Update the notes in local storage after adding a new note
+			saveNotesToLocalStorage();
+			// updateNotesPanel();
 		}
 	}
 	// @ts-ignore
@@ -283,9 +307,23 @@
 
 		// Remove the note based on the provided index
 		selectedNote.splice(noteIndex, 1);
-		updateNotesPanel();
+
+		// Update the notes in local storage after adding a new note
+		saveNotesToLocalStorage();
+		// updateNotesPanel();
 	}
 
+	// localStorage.clear();
+
+	// Run in cosole to see what is in local storage 
+
+ 	// for (let i = 0; i < localStorage.length; i++) {
+	// 	const key = localStorage.key(i);
+	// 	const value = localStorage.getItem(key);
+	// 	console.log(`${key}: ${value}`);
+  	// } 
+
+	
 	/**
 	 * @type {Object.<string, number>}
 	 *
@@ -526,6 +564,10 @@
 </div>
 <footer>
 </footer>
+
+
+
+
 
 <style>
 	@import url('https://fonts.cdnfonts.com/css/varela-round-3');

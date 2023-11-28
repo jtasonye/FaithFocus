@@ -16,6 +16,10 @@
 	// @ts-ignore
 	let verseNotes = [];
 
+	// This variable is an array that stores all the highlighted verses.
+	// @ts-ignore
+	let highlightedVerses = [];
+
 	async function fetchPassage() {
 		try {
 			// Fetch the passage data from the API using the current book and chapter values.
@@ -149,7 +153,6 @@
 			updateNotesPanel();
 		}
 	}
-
 
 	onMount(async () => {
 		const url = new URL(window.location.href);

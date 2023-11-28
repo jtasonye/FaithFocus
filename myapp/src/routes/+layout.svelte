@@ -12,5 +12,5 @@
 
 <Heading />
 <slot />
-<Footer />
+<!-- <Footer /> -->
 

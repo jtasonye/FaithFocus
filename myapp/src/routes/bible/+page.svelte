@@ -1,8 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 
-	// Initialize book and chapter to get parameters from
-	// window.location.href
+	// Initialize the book and chapter variables to get parameters from window.location.href.
 	let book = '';
 	let chapter = '';
 
@@ -13,40 +12,65 @@
 	// @ts-ignore
 	let versesArray = [];
 
-	// This variable is any array that stores all the notes taken.
+	// This variable is an array that stores all the notes taken.
 	// @ts-ignore
 	let verseNotes = [];
 
+	// This variable is an array that stores all the highlighted verses.
+	// @ts-ignore
+	let highlightedVerses = [];
+
 	async function fetchPassage() {
 		try {
-			// Attempt to fetch the passage data from the API using the current book and chapter values.
+			// Fetch the passage data from the API using the current book and chapter values.
 			const response = await fetch(
 				`https://labs.bible.org/api/?passage=${book}+${chapter}&type=json`
 			);
 
-			// Data is a variable that we can use to manipulate the whatever was fetched
-			// Type json allows us to use variable names for book, chapter, etc
+			/* 
+			Data is a variable that we can use to manipulate the whatever was 
+			fetched and Type json allows us to use variable names for book, chapter, etc.
+			*/
 			const data = await response.json();
+
+			/*
+			Create a new URL object that will be used to get the book and 
+			chapter values from the previous page.
+			*/
 			const url = new URL(window.location.href);
+
+			/* 
+			Extract the value of the 'book' parameter from the URL.
+			If the book or chapter parameter is not present, the values on 
+			left side will be defaulted to an empty string.
+			*/
 			book = url.searchParams.get('book') || '';
 			chapter = url.searchParams.get('chapter') || '';
 
 			if (data && data.length > 0) {
-				// Breaking chapter into verses and putting it in array to manipulate individually
-				// @ts-ignore
+				/* 
+				Break the fetched passage into verses and put them in an array
+				so that they can be manipulated individually.
+				*/ //@ts-ignore
 				versesArray = data.map((verse) => ({
-					// All keys are names we created, all values are from json file
+					// All keys are names we create, all values are from json file.
 					book: verse.bookname,
 					chapter: verse.chapter,
 					verseNumber: verse.verse,
 					text: verse.text
 				}));
 
-				// Update the selected book and chapter to match the fetched passage.
+				/* 
+				Update the variables selectedBook and selectedChapter to match 
+				the parameters passed from the previous page. 
+				*/
 				selectedBook = book;
 				selectedChapter = chapter;
 
-				// Convert the verses array into HTML, marking each verse clickable.
+				/* 
+				Make each verse clickable by converting the variable versesArray
+				into HTML and add an index to differentiate the verses.
+				*/
 				biblePassage = versesArray
 					// @ts-ignore
 					.map((verse, index) => {
@@ -55,8 +79,15 @@
 					})
 					.join(' ');
 
-				// Initialize an empty array to store notes for each verse
-				verseNotes = versesArray.map(() => []);
+				/* 
+				Initialize the variable verseNotes as an array with the same
+				length as versesArray. For each verse in verseArray, an empty
+				array is created and assigned to the correct position in the 
+				verseNotes array.
+				*/
+				verseNotes = versesArray.map(() => []); 
+
+				// Update the avaliable chapters based on the selected book.
 				populateBookChaps();
 			} else {
 				biblePassage = 'No passage found.';
@@ -66,23 +97,82 @@
 		}
 	}
 
-	// Call the fetchPassage function when the component is mounted
+	// Function to save notes to local storage.
+	function saveNotesToLocalStorage() {
+
+		const savedNotes = localStorage.getItem(`verseNotes-${book}-${chapter}`);
+
+		if (savedNotes) {
+			/*
+			If there are existing notes, parse and merge them with the 
+			current notes.
+			*/
+			const existingNotes = JSON.parse(savedNotes);
+
+			verseNotes.forEach((notes, verseIndex) => {
+				existingNotes[verseIndex] = existingNotes[verseIndex] || [];
+				existingNotes[verseIndex] = existingNotes[verseIndex].concat(notes);
+			});
+
+			// Save the merged notes to local storage.
+			localStorage.setItem(`verseNotes-${book}-${chapter}`, JSON.stringify(existingNotes));
+		} 
+		else{
+			// If there are no existing notes, save the current notes directly.
+			localStorage.setItem(`verseNotes-${book}-${chapter}`, JSON.stringify(verseNotes));
+		}
+
+  		updateNotesPanel();
+
+		// Refresh the page after calling "updateNotesPanel()".
+		location.reload();
+	}
+
+	// Function to delete a note from local storage.
+	function deleteNoteFromLocalStorage(verseIndex, noteIndex) {
+		// Retrieve existing notes from local storage.
+		const savedNotes = localStorage.getItem(`verseNotes-${book}-${chapter}`);
+
+		if (savedNotes) {
+			const existingNotes = JSON.parse(savedNotes);
+			existingNotes[verseIndex].splice(noteIndex, 1);
+			localStorage.setItem(`verseNotes-${book}-${chapter}`, JSON.stringify(existingNotes));
+		}
+		// Refresh the page after deleting the note.
+		location.reload();
+	}
+
+	/*
+	Function to get notes from local storage and update the "verseNotes"
+	variable with the loaded notes.
+	*/
+	function loadNotesFromLocalStorage() {
+		const savedNotes = localStorage.getItem(`verseNotes-${book}-${chapter}`);
+		if (savedNotes) {
+			verseNotes = JSON.parse(savedNotes);
+			updateNotesPanel();
+		}
+	}
+
 	onMount(async () => {
 		const url = new URL(window.location.href);
 		book = url.searchParams.get('book') || '';
 		chapter = url.searchParams.get('chapter') || '';
 
+		// Load notes from local storage when the component is mounted.
+		loadNotesFromLocalStorage();
+
 		await fetchPassage();
-		// Attach click event listeners to verses
+		// Attach click event listeners to verses.
 		addClickListeners();
-		// Attach hover event listeners to verses
+		// Attach hover event listeners to verses.
 		addHoverListeners();
-		// Attach click event listeners to notes
+		// Attach click event listeners to notes.
 		addDeleteListeners();
 	});
 
 	function addClickListeners() {
-		// Get all the verses from class name "clickable" and add a click event
+		// Get all the verses from class name "clickable" and add a click event.
 		document.querySelectorAll('.clickable').forEach((item) => {
 			item.addEventListener('click', handleVerseClick);
 		});
@@ -94,14 +184,14 @@
 		const selectedVerse = versesArray[verseIndex];
 
 		const action = prompt(
-			"What would you like to do with this verse?\n - Type 'highlight' to highlight the verse\n - Type 'unhighlight' to remove the highlight\n - Type 'notes' to add a note."
+			"What would you like to do with this verse?\n - Type 'h' to highlight the verse\n - Type 'u' to remove the highlight\n - Type 'n' to add a note."
 		);
 
-		if (action === 'highlight') {
+		if (action === 'h') {
 			highlightVerse(event.target);
-		} else if (action === 'unhighlight') {
+		} else if (action === 'u') {
 			unhighlightVerse(event.target);
-		} else if (action === 'notes') {
+		} else if (action === 'n') {
 			addNoteForVerse(selectedVerse, verseIndex);
 		}
 	}
@@ -138,6 +228,7 @@
 			verseNotes[verseIndex] = [
 				`${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`
 			];
+			saveNotesToLocalStorage();
 			updateNotesPanel();
 		}
 	}
@@ -146,7 +237,7 @@
 	// Update the handleVerseHover and handleVerseMouseOut functions
 	function handleVerseHover(event) {
 		if (!event.target.classList.contains('highlighted')) {
-			event.target.style.backgroundColor = 'yellow';
+			event.target.style.backgroundColor = 'var(--notesbgcolor)';
 		}
 		event.target.style.cursor = 'pointer';
 	}
@@ -166,20 +257,25 @@
 		});
 	}
 
+	/*
+	Function to update the UI to reflect changes in the "verseNotes" variable.
+	*/
 	function updateNotesPanel() {
 		const notesBody = document.getElementById('notes-list');
 
 		if (notesBody !== null) {
-			// Initialize an empty string to store the HTML content
+			// Initialize an empty string to store the HTML content.
 			let notesHTML = '';
 
-			// Loop through verseNotes to generate the HTML for notes
-			// @ts-ignore
+			/*
+			Loop through verseNotes to dynamically generate the HTML for notes.
+			*/ // @ts-ignore
 			verseNotes.forEach((notes, verseIndex) => {
 				// @ts-ignore
 				notes.forEach((note, noteIndex) => {
-					// Concatenate each note's HTML without adding a separator
-					notesHTML += `<div class="note" data-index="${verseIndex}">
+					// Concatenate each note's HTML without adding a separator.
+					notesHTML += 
+					`<div class="note" data-index="${verseIndex}">
             		   <p note-index="${noteIndex}">${note}</p>
             		   <button class="edit" data-index="${noteIndex}">Edit Note</button>
             		   <button class="delete" data-index="${noteIndex}">Delete Note</button>
@@ -187,10 +283,10 @@
 				});
 			});
 
-			// Set the inner HTML of notesBody to the generated notesHTML
+			// Set the inner HTML of "notesBody" to the generated "notesHTML"
 			notesBody.innerHTML = notesHTML;
 
-			// Select all note elements
+			// Select all the note elements.
 			const noteElements = document.querySelectorAll('.note');
 
 			// Loop through the selected note elements to apply styles
@@ -208,18 +304,18 @@
 				}
 			});
 
-			// Select all delete elements
+			// Select all the delete elements.
 			const deleteElements = document.querySelectorAll('.delete');
 
 			// @ts-ignore
 			function handleDeleteHover(event) {
-				event.target.style.backgroundColor = 'var(--hovcolor)';
+				event.target.style.backgroundColor = '#FAA0A0';
 				event.target.style.cursor = 'pointer';
 			}
 
 			// @ts-ignore
 			function handleDeleteMouseOut(event) {
-				event.target.style.backgroundColor = 'initial';
+				event.target.style.backgroundColor = 'var(--notesbgcolor)';
 			}
 
 			// Loop through the selected note elements to apply styles
@@ -228,7 +324,7 @@
 				deleteElement.addEventListener('mouseout', handleDeleteMouseOut);
 				// Check if noteElement is an HTMLElement
 				if (deleteElement instanceof HTMLElement) {
-					// deleteElement.style.backgroundColor = '#FAA0A0';
+					deleteElement.style.backgroundColor = 'var(--notesbgcolor)';
 					deleteElement.style.borderRadius = '40px';
 					// noteElement.style.padding = '10px';
 					// noteElement.style.margin = '10px 0';
@@ -241,22 +337,22 @@
 
 			// @ts-ignore
 			function handleEditHover(event) {
-				event.target.style.backgroundColor = 'var(--hovcolor)';
+				event.target.style.backgroundColor = '#C1E1C1';
 				event.target.style.cursor = 'pointer';
 			}
 
 			// @ts-ignore
 			function handleEditMouseOut(event) {
-				event.target.style.backgroundColor = 'initial';
+				event.target.style.backgroundColor = 'var(--notesbgcolor)';
 			}
 
-			// Loop through the selected note elements to apply styles
+			// Loop through the selected note elements to apply styles.
 			editElements.forEach((editElement) => {
 				editElement.addEventListener('mouseover', handleEditHover);
 				editElement.addEventListener('mouseout', handleEditMouseOut);
 				// Check if noteElement is an HTMLElement
 				if (editElement instanceof HTMLElement) {
-					// editElement.style.backgroundColor = '#A7C7E7';
+					editElement.style.backgroundColor = 'var(--notesbgcolor)';
 					editElement.style.borderRadius = '40px';
 					// noteElement.style.padding = '10px';
 					// noteElement.style.margin = '10px 0'
@@ -269,8 +365,8 @@
 		}
 	}
 
+
 	function addDeleteListeners() {
-		// Get all the verses from class name "clickable" and add a click event
 		document.querySelectorAll('.delete').forEach((item) => {
 			item.addEventListener('click', handleDeleteClick);
 		});
@@ -282,31 +378,44 @@
 		});
 	}
 
+
 	// @ts-ignore
 	function handleEditClick(event) {
 		const noteIndex = event.target.getAttribute('data-index');
 		const verseIndex = event.target.parentNode.getAttribute('data-index');
 		// @ts-ignore
-		const fullNote = verseNotes[verseIndex][noteIndex];
-
-		// Split the string by " - " and take the second part, which is the actual note content.
-		const noteContent = fullNote.split(' - ')[1];
-		// @ts-ignore
 		const selectedVerse = versesArray[verseIndex];
 
-		// Allow the user to only edit the note content
+		// Retrieve the existing note content from local storage
+		const savedNotes = localStorage.getItem(`verseNotes-${book}-${chapter}`);
+		let existingNotes = [];
+		if (savedNotes) {
+			existingNotes = JSON.parse(savedNotes);
+		}
+
+		// Get the existing note content
+		const existingNote = existingNotes[verseIndex][noteIndex];
+		const existingNoteContent = existingNote.split(' - ')[1];
+
+		// Allow the user to edit the note content
 		const newNoteContent = prompt(
 			`Edit your note for ${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber}`,
-			noteContent
+			existingNoteContent
 		);
 
-		if (newNoteContent != null && newNoteContent.trim() != '') {
-			// Update the note in the verseNotes array with the new content
-			// @ts-ignore
-			verseNotes[verseIndex][noteIndex] = `${fullNote.split(' - ')[0]} - ${newNoteContent}`;
-			updateNotesPanel();
+		if (newNoteContent != null) {
+			// Update the note content in the existing note.
+			existingNotes[verseIndex][noteIndex] = `${selectedVerse.book} 
+			${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${newNoteContent}`;
+
+			// Save the updated notes back to local storage.
+			localStorage.setItem(`verseNotes-${book}-${chapter}`, JSON.stringify(existingNotes));
+
+			// Refresh the page after editing the note.
+			location.reload();
 		}
 	}
+
 	// @ts-ignore
 	function handleDeleteClick(event) {
 		const noteIndex = event.target.getAttribute('data-index');
@@ -316,9 +425,26 @@
 
 		// Remove the note based on the provided index
 		selectedNote.splice(noteIndex, 1);
+
+		/*
+		Call the deleteNoteFromLocalStorage function and update the notes in
+		local storage after deleting a note.
+		*/
+		deleteNoteFromLocalStorage(selectedVerseIndex, noteIndex);
 		updateNotesPanel();
 	}
 
+	// localStorage.clear();
+
+	// Run in console to see what is in local storage 
+
+ 	// for (let i = 0; i < localStorage.length; i++) {
+	// 	const key = localStorage.key(i);
+	// 	const value = localStorage.getItem(key);
+	// 	console.log(`${key}-${value}`);
+  	// } 
+
+	
 	/**
 	 * @type {Object.<string, number>}
 	 *
@@ -396,31 +522,31 @@
 		Revelation: 22
 	};
 
-	let sortOrder = 'Traditional'; // Added variable to store the sort order
+	let sortOrder = 'Traditional'; // Added variable to store the sort order.
 
-	// Reactive statement to update the order of the books based on sortOrder
+	// Reactive statement to update the order of the books based on sortOrder.
 	$: orderedBooks = sortOrder === 'Traditional' ? Object.keys(bible) : Object.keys(bible).sort();
 
-	// Function to update sortOrder when radio buttons change
-	// @ts-ignore
+	// Function to update sortOrder when radio buttons change.
+	//@ts-ignore
 	function updateSortOrder(order) {
 		sortOrder = order;
 
-		// Update button styles based on sortOrder
+		// Update button styles based on sortOrder.
 		const tradButton = document.getElementById('trad');
-		const alphButton = document.getElementById('alph');
+      	const alphButton = document.getElementById('alph');
 
 		if (sortOrder === 'Traditional') {
 			// @ts-ignore
-			tradButton.style.backgroundColor = 'var(--slctcolor)';
+        	tradButton.style.backgroundColor = 'var(--slctcolor)'; 
 			// @ts-ignore
-			alphButton.style.backgroundColor = '';
-		} else {
+        	alphButton.style.backgroundColor = '';
+      	} else {
+			  // @ts-ignore
+        	alphButton.style.backgroundColor = 'var(--slctcolor)'; 
 			// @ts-ignore
-			alphButton.style.backgroundColor = 'var(--slctcolor)';
-			// @ts-ignore
-			tradButton.style.backgroundColor = '';
-		}
+        	tradButton.style.backgroundColor = ''; 
+      	}
 	}
 
 	/**
@@ -444,8 +570,9 @@
 	 */
 	let allChaps = [];
 
-	/** Function that takes the selected book from the bible object
-	 *  and retrieves the number of chapters to put into the allChaps array.
+	/*
+	Function that takes the selected book from the bible object
+	and retrieves the number of chapters to put into the allChaps array.
 	 */
 	function populateBookChaps() {
 		allChaps = [];
@@ -482,6 +609,7 @@
 		const target = event.target;
 		if (target instanceof HTMLSelectElement) {
 			const selectedBook = target.value;
+			searchButton();
 			populateBookChaps();
 			console.log('Selected Book:', selectedBook);
 		}
@@ -495,8 +623,8 @@
 		// Make sure both selects are inputed
 		if (selectedBook && selectedChapter) {
 			window.location.href = `/bible?book=${selectedBook}&chapter=${selectedChapter}`;
-			// window.location.href = `/bible`;
-		} else {
+		} 
+		else {
 			alert('Please select both a book and a chapter.');
 		}
 	}
@@ -506,6 +634,7 @@
 	<div id="bible-passage">
 		<header>
 			<div class="align">
+
 				<div class="bible-order">
 					<button id="trad" on:click={() => updateSortOrder('Traditional')}>TRD</button>
 					<button id="alph" on:click={() => updateSortOrder('Alphabetical')}>ALPH</button>
@@ -547,7 +676,7 @@
 
 	<div id="notes-panel">
 		<header>
-			<p id="notes-header">Your Notes</p>
+			<p id="notes-header">Notes</p>
 			<p>Click on a verse to start taking notes !</p>
 		</header>
 
@@ -556,9 +685,32 @@
 		</div>
 	</div>
 </div>
+<footer>
+</footer>
+
+
+
+
 
 <style>
 	@import url('https://fonts.cdnfonts.com/css/varela-round-3');
+
+	/* Style for highlighted verses */
+	.highlighted {
+		background-color: var(--notesbgcolor) !important;
+	}
+
+	footer {
+		background-color: var(--hdrcolor);
+		/* position:fixed; */
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		/* height: 20px; */
+		height: 2.5vh;
+		text-align: center;	
+		z-index: 1;
+	}
 	.align {
 		display: flex;
 		align-items: center;
@@ -586,15 +738,10 @@
 		margin: 0;
 		height: 40px;
 		-webkit-appearance: none;
-		-moz-appearance: none;
-		text-indent: 5px;
+  		-moz-appearance: none;
+  		text-indent: 5px;
 	}
-
-	/* Style for highlighted verses */
-	.highlighted {
-		background-color: yellow !important;
-	}
-
+	
 	.bible-order button:hover,
 	select:hover,
 	.search-button button:hover {
@@ -644,7 +791,7 @@
 		/* background-color: #edede9; */
 		background-color: #f4f3ee;
 		text-align: center;
-		width: 62%;
+		width: 62%
 	}
 
 	#notes-panel {
@@ -653,7 +800,7 @@
 		border-bottom: 3px solid #ccc; */
 
 		/* background-color: #d4ccc3; */
-		background-color: #cad2c5;
+		background-color: var(--notesbgcolor);
 		width: 38%;
 	}
 

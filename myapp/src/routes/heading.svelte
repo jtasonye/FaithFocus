@@ -62,6 +62,8 @@
 
   header a:hover {
     background-color: var(--bgcolor);
+    /* background-color: var(--hovcolor); */
+
   }
 
   .navbar {

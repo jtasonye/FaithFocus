@@ -177,42 +177,74 @@
 
 	// @ts-ignore
 	function handleVerseClick(event) {
-		// Get index number of the clicked verse using "data-index".
 		const verseIndex = event.target.getAttribute('data-index');
-		// Get the verse information in "versesArray" by using "verseIndex".
-		// @ts-ignore
 		const selectedVerse = versesArray[verseIndex];
 
-		// Add notes using window.prompt().
-		const note = prompt(
-			`What note would you like to add for ${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} ?`
+		const action = prompt(
+			"What would you like to do with this verse?\n - Type 'h' to highlight the verse\n - Type 'u' to remove the highlight\n - Type 'n' to add a note."
 		);
 
-		/*
-		Check to see that after removing the the unnecessary spaces, the input 
-		is not empty.
-		*/
-		if (note != null && note.trim() != '') {
-			// Add the note into the verseNotes array
-			// @ts-ignore
-			verseNotes[verseIndex].push(`${selectedVerse.book} 
-			${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`);
+		if (action === 'h') {
+			highlightVerse(event.target);
+		} else if (action === 'u') {
+			unhighlightVerse(event.target);
+		} else if (action === 'n') {
+			addNoteForVerse(selectedVerse, verseIndex);
+		}
+	}
 
-			// Update the notes in local storage after adding a new note.
+	// @ts-ignore
+	function highlightVerse(verseElement) {
+		verseElement.classList.add('highlighted');
+	}
+
+	// @ts-ignore
+	function unhighlightVerse(verseElement) {
+		verseElement.classList.remove('highlighted');
+	}
+
+	function addNoteForVerse(selectedVerse, verseIndex) {
+		// Check if a note already exists for this verse
+		if (verseNotes[verseIndex].length > 0) {
+			// Prompt the user to decide on overwriting the note or cancelling
+			const overwrite = confirm(
+				'A note already exists for this verse. Do you want to overwrite it?'
+			);
+			if (!overwrite) {
+				return; // Exit the function if the user chooses not to overwrite
+			}
+		}
+
+		// Prompt for the new note
+		const note = prompt(
+			`What note would you like to add for ${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber}?`
+		);
+
+		if (note != null && note.trim() != '') {
+			// Replace the existing note or add a new one
+			verseNotes[verseIndex] = [
+				`${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`
+			];
 			saveNotesToLocalStorage();
 			updateNotesPanel();
 		}
 	}
 
 	// @ts-ignore
+	// Update the handleVerseHover and handleVerseMouseOut functions
 	function handleVerseHover(event) {
-		event.target.style.backgroundColor = '#cad2c5';
+		if (!event.target.classList.contains('highlighted')) {
+			event.target.style.backgroundColor = 'var(--notesbgcolor)';
+		}
 		event.target.style.cursor = 'pointer';
 	}
 
 	// @ts-ignore
 	function handleVerseMouseOut(event) {
-		event.target.style.backgroundColor = 'initial';
+		if (!event.target.classList.contains('highlighted')) {
+			event.target.style.backgroundColor = 'initial';
+		}
+		event.target.style.cursor = 'pointer';
 	}
 
 	function addHoverListeners() {
@@ -659,6 +691,11 @@
 
 <style>
 	@import url('https://fonts.cdnfonts.com/css/varela-round-3');
+
+	/* Style for highlighted verses */
+	.highlighted {
+		background-color: var(--notesbgcolor) !important;
+	}
 
 	footer {
 		background-color: var(--hdrcolor);

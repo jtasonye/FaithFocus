@@ -205,7 +205,6 @@
 		// Make sure both selects are inputed
 		if (selectedBook && selectedChapter) {
 			window.location.href = `/bible?book=${selectedBook}&chapter=${selectedChapter}`;
-			// window.location.href = `/bible`;
 		} else if (selectedBook && !selectedChapter){
 			alert('Please select a chapter.');
 		}
@@ -232,7 +231,7 @@
 						
 						<div class="tooltip">
 							<button id="trad" on:click={() => updateSortOrder('Traditional')}>TRD</button>
-							<span class="tooltiptext"> Bible Canon Sort</span>
+							<span class="tooltiptext"> Traditional Sort</span>
 						</div>
 		
 						<div class="tooltip">

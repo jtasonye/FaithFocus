@@ -20,6 +20,8 @@
 	// @ts-ignore
 	let highlightedVerses = [];
 
+	let selectedVerses = [];
+
 	async function fetchPassage() {
 		try {
 			// Fetch the passage data from the API using the current book and chapter values.
@@ -128,6 +130,7 @@
 		location.reload();
 	}
 
+
 	// Function to delete a note from local storage.
 	function deleteNoteFromLocalStorage(verseIndex, noteIndex) {
 		// Retrieve existing notes from local storage.
@@ -187,11 +190,11 @@
 			"What would you like to do with this verse?\n - Type 'h' to highlight the verse\n - Type 'u' to remove the highlight\n - Type 'n' to add a note."
 		);
 
-		if (action === 'h') {
+		if (action === 'h' || action === 'H') {
 			highlightVerse(event.target);
-		} else if (action === 'u') {
+		} else if (action === 'u' || action === 'U') {
 			unhighlightVerse(event.target);
-		} else if (action === 'n') {
+		} else if (action === 'n' || action === 'N') {
 			addNoteForVerse(selectedVerse, verseIndex);
 		}
 	}
@@ -324,6 +327,7 @@
 				deleteElement.addEventListener('mouseout', handleDeleteMouseOut);
 				// Check if noteElement is an HTMLElement
 				if (deleteElement instanceof HTMLElement) {
+					deleteElement.style.color = '#353935';
 					deleteElement.style.backgroundColor = 'var(--notesbgcolor)';
 					deleteElement.style.borderRadius = '40px';
 					// noteElement.style.padding = '10px';
@@ -352,6 +356,7 @@
 				editElement.addEventListener('mouseout', handleEditMouseOut);
 				// Check if noteElement is an HTMLElement
 				if (editElement instanceof HTMLElement) {
+					editElement.style.color = '#353935';
 					editElement.style.backgroundColor = 'var(--notesbgcolor)';
 					editElement.style.borderRadius = '40px';
 					// noteElement.style.padding = '10px';

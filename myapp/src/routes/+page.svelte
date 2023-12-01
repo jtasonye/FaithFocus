@@ -450,19 +450,19 @@
 		text-shadow: 2px 1px black;
 		border-radius: 15px;
 		/* margin: 110px; */
-		margin: 15vh;
+		margin: 14vh;
 		background-color: rgb(39, 34, 34, 0.7);
 		/* 730 & 654 */
 	}
 
 	@media (max-width: 730px) {
 		.title h1 {
-			margin-top: 200px;
-			font-size: 30px;
+			margin-top: 190px;
+			font-size: 50px;
 		}
 
 		.title h2 {
-			font-size: 20px;
+			font-size: 30px;
 		}
 
 		.bible-order {
@@ -494,9 +494,19 @@
 
 	/* iPhone SE */
 	/* Max-width: if [device width] is less than or equal to, then apply style */
-	@media (max-width: 380px) {
+	@media (min-width: 0px) and (max-width: 380px) {
 		.title h1 {
+			font-size: 35px;
 			margin-top: 150px;
+		}
+
+		.title h2 {
+			font-size: 23px;
+		}
+
+		#verse-of-the-day {
+			margin: 5vh;
+			font-size: 15px;
 		}
 	}
 

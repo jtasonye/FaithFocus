@@ -16,12 +16,6 @@
 	// @ts-ignore
 	let verseNotes = [];
 
-	// This variable is an array that stores all the highlighted verses.
-	// @ts-ignore
-	let highlightedVerses = [];
-
-	let selectedVerses = [];
-
 	async function fetchPassage() {
 		try {
 			// Fetch the passage data from the API using the current book and chapter values.
@@ -199,16 +193,6 @@
 		}
 	}
 
-	// @ts-ignore
-	function highlightVerse(verseElement) {
-		verseElement.classList.add('highlighted');
-	}
-
-	// @ts-ignore
-	function unhighlightVerse(verseElement) {
-		verseElement.classList.remove('highlighted');
-	}
-
 	function addNoteForVerse(selectedVerse, verseIndex) {
 		// Check if a note already exists for this verse
 		if (verseNotes[verseIndex].length > 0) {
@@ -236,22 +220,40 @@
 		}
 	}
 
-	// @ts-ignore
-	// Update the handleVerseHover and handleVerseMouseOut functions
-	function handleVerseHover(event) {
-		if (!event.target.classList.contains('highlighted')) {
-			event.target.style.backgroundColor = 'var(--notesbgcolor)';
-		}
-		event.target.style.cursor = 'pointer';
-	}
+	// Add a variable to store the selected highlight color.
+	let selectedHighlightColor = '#ff9fae';
+
+	 // Update the highlightVerse and unhighlightVerse functions.
+	 function highlightVerse(verseElement) {
+        verseElement.classList.add('highlighted');
+        verseElement.style.backgroundColor = selectedHighlightColor;
+    }
+
+    function unhighlightVerse(verseElement) {
+        verseElement.classList.remove('highlighted');
+        verseElement.style.backgroundColor = '';
+    }
+
+	function handleHighlightColorChange(color) {
+    	selectedHighlightColor = color;
+  	}
 
 	// @ts-ignore
-	function handleVerseMouseOut(event) {
-		if (!event.target.classList.contains('highlighted')) {
-			event.target.style.backgroundColor = 'initial';
-		}
-		event.target.style.cursor = 'pointer';
-	}
+    // Update the handleVerseHover and handleVerseMouseOut functions.
+    function handleVerseHover(event) {
+        if (!event.target.classList.contains('highlighted')) {
+            event.target.style.backgroundColor = selectedHighlightColor;
+        }
+        event.target.style.cursor = 'pointer';
+    }
+
+    // @ts-ignore
+    function handleVerseMouseOut(event) {
+        if (!event.target.classList.contains('highlighted')) {
+            event.target.style.backgroundColor = 'initial';
+        }
+        event.target.style.cursor = 'pointer';
+    }
 
 	function addHoverListeners() {
 		document.querySelectorAll('.clickable').forEach((item) => {
@@ -341,7 +343,7 @@
 
 			// @ts-ignore
 			function handleEditHover(event) {
-				event.target.style.backgroundColor = '#C1E1C1';
+				event.target.style.backgroundColor = '#AFE1AF';
 				event.target.style.cursor = 'pointer';
 			}
 
@@ -682,7 +684,20 @@
 	<div id="notes-panel">
 		<header>
 			<p id="notes-header">Notes</p>
-			<p>Click on a verse to start taking notes !</p>
+			<div class="highlight-color-options">
+				<label>
+				  <!-- Highlight Color: -->
+				  <div class="color-buttons">
+					<button class="color-button" style="background-color: #ff9fae" on:click={() => handleHighlightColorChange('#ff9fae')}></button>
+					<button class="color-button" style="background-color: #ffc87a" on:click={() => handleHighlightColorChange('#ffc87a')}></button>
+					<button class="color-button" style="background-color: #fde995" on:click={() => handleHighlightColorChange('#fde995')}></button>
+					<button class="color-button" style="background-color: #a6e1c5" on:click={() => handleHighlightColorChange('#a6e1c5')}></button>
+					<button class="color-button" style="background-color: #a7e0f6" on:click={() => handleHighlightColorChange('#a7e0f6')}></button>
+					<button class="color-button" style="background-color: #e1a7fb" on:click={() => handleHighlightColorChange('#e1a7fb')}></button>
+				  </div>
+				</label>
+			  </div>
+			<!-- <p>Click on a verse to start taking notes !</p> -->
 		</header>
 
 		<div id="notes-list">
@@ -700,9 +715,23 @@
 <style>
 	@import url('https://fonts.cdnfonts.com/css/varela-round-3');
 
-	/* Style for highlighted verses */
-	.highlighted {
-		background-color: var(--notesbgcolor) !important;
+		.color-buttons {
+		/* display: flex; */
+		display:flexbox;
+	}
+
+	.color-button {
+		background-color: transparent;
+		border: none;
+		border-radius: 50%;
+		width: 30px;
+		height: 30px;
+		margin: 0 5px;
+		cursor: pointer;
+	}
+
+	.highlight-color-options select {
+		width: 150px;
 	}
 
 	footer {
@@ -767,6 +796,10 @@
 		background-color: var(--hdrcolor);
 	}
 
+	/* Style for highlighted verses */
+    .highlighted {
+        background-color: var(--highlight-color) !important;
+    }
 	.page-container {
 		display: flex;
 		height: 95vh; /* Set the height of the container */
@@ -809,10 +842,15 @@
 		width: 38%;
 	}
 
+	#bible-passage header {
+		/* height: 40px; */
+	}
+
 	#notes-panel header {
 		font-family: 'Varela Round', sans-serif;
 		background-color: #d9d9d9;
 		border: 1px solid #d9d9d9;
+		/* height: 80px; */
 	}
 
 	#bible-passage header,
@@ -855,6 +893,16 @@
 			margin: 0px 0px 0px 5px;
 			/* display: none; */
 			/* Comment to see change */
+		}
+	}
+
+	@media (max-width: 686px){
+		#bible-passage header {
+			height: 40px;
+		}
+
+		#notes-panel header {
+			height: 80px;
 		}
 	}
 </style>

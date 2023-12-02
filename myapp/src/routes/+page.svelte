@@ -27,7 +27,7 @@
 
     onMount(async () => {
 		await fetchVerse();
-		bgImage
+		bgImage;
 	});
 
 	/**
@@ -457,7 +457,7 @@
 
 	@media (max-width: 730px) {
 		.title h1 {
-			margin-top: 190px;
+			margin-top: 100px;
 			font-size: 50px;
 		}
 
@@ -487,7 +487,7 @@
 		}
 
 		#verse-of-the-day {
-			margin: 5vh;
+			margin: 7vh;
 			font-size: 20px;
 		}
 	}
@@ -497,7 +497,7 @@
 	@media (min-width: 0px) and (max-width: 380px) {
 		.title h1 {
 			font-size: 35px;
-			margin-top: 150px;
+			margin-top: 100px;
 		}
 
 		.title h2 {
@@ -505,7 +505,7 @@
 		}
 
 		#verse-of-the-day {
-			margin: 5vh;
+			margin: 11vh;
 			font-size: 15px;
 		}
 	}

@@ -26,7 +26,7 @@
     <div id="navbar-right" class:visible={showMenu}>
       <a href="/">Home</a>
       <a href="/bible?book=Genesis&chapter=Chapter 1">Bible</a>
-      <a href="">About</a>
+      <a href="/about">About</a>
       <a href="">Contact</a>
     </div>
   </div>

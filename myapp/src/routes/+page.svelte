@@ -215,7 +215,8 @@
 </script>
 
 <div class="page-wrap">
-	<img class="page-bg" src="{bgImage}" alt="Image of David and Goliath" />
+	<img class="page-bg" src="{bgImage}" alt="Image of road surrounded by a vast forrest with a cloudy
+	sky" />
 
 	<div class="page-content">
 
@@ -298,7 +299,7 @@
 	}
 	.title {
 		/* text-align: center; */
-		color: var(--bgcolor);
+		color: var(--gold);
 		/* color: #d7ceaf; */
 		font-weight: 900;
 		font-family: 'Varela Round', sans-serif;
@@ -409,7 +410,8 @@
 	.bible-order button:hover,
 	select:hover,
 	.search-button button:hover {
-		background-color: var(--hovcolor);
+		/* background-color: var(--hovcolor); */
+		background-color: var(--slctcolor);
 		cursor: pointer;
 	}
 
@@ -418,6 +420,7 @@
 		position: relative;
 		width: 100%;
 		height: 100vh;
+		padding-bottom: 150px;
   	}
 
 	.page-bg {
@@ -452,7 +455,6 @@
 		/* margin: 110px; */
 		margin: 14vh;
 		background-color: rgb(39, 34, 34, 0.7);
-		/* 730 & 654 */
 	}
 
 	@media (max-width: 730px) {

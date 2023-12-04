@@ -4,9 +4,13 @@
   // Menu for mobile devices
   let showMenu = false;
 
-  // Not sure yet
+  
   function onMenuClick() {
     showMenu = !showMenu;
+  }
+
+  function onMenuItemClick() {
+    showMenu = false;
   }
 </script>
 
@@ -24,10 +28,10 @@
     </a>
 
     <div id="navbar-right" class:visible={showMenu}>
-      <a href="/">Home</a>
-      <a href="/bible?book=Genesis&chapter=Chapter 1">Bible</a>
-      <a href="/about">About</a>
-      <a href="">Contact</a>
+      <a href="/" on:click={onMenuItemClick}>Home</a>
+      <a href="/bible?book=Genesis&chapter=Chapter 1" on:click={onMenuItemClick}>Bible</a>
+      <a href="/about" on:click={onMenuItemClick}>About</a>
+      <a href="/notes" on:click={onMenuItemClick}>Notes</a>
     </div>
   </div>
 </header>
@@ -61,9 +65,8 @@
   }
 
   header a:hover {
-    background-color: var(--bgcolor);
-    /* background-color: var(--hovcolor); */
-
+    /* background-color: var(--bgcolor); */
+    background-color: var(--slctcolor);
   }
 
   .navbar {

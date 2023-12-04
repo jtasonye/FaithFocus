@@ -1,15 +1,15 @@
 :root {
-    --bgcolor: #c2b294;
+    --gold: #c2b294;
     --hdrcolor: #132c13;
+    --cadetgrey: #5d6a5b;
 
     --hovcolor: #7ea172;
     --slctcolor: #8A9A5B;
     --notesbgcolor: #cad2c5;
+    --biblebgcolor: #f4f3ee;
 }
 
 body{
-    /* background-color: var(--bgcolor); */
-    /* background-color: white; */
     background-color: var(--hdrcolor);
 }
 

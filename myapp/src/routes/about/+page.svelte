@@ -112,20 +112,20 @@
       margin: 8px 8px 50px 8px;
     }
 
-    .card1 img {
+    /* .card1 img {
         width: 300px;
         height: 250px;
-    }
+    } */
 
-    .card2 img {
+    /* .card2 img {
       width: 300px;
       height: 250px;
-    }
+    } */
 
-    .card3 img {
+    /* .card3 img {
         width: 300px;
         height: 250px;
-    }
+    } */
     
     .about-section {
       padding: 50px;

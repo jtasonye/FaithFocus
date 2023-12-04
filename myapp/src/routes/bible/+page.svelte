@@ -167,9 +167,11 @@
 		loadNotesFromLocalStorage();
 
 		await fetchPassage();
+
 		// Attach click event listeners to verses.
 		addClickListeners();
 		addHoverListeners();
+
 		// Attach click event listeners to notes.
 		addDeleteListeners();
 		addNoteHoverListeners();
@@ -992,7 +994,7 @@
 	#bible-passage {
 		background-color: var(--biblebgcolor);
 		text-align: center;
-		width: 62%
+		width: 62%;
 	}
 
 	#notes-panel {

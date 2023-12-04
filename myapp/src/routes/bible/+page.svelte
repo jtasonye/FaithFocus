@@ -81,7 +81,7 @@
 				array is created and assigned to the correct position in the 
 				verseNotes array.
 				*/
-				verseNotes = versesArray.map(() => []); 
+				verseNotes = versesArray.map(() => []);
 
 				// Update the avaliable chapters based on the selected book.
 				populateBookChaps();
@@ -95,7 +95,6 @@
 
 	// Function to save notes to local storage.
 	function saveNotesToLocalStorage() {
-
 		const savedNotes = localStorage.getItem(`verseNotes-${book}-${chapter}`);
 
 		if (savedNotes) {
@@ -112,18 +111,16 @@
 
 			// Save the merged notes to local storage.
 			localStorage.setItem(`verseNotes-${book}-${chapter}`, JSON.stringify(existingNotes));
-		} 
-		else{
+		} else {
 			// If there are no existing notes, save the current notes directly.
 			localStorage.setItem(`verseNotes-${book}-${chapter}`, JSON.stringify(verseNotes));
 		}
 
-  		updateNotesPanel();
+		updateNotesPanel();
 
 		// Refresh the page after calling "updateNotesPanel()".
 		location.reload();
 	}
-
 
 	// Function to delete a note from local storage.
 	function deleteNoteFromLocalStorage(verseIndex, noteIndex) {
@@ -166,6 +163,7 @@
 		addHoverListeners();
 		// Attach click event listeners to notes.
 		addDeleteListeners();
+		loadHighlightsFromLocalStorage();
 	});
 
 	function addClickListeners() {
@@ -185,9 +183,9 @@
 		);
 
 		if (action === 'h' || action === 'H') {
-			highlightVerse(event.target);
+			highlightVerse(event.target, verseIndex);
 		} else if (action === 'u' || action === 'U') {
-			unhighlightVerse(event.target);
+			unhighlightVerse(event.target, verseIndex);
 		} else if (action === 'n' || action === 'N') {
 			addNoteForVerse(selectedVerse, verseIndex);
 		}
@@ -219,41 +217,75 @@
 			updateNotesPanel();
 		}
 	}
+	// Add an array that stores all the highlights taken
+	let verseHighlights = [];
 
 	// Add a variable to store the selected highlight color.
 	let selectedHighlightColor = '#ff9fae';
 
-	 // Update the highlightVerse and unhighlightVerse functions.
-	 function highlightVerse(verseElement) {
-        verseElement.classList.add('highlighted');
-        verseElement.style.backgroundColor = selectedHighlightColor;
-    }
+	// Update the highlightVerse and unhighlightVerse functions.
+	function highlightVerse(verseElement, verseIndex) {
+		verseElement.classList.add('highlighted');
+		verseElement.style.backgroundColor = selectedHighlightColor;
 
-    function unhighlightVerse(verseElement) {
-        verseElement.classList.remove('highlighted');
-        verseElement.style.backgroundColor = '';
-    }
+		// Save the highlight information
+		verseHighlights[verseIndex] = selectedHighlightColor;
+		saveHighlightsToLocalStorage();
+	}
+
+	function unhighlightVerse(verseElement, verseIndex) {
+		verseElement.classList.remove('highlighted');
+		verseElement.style.backgroundColor = '';
+
+		// Remove the highlight information
+		delete verseHighlights[verseIndex];
+		saveHighlightsToLocalStorage();
+	}
+
+	function saveHighlightsToLocalStorage() {
+		localStorage.setItem(`verseHighlights-${book}-${chapter}`, JSON.stringify(verseHighlights));
+	}
 
 	function handleHighlightColorChange(color) {
-    	selectedHighlightColor = color;
-  	}
+		selectedHighlightColor = color;
+	}
+
+	function loadHighlightsFromLocalStorage() {
+		const savedHighlights = localStorage.getItem(`verseHighlights-${book}-${chapter}`);
+		if (savedHighlights) {
+			verseHighlights = JSON.parse(savedHighlights);
+			applySavedHighlights();
+		}
+	}
+
+	function applySavedHighlights() {
+		verseHighlights.forEach((color, index) => {
+			if (color) {
+				const verseElement = document.querySelector(`[data-index="${index}"]`);
+				if (verseElement) {
+					verseElement.classList.add('highlighted');
+					verseElement.style.backgroundColor = color;
+				}
+			}
+		});
+	}
 
 	// @ts-ignore
-    // Update the handleVerseHover and handleVerseMouseOut functions.
-    function handleVerseHover(event) {
-        if (!event.target.classList.contains('highlighted')) {
-            event.target.style.backgroundColor = selectedHighlightColor;
-        }
-        event.target.style.cursor = 'pointer';
-    }
+	// Update the handleVerseHover and handleVerseMouseOut functions.
+	function handleVerseHover(event) {
+		if (!event.target.classList.contains('highlighted')) {
+			event.target.style.backgroundColor = selectedHighlightColor;
+		}
+		event.target.style.cursor = 'pointer';
+	}
 
-    // @ts-ignore
-    function handleVerseMouseOut(event) {
-        if (!event.target.classList.contains('highlighted')) {
-            event.target.style.backgroundColor = 'initial';
-        }
-        event.target.style.cursor = 'pointer';
-    }
+	// @ts-ignore
+	function handleVerseMouseOut(event) {
+		if (!event.target.classList.contains('highlighted')) {
+			event.target.style.backgroundColor = 'initial';
+		}
+		event.target.style.cursor = 'pointer';
+	}
 
 	function addHoverListeners() {
 		document.querySelectorAll('.clickable').forEach((item) => {
@@ -279,8 +311,7 @@
 				// @ts-ignore
 				notes.forEach((note, noteIndex) => {
 					// Concatenate each note's HTML without adding a separator.
-					notesHTML += 
-					`<div class="note" data-index="${verseIndex}">
+					notesHTML += `<div class="note" data-index="${verseIndex}">
             		   <p note-index="${noteIndex}">${note}</p>
             		   <button class="edit" data-index="${noteIndex}">Edit Note</button>
             		   <button class="delete" data-index="${noteIndex}">Delete Note</button>
@@ -372,7 +403,6 @@
 		}
 	}
 
-
 	function addDeleteListeners() {
 		document.querySelectorAll('.delete').forEach((item) => {
 			item.addEventListener('click', handleDeleteClick);
@@ -384,7 +414,6 @@
 			item.addEventListener('click', handleEditClick);
 		});
 	}
-
 
 	// @ts-ignore
 	function handleEditClick(event) {
@@ -443,15 +472,14 @@
 
 	// localStorage.clear();
 
-	// Run in console to see what is in local storage 
+	// Run in console to see what is in local storage
 
- 	// for (let i = 0; i < localStorage.length; i++) {
+	// for (let i = 0; i < localStorage.length; i++) {
 	// 	const key = localStorage.key(i);
 	// 	const value = localStorage.getItem(key);
 	// 	console.log(`${key}-${value}`);
-  	// } 
+	// }
 
-	
 	/**
 	 * @type {Object.<string, number>}
 	 *
@@ -541,19 +569,19 @@
 
 		// Update button styles based on sortOrder.
 		const tradButton = document.getElementById('trad');
-      	const alphButton = document.getElementById('alph');
+		const alphButton = document.getElementById('alph');
 
 		if (sortOrder === 'Traditional') {
 			// @ts-ignore
-        	tradButton.style.backgroundColor = 'var(--slctcolor)'; 
+			tradButton.style.backgroundColor = 'var(--slctcolor)';
 			// @ts-ignore
-        	alphButton.style.backgroundColor = '';
-      	} else {
-			  // @ts-ignore
-        	alphButton.style.backgroundColor = 'var(--slctcolor)'; 
+			alphButton.style.backgroundColor = '';
+		} else {
 			// @ts-ignore
-        	tradButton.style.backgroundColor = ''; 
-      	}
+			alphButton.style.backgroundColor = 'var(--slctcolor)';
+			// @ts-ignore
+			tradButton.style.backgroundColor = '';
+		}
 	}
 
 	/**
@@ -630,8 +658,7 @@
 		// Make sure both selects are inputed
 		if (selectedBook && selectedChapter) {
 			window.location.href = `/bible?book=${selectedBook}&chapter=${selectedChapter}`;
-		} 
-		else {
+		} else {
 			alert('Please select both a book and a chapter.');
 		}
 	}
@@ -641,7 +668,6 @@
 	<div id="bible-passage">
 		<header>
 			<div class="align">
-
 				<div class="bible-order">
 					<button id="trad" on:click={() => updateSortOrder('Traditional')}>TRD</button>
 					<button id="alph" on:click={() => updateSortOrder('Alphabetical')}>ALPH</button>
@@ -686,17 +712,41 @@
 			<p id="notes-header">Notes</p>
 			<div class="highlight-color-options">
 				<label>
-				  <!-- Highlight Color: -->
-				  <div class="color-buttons">
-					<button class="color-button" style="background-color: #ff9fae" on:click={() => handleHighlightColorChange('#ff9fae')}></button>
-					<button class="color-button" style="background-color: #ffc87a" on:click={() => handleHighlightColorChange('#ffc87a')}></button>
-					<button class="color-button" style="background-color: #fde995" on:click={() => handleHighlightColorChange('#fde995')}></button>
-					<button class="color-button" style="background-color: #a6e1c5" on:click={() => handleHighlightColorChange('#a6e1c5')}></button>
-					<button class="color-button" style="background-color: #a7e0f6" on:click={() => handleHighlightColorChange('#a7e0f6')}></button>
-					<button class="color-button" style="background-color: #e1a7fb" on:click={() => handleHighlightColorChange('#e1a7fb')}></button>
-				  </div>
+					<!-- Highlight Color: -->
+					<div class="color-buttons">
+						<button
+							class="color-button"
+							style="background-color: #ff9fae"
+							on:click={() => handleHighlightColorChange('#ff9fae')}
+						/>
+						<button
+							class="color-button"
+							style="background-color: #ffc87a"
+							on:click={() => handleHighlightColorChange('#ffc87a')}
+						/>
+						<button
+							class="color-button"
+							style="background-color: #fde995"
+							on:click={() => handleHighlightColorChange('#fde995')}
+						/>
+						<button
+							class="color-button"
+							style="background-color: #a6e1c5"
+							on:click={() => handleHighlightColorChange('#a6e1c5')}
+						/>
+						<button
+							class="color-button"
+							style="background-color: #a7e0f6"
+							on:click={() => handleHighlightColorChange('#a7e0f6')}
+						/>
+						<button
+							class="color-button"
+							style="background-color: #e1a7fb"
+							on:click={() => handleHighlightColorChange('#e1a7fb')}
+						/>
+					</div>
 				</label>
-			  </div>
+			</div>
 			<!-- <p>Click on a verse to start taking notes !</p> -->
 		</header>
 
@@ -705,19 +755,14 @@
 		</div>
 	</div>
 </div>
-<footer>
-</footer>
-
-
-
-
+<footer />
 
 <style>
 	@import url('https://fonts.cdnfonts.com/css/varela-round-3');
 
-		.color-buttons {
+	.color-buttons {
 		/* display: flex; */
-		display:flexbox;
+		display: flexbox;
 	}
 
 	.color-button {
@@ -742,7 +787,7 @@
 		width: 100%;
 		/* height: 20px; */
 		height: 2.5vh;
-		text-align: center;	
+		text-align: center;
 		z-index: 1;
 	}
 	.align {
@@ -772,10 +817,10 @@
 		margin: 0;
 		height: 40px;
 		-webkit-appearance: none;
-  		-moz-appearance: none;
-  		text-indent: 5px;
+		-moz-appearance: none;
+		text-indent: 5px;
 	}
-	
+
 	.bible-order button:hover,
 	select:hover,
 	.search-button button:hover {
@@ -797,9 +842,9 @@
 	}
 
 	/* Style for highlighted verses */
-    .highlighted {
-        background-color: var(--highlight-color) !important;
-    }
+	.highlighted {
+		background-color: var(--highlight-color) !important;
+	}
 	.page-container {
 		display: flex;
 		height: 95vh; /* Set the height of the container */
@@ -829,7 +874,7 @@
 		/* background-color: #edede9; */
 		background-color: #f4f3ee;
 		text-align: center;
-		width: 62%
+		width: 62%;
 	}
 
 	#notes-panel {
@@ -896,7 +941,7 @@
 		}
 	}
 
-	@media (max-width: 686px){
+	@media (max-width: 686px) {
 		#bible-passage header {
 			height: 40px;
 		}

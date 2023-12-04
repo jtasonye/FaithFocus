@@ -8,12 +8,12 @@
 	// This is a variable to hold the entire fetched API chapter.
 	let biblePassage = 'Loading passage...';
 
-	// This variable is an array that stores individual verses fetched from the API.
 	// @ts-ignore
+	// This variable is an array that stores individual verses fetched from the API.
 	let versesArray = [];
 
-	// This variable is an array that stores all the notes taken.
 	// @ts-ignore
+	// This variable is an array that stores all the notes taken.
 	let verseNotes = [];
 
 	async function fetchPassage() {
@@ -104,6 +104,7 @@
 			*/
 			const existingNotes = JSON.parse(savedNotes);
 
+			// @ts-ignore
 			verseNotes.forEach((notes, verseIndex) => {
 				existingNotes[verseIndex] = existingNotes[verseIndex] || [];
 				existingNotes[verseIndex] = existingNotes[verseIndex].concat(notes);
@@ -111,17 +112,24 @@
 
 			// Save the merged notes to local storage.
 			localStorage.setItem(`verseNotes-${book}-${chapter}`, JSON.stringify(existingNotes));
-		} else {
+		} 
+		else{
+			// @ts-ignore
 			// If there are no existing notes, save the current notes directly.
 			localStorage.setItem(`verseNotes-${book}-${chapter}`, JSON.stringify(verseNotes));
 		}
 
 		updateNotesPanel();
 
+		
+		 // Update the notes in local storage for the /notes page.
+		 updateNotesInSharedStorage();
+
 		// Refresh the page after calling "updateNotesPanel()".
 		location.reload();
 	}
 
+	// @ts-ignore
 	// Function to delete a note from local storage.
 	function deleteNoteFromLocalStorage(verseIndex, noteIndex) {
 		// Retrieve existing notes from local storage.
@@ -159,10 +167,12 @@
 		await fetchPassage();
 		// Attach click event listeners to verses.
 		addClickListeners();
-		// Attach hover event listeners to verses.
 		addHoverListeners();
 		// Attach click event listeners to notes.
 		addDeleteListeners();
+		addNoteHoverListeners();
+
+    // Load notes from local storage when the component is mounted.
 		loadHighlightsFromLocalStorage();
 	});
 
@@ -176,10 +186,11 @@
 	// @ts-ignore
 	function handleVerseClick(event) {
 		const verseIndex = event.target.getAttribute('data-index');
+		//@ts-ignore
 		const selectedVerse = versesArray[verseIndex];
 
 		const action = prompt(
-			"What would you like to do with this verse?\n - Type 'h' to highlight the verse\n - Type 'u' to remove the highlight\n - Type 'n' to add a note."
+			"What would you like to do with this verse?\n - Type 'h' to highlight the verse\n - Type 'u' to unhighlight the verse\n - Type 'n' to add a note."
 		);
 
 		if (action === 'h' || action === 'H') {
@@ -191,7 +202,9 @@
 		}
 	}
 
+	//@ts-ignore
 	function addNoteForVerse(selectedVerse, verseIndex) {
+		//@ts-ignore
 		// Check if a note already exists for this verse
 		if (verseNotes[verseIndex].length > 0) {
 			// Prompt the user to decide on overwriting the note or cancelling
@@ -209,9 +222,17 @@
 		);
 
 		if (note != null && note.trim() != '') {
+
+			// Get current date to use as a time stamp
+			var today = new Date();
+			var month = today.getMonth() + 1;
+			var day = today.getDate();
+			var year = today.getFullYear();
+			var newDate = month + "-" + day + "-" + year;
+
 			// Replace the existing note or add a new one
 			verseNotes[verseIndex] = [
-				`${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`
+				`<em><sup> Note added: ${newDate}</sup></em> <br />${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`
 			];
 			saveNotesToLocalStorage();
 			updateNotesPanel();
@@ -223,6 +244,22 @@
 	// Add a variable to store the selected highlight color.
 	let selectedHighlightColor = '#ff9fae';
 
+
+// 	//@ts-ignore
+// 	 // Update the highlightVerse and unhighlightVerse functions.
+// 	 function highlightVerse(verseElement) {
+//         verseElement.classList.add('highlighted');
+//         verseElement.style.backgroundColor = selectedHighlightColor;
+//     }
+
+// 	//@ts-ignore
+//     function unhighlightVerse(verseElement) {
+//         verseElement.classList.remove('highlighted');
+//         verseElement.style.backgroundColor = '';
+//     }
+
+  
+  
 	// Update the highlightVerse and unhighlightVerse functions.
 	function highlightVerse(verseElement, verseIndex) {
 		verseElement.classList.add('highlighted');
@@ -246,6 +283,7 @@
 		localStorage.setItem(`verseHighlights-${book}-${chapter}`, JSON.stringify(verseHighlights));
 	}
 
+	//@ts-ignore
 	function handleHighlightColorChange(color) {
 		selectedHighlightColor = color;
 	}
@@ -294,9 +332,38 @@
 		});
 	}
 
-	/*
-	Function to update the UI to reflect changes in the "verseNotes" variable.
-	*/
+	// @ts-ignore
+	function handleNoteHover(event) {
+		const verseIndex = event.target.parentNode.getAttribute('data-index');
+		const verseElement = document.querySelector(`.clickable[data-index="${verseIndex}"]`);
+
+		if (verseElement) {
+			const isUnderlined = window.getComputedStyle(verseElement).textDecoration === 'underline';
+			//@ts-ignore
+			verseElement.style.textDecoration = isUnderlined ? 'none' : 'underline';
+		}
+	}
+
+	// @ts-ignore
+	function handleNoteMouseOut(event) {
+		const verseIndex = event.target.parentNode.getAttribute('data-index');
+		const verseElement = document.querySelector(`.clickable[data-index="${verseIndex}"]`);
+
+		if (verseElement) {
+			const isUnderlined = window.getComputedStyle(verseElement).textDecoration === 'none';
+			//@ts-ignore
+			verseElement.style.textDecoration = isUnderlined ? 'underline' : 'none';
+		}
+	}
+
+	function addNoteHoverListeners() {
+		document.querySelectorAll('.note').forEach((item) => {
+			item.addEventListener('mouseover', handleNoteHover);
+			item.addEventListener('mouseout', handleNoteMouseOut);
+		});
+	}
+
+	// Function to update the UI to reflect changes in the "verseNotes" variable.
 	function updateNotesPanel() {
 		const notesBody = document.getElementById('notes-list');
 
@@ -304,9 +371,8 @@
 			// Initialize an empty string to store the HTML content.
 			let notesHTML = '';
 
-			/*
-			Loop through verseNotes to dynamically generate the HTML for notes.
-			*/ // @ts-ignore
+			// @ts-ignore
+			// Loop through verseNotes to dynamically generate the HTML for notes.
 			verseNotes.forEach((notes, verseIndex) => {
 				// @ts-ignore
 				notes.forEach((note, noteIndex) => {
@@ -340,41 +406,14 @@
 				}
 			});
 
-			// Select all the delete elements.
-			const deleteElements = document.querySelectorAll('.delete');
-
-			// @ts-ignore
-			function handleDeleteHover(event) {
-				event.target.style.backgroundColor = '#FAA0A0';
-				event.target.style.cursor = 'pointer';
-			}
-
-			// @ts-ignore
-			function handleDeleteMouseOut(event) {
-				event.target.style.backgroundColor = 'var(--notesbgcolor)';
-			}
-
-			// Loop through the selected note elements to apply styles
-			deleteElements.forEach((deleteElement) => {
-				deleteElement.addEventListener('mouseover', handleDeleteHover);
-				deleteElement.addEventListener('mouseout', handleDeleteMouseOut);
-				// Check if noteElement is an HTMLElement
-				if (deleteElement instanceof HTMLElement) {
-					deleteElement.style.color = '#353935';
-					deleteElement.style.backgroundColor = 'var(--notesbgcolor)';
-					deleteElement.style.borderRadius = '40px';
-					// noteElement.style.padding = '10px';
-					// noteElement.style.margin = '10px 0';
-					// noteElement.style.width = '85%';
-				}
-			});
 
 			// Select all of the edit elements
 			const editElements = document.querySelectorAll('.edit');
 
 			// @ts-ignore
 			function handleEditHover(event) {
-				event.target.style.backgroundColor = '#AFE1AF';
+				// event.target.style.backgroundColor = '#AFE1AF';
+				event.target.style.backgroundColor = '#b1b9ae';
 				event.target.style.cursor = 'pointer';
 			}
 
@@ -392,15 +431,50 @@
 					editElement.style.color = '#353935';
 					editElement.style.backgroundColor = 'var(--notesbgcolor)';
 					editElement.style.borderRadius = '40px';
-					// noteElement.style.padding = '10px';
-					// noteElement.style.margin = '10px 0'
-					// noteElement.style.width = '85%';
+					editElement.style.marginBottom = '15px';
+					editElement.style.fontFamily = 'Varela Round, sans-serif';
+				}
+			});
+
+
+			// Select all the delete elements.
+			const deleteElements = document.querySelectorAll('.delete');
+
+			// @ts-ignore
+			function handleDeleteHover(event) {
+				event.target.style.backgroundColor = '#FF8080';
+				event.target.style.cursor = 'pointer';
+			}
+
+			// @ts-ignore
+			function handleDeleteMouseOut(event) {
+				event.target.style.backgroundColor = 'var(--notesbgcolor)';
+			}
+
+			// Loop through the selected note elements to apply styles
+			deleteElements.forEach((deleteElement) => {
+				deleteElement.addEventListener('mouseover', handleDeleteHover);
+				deleteElement.addEventListener('mouseout', handleDeleteMouseOut);
+				// Check if noteElement is an HTMLElement
+				if (deleteElement instanceof HTMLElement) {
+					deleteElement.style.color = '#353935';
+					deleteElement.style.backgroundColor = 'var(--notesbgcolor)';
+					deleteElement.style.borderRadius = '40px';
+					deleteElement.style.fontFamily = 'Varela Round, sans-serif';
 				}
 			});
 
 			addDeleteListeners();
 			addEditListeners();
 		}
+		 // Update the notes in local storage for the /notes page.
+		 updateNotesInSharedStorage();
+	}
+	
+	// Function to update the notes in shared storage (local storage).
+	function updateNotesInSharedStorage() {
+		//@ts-ignore
+		localStorage.setItem('allVerseNotes', JSON.stringify(verseNotes));
 	}
 
 	function addDeleteListeners() {
@@ -440,8 +514,15 @@
 		);
 
 		if (newNoteContent != null) {
+			// Get current date to use as a time stamp
+			var today = new Date();
+			var month = today.getMonth() + 1;
+			var day = today.getDate();
+			var year = today.getFullYear();
+			var newDate = month + "-" + day + "-" + year;
+
 			// Update the note content in the existing note.
-			existingNotes[verseIndex][noteIndex] = `${selectedVerse.book} 
+			existingNotes[verseIndex][noteIndex] = `<sup> Note edited: ${newDate}</sup> <br />${selectedVerse.book} 
 			${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${newNoteContent}`;
 
 			// Save the updated notes back to local storage.
@@ -662,6 +743,59 @@
 			alert('Please select both a book and a chapter.');
 		}
 	}
+
+	// Function to navigate to the previous chapter
+	function goToPreviousChapter() {
+		// Extract the current chapter number string and convert it to an integer.
+		const currentChapterNumber = parseInt(selectedChapter.split(' ')[1]);
+
+		// If the current chapter isn't the first chapter, go back to the previous chapter.
+		if (currentChapterNumber > 1) {
+			const newChapterNumber = currentChapterNumber - 1;
+			selectedChapter = `Chapter ${newChapterNumber}`;
+			window.location.href = `/bible?book=${selectedBook}&chapter=${selectedChapter}`;
+		}
+		else {
+			// Find the index of the currently selected book in the 'orderedBooks' array.
+			const bookIndex = orderedBooks.indexOf(selectedBook);
+			// Checks if the current book is not the first book.
+			if (bookIndex > 0) {
+				// Move to the previous book.
+				selectedBook = orderedBooks[bookIndex - 1];
+				
+				// Set the chapter to the first chapter of the previous book
+				selectedChapter = `Chapter 1`;
+				window.location.href = `/bible?book=${selectedBook}&chapter=${selectedChapter}`;
+			}
+		}
+	}
+
+	// Function to navigate to the next chapter.
+	function goToNextChapter() {
+		// Extract the current chapter number string and convert it to an integer.
+		const currentChapterNumber = parseInt(selectedChapter.split(' ')[1]);
+		const totalChapters = allChaps.length;
+
+		if (currentChapterNumber < totalChapters) {
+			const newChapterNumber = currentChapterNumber + 1;
+			selectedChapter = `Chapter ${newChapterNumber}`;
+			window.location.href = `/bible?book=${selectedBook}&chapter=${selectedChapter}`;
+		} 
+		// Check if the current chapter is the last chapter of the book.
+		else {
+			// Find the index of the currently selected book in the 'orderedBooks' array.
+			const bookIndex = orderedBooks.indexOf(selectedBook);
+			// Check if the current book is not the last book of the Bible.
+			if (bookIndex < orderedBooks.length - 1) {
+				// Move to the next book if available.
+				selectedBook = orderedBooks[bookIndex + 1];
+				// Set the current chapter to the first chapter of the next book.
+				selectedChapter = `Chapter 1`;
+				window.location.href = `/bible?book=${selectedBook}&chapter=${selectedChapter}`;
+			}
+		}
+	}
+
 </script>
 
 <div class="page-container">
@@ -705,11 +839,27 @@
 
 		<!-- @html ignores inline css styling and outputs variable -->
 		<p id="passage-body">{@html biblePassage}</p>
+
+		<div class="navigation-container">
+			<div class="navigation-buttons">
+			  <button on:click={goToPreviousChapter}>&lt; Prev</button>
+			  <button on:click={goToNextChapter}>Next &gt;</button>
+			</div>
+		</div>
+
+		<p id="citation">
+			<em>
+				“The Scriptures quoted are from the NET Bible® https://netbible.com 
+				copyright ©1996, 2019 used with permission from Biblical Studies Press, 
+				L.L.C. All rights reserved”.
+			</em>
+		</p>
 	</div>
 
 	<div id="notes-panel">
 		<header>
-			<p id="notes-header">Notes</p>
+			<p id="notes-header">Notes: Click on a verse to start</p>
+			<!-- <p>Click on a verse to start taking notes !</p> -->
 			<div class="highlight-color-options">
 				<label>
 					<!-- Highlight Color: -->
@@ -747,7 +897,6 @@
 					</div>
 				</label>
 			</div>
-			<!-- <p>Click on a verse to start taking notes !</p> -->
 		</header>
 
 		<div id="notes-list">
@@ -755,13 +904,52 @@
 		</div>
 	</div>
 </div>
-<footer />
+
+<footer>
+</footer>
+
 
 <style>
 	@import url('https://fonts.cdnfonts.com/css/varela-round-3');
 
+	#citation {
+		text-align: center;
+		width: 90%;
+		margin-left: 5%;
+	}
+
+	.navigation-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+		  margin: 0 10px 120px 20px;
+  }
+
+  .navigation-buttons button {
+      font-size: 13px;
+      font-family: 'Varela Round', sans-serif;
+      background-color: var(--hovcolor);
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+  }
+
+  .navigation-buttons button:hover {
+      background-color: var(--slctcolor);
+  }
+
+	.navigation-container {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 61%;
+		z-index: 1000;
+	}
+
 	.color-buttons {
-		/* display: flex; */
 		display: flexbox;
 	}
 
@@ -785,7 +973,6 @@
 		left: 0;
 		bottom: 0;
 		width: 100%;
-		/* height: 20px; */
 		height: 2.5vh;
 		text-align: center;
 		z-index: 1;
@@ -824,7 +1011,8 @@
 	.bible-order button:hover,
 	select:hover,
 	.search-button button:hover {
-		background-color: var(--hovcolor);
+		/* background-color: var(--hovcolor); */
+		background-color: var(--slctcolor);
 		cursor: pointer;
 	}
 
@@ -855,6 +1043,7 @@
 	/* Styles API fetched verses */
 	#passage-body {
 		letter-spacing: 1px;
+		padding-bottom: 50px;
 	}
 
 	#bible-passage,
@@ -867,40 +1056,25 @@
 	}
 
 	#bible-passage {
-		/* border-right: 3px solid #ccc;
-		border-top: 3px solid #ccc;
-		border-bottom: 3px solid #ccc; */
-
-		/* background-color: #edede9; */
-		background-color: #f4f3ee;
+		background-color: var(--biblebgcolor);
 		text-align: center;
 		width: 62%;
 	}
 
 	#notes-panel {
-		/* border-left: 3px solid #ccc;
-		border-top: 3px solid #ccc;
-		border-bottom: 3px solid #ccc; */
-
-		/* background-color: #d4ccc3; */
 		background-color: var(--notesbgcolor);
 		width: 38%;
 	}
 
-	#bible-passage header {
-		/* height: 40px; */
-	}
-
 	#notes-panel header {
 		font-family: 'Varela Round', sans-serif;
-		background-color: #d9d9d9;
-		border: 1px solid #d9d9d9;
-		/* height: 80px; */
+		background-color: var(--cadetgrey);
+		border: 1px solid var(--cadetgrey);
+		color: white;
 	}
 
 	#bible-passage header,
 	#notes-panel header {
-		height: 50px;
 		width: 100%;
 		text-align: center;
 		padding-bottom: 40px;
@@ -930,24 +1104,47 @@
 
 		select {
 			width: 140px;
-			/* margin-bottom: 5px; */
 		}
 
 		.bible-order button {
 			color: white;
 			margin: 0px 0px 0px 5px;
-			/* display: none; */
-			/* Comment to see change */
 		}
-	}
 
-	@media (max-width: 686px) {
 		#bible-passage header {
-			height: 40px;
+			height: 50px;
 		}
 
 		#notes-panel header {
-			height: 80px;
+			height: 115px;
+		}
+
+		.navigation-buttons {
+			justify-content:space-between;
+			margin: 0 5px 120px 9px;
+		}
+
+		.navigation-buttons button {
+			font-size: 12px;
+			padding: 11px 10px;
+		}
+
+		#citation {
+			font-size: 15px;
+			width: 85%;
+			margin-left: 9%;
+		}
+	}
+
+	/* Adds smoother transition from larger to smaller screens */
+	@media (min-width: 630px){
+		/* 656px */
+		#bible-passage header {
+			height: 30px;
+		}
+
+		#notes-panel header {
+			height: 78px;
 		}
 	}
 </style>

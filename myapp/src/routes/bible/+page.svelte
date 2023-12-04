@@ -112,8 +112,7 @@
 
 			// Save the merged notes to local storage.
 			localStorage.setItem(`verseNotes-${book}-${chapter}`, JSON.stringify(existingNotes));
-		} 
-		else{
+		} else {
 			// @ts-ignore
 			// If there are no existing notes, save the current notes directly.
 			localStorage.setItem(`verseNotes-${book}-${chapter}`, JSON.stringify(verseNotes));
@@ -121,9 +120,8 @@
 
 		updateNotesPanel();
 
-		
-		 // Update the notes in local storage for the /notes page.
-		 updateNotesInSharedStorage();
+		// Update the notes in local storage for the /notes page.
+		updateNotesInSharedStorage();
 
 		// Refresh the page after calling "updateNotesPanel()".
 		location.reload();
@@ -172,7 +170,7 @@
 		addDeleteListeners();
 		addNoteHoverListeners();
 
-    // Load notes from local storage when the component is mounted.
+		// Load notes from local storage when the component is mounted.
 		loadHighlightsFromLocalStorage();
 	});
 
@@ -222,13 +220,12 @@
 		);
 
 		if (note != null && note.trim() != '') {
-
 			// Get current date to use as a time stamp
 			var today = new Date();
 			var month = today.getMonth() + 1;
 			var day = today.getDate();
 			var year = today.getFullYear();
-			var newDate = month + "-" + day + "-" + year;
+			var newDate = month + '-' + day + '-' + year;
 
 			// Replace the existing note or add a new one
 			verseNotes[verseIndex] = [
@@ -244,22 +241,19 @@
 	// Add a variable to store the selected highlight color.
 	let selectedHighlightColor = '#ff9fae';
 
+	// 	//@ts-ignore
+	// 	 // Update the highlightVerse and unhighlightVerse functions.
+	// 	 function highlightVerse(verseElement) {
+	//         verseElement.classList.add('highlighted');
+	//         verseElement.style.backgroundColor = selectedHighlightColor;
+	//     }
 
-// 	//@ts-ignore
-// 	 // Update the highlightVerse and unhighlightVerse functions.
-// 	 function highlightVerse(verseElement) {
-//         verseElement.classList.add('highlighted');
-//         verseElement.style.backgroundColor = selectedHighlightColor;
-//     }
+	// 	//@ts-ignore
+	//     function unhighlightVerse(verseElement) {
+	//         verseElement.classList.remove('highlighted');
+	//         verseElement.style.backgroundColor = '';
+	//     }
 
-// 	//@ts-ignore
-//     function unhighlightVerse(verseElement) {
-//         verseElement.classList.remove('highlighted');
-//         verseElement.style.backgroundColor = '';
-//     }
-
-  
-  
 	// Update the highlightVerse and unhighlightVerse functions.
 	function highlightVerse(verseElement, verseIndex) {
 		verseElement.classList.add('highlighted');
@@ -406,7 +400,6 @@
 				}
 			});
 
-
 			// Select all of the edit elements
 			const editElements = document.querySelectorAll('.edit');
 
@@ -435,7 +428,6 @@
 					editElement.style.fontFamily = 'Varela Round, sans-serif';
 				}
 			});
-
 
 			// Select all the delete elements.
 			const deleteElements = document.querySelectorAll('.delete');
@@ -467,10 +459,10 @@
 			addDeleteListeners();
 			addEditListeners();
 		}
-		 // Update the notes in local storage for the /notes page.
-		 updateNotesInSharedStorage();
+		// Update the notes in local storage for the /notes page.
+		updateNotesInSharedStorage();
 	}
-	
+
 	// Function to update the notes in shared storage (local storage).
 	function updateNotesInSharedStorage() {
 		//@ts-ignore
@@ -519,10 +511,12 @@
 			var month = today.getMonth() + 1;
 			var day = today.getDate();
 			var year = today.getFullYear();
-			var newDate = month + "-" + day + "-" + year;
+			var newDate = month + '-' + day + '-' + year;
 
 			// Update the note content in the existing note.
-			existingNotes[verseIndex][noteIndex] = `<sup> Note edited: ${newDate}</sup> <br />${selectedVerse.book} 
+			existingNotes[verseIndex][
+				noteIndex
+			] = `<sup> Note edited: ${newDate}</sup> <br />${selectedVerse.book} 
 			${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${newNoteContent}`;
 
 			// Save the updated notes back to local storage.
@@ -754,17 +748,19 @@
 			const newChapterNumber = currentChapterNumber - 1;
 			selectedChapter = `Chapter ${newChapterNumber}`;
 			window.location.href = `/bible?book=${selectedBook}&chapter=${selectedChapter}`;
-		}
-		else {
+		} else {
 			// Find the index of the currently selected book in the 'orderedBooks' array.
 			const bookIndex = orderedBooks.indexOf(selectedBook);
 			// Checks if the current book is not the first book.
 			if (bookIndex > 0) {
 				// Move to the previous book.
 				selectedBook = orderedBooks[bookIndex - 1];
-				
-				// Set the chapter to the first chapter of the previous book
-				selectedChapter = `Chapter 1`;
+
+				// Get the last chapter number of the previous book
+				const lastChapterNumber = bible[selectedBook];
+
+				// Set the chapter to the last chapter of the previous book
+				selectedChapter = `Chapter ${lastChapterNumber}`;
 				window.location.href = `/bible?book=${selectedBook}&chapter=${selectedChapter}`;
 			}
 		}
@@ -780,7 +776,7 @@
 			const newChapterNumber = currentChapterNumber + 1;
 			selectedChapter = `Chapter ${newChapterNumber}`;
 			window.location.href = `/bible?book=${selectedBook}&chapter=${selectedChapter}`;
-		} 
+		}
 		// Check if the current chapter is the last chapter of the book.
 		else {
 			// Find the index of the currently selected book in the 'orderedBooks' array.
@@ -795,7 +791,6 @@
 			}
 		}
 	}
-
 </script>
 
 <div class="page-container">
@@ -842,16 +837,15 @@
 
 		<div class="navigation-container">
 			<div class="navigation-buttons">
-			  <button on:click={goToPreviousChapter}>&lt; Prev</button>
-			  <button on:click={goToNextChapter}>Next &gt;</button>
+				<button on:click={goToPreviousChapter}>&lt; Prev</button>
+				<button on:click={goToNextChapter}>Next &gt;</button>
 			</div>
 		</div>
 
 		<p id="citation">
 			<em>
-				“The Scriptures quoted are from the NET Bible® https://netbible.com 
-				copyright ©1996, 2019 used with permission from Biblical Studies Press, 
-				L.L.C. All rights reserved”.
+				“The Scriptures quoted are from the NET Bible® https://netbible.com copyright ©1996, 2019
+				used with permission from Biblical Studies Press, L.L.C. All rights reserved”.
 			</em>
 		</p>
 	</div>
@@ -905,9 +899,7 @@
 	</div>
 </div>
 
-<footer>
-</footer>
-
+<footer />
 
 <style>
 	@import url('https://fonts.cdnfonts.com/css/varela-round-3');
@@ -919,27 +911,27 @@
 	}
 
 	.navigation-buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-		  margin: 0 10px 120px 20px;
-  }
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 10px;
+		margin: 0 10px 120px 20px;
+	}
 
-  .navigation-buttons button {
-      font-size: 13px;
-      font-family: 'Varela Round', sans-serif;
-      background-color: var(--hovcolor);
-      color: white;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-  }
+	.navigation-buttons button {
+		font-size: 13px;
+		font-family: 'Varela Round', sans-serif;
+		background-color: var(--hovcolor);
+		color: white;
+		padding: 8px 12px;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: background-color 0.3s;
+	}
 
-  .navigation-buttons button:hover {
-      background-color: var(--slctcolor);
-  }
+	.navigation-buttons button:hover {
+		background-color: var(--slctcolor);
+	}
 
 	.navigation-container {
 		position: fixed;
@@ -1120,7 +1112,7 @@
 		}
 
 		.navigation-buttons {
-			justify-content:space-between;
+			justify-content: space-between;
 			margin: 0 5px 120px 9px;
 		}
 
@@ -1137,7 +1129,7 @@
 	}
 
 	/* Adds smoother transition from larger to smaller screens */
-	@media (min-width: 630px){
+	@media (min-width: 630px) {
 		/* 656px */
 		#bible-passage header {
 			height: 30px;

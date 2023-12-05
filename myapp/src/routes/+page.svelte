@@ -4,24 +4,24 @@
 
 	let verseOfTheDay = 'Loading verse...';
 
-	// Function to fetch the verse of the day
+	// Function to fetch the verse of the day.
 	function fetchVerse() {
 		fetch('https://labs.bible.org/api/?passage=votd&type=json')
 			.then((response) => response.json())
 			.then((data) => {
 				// The API might return a list of verses, so we ensure we're accessing the first one.
 				if (data && data.length > 0) {
-					// Construct the verse with the text and reference
+					// Construct the verse with the text and reference.
 					verseOfTheDay = `${data[0].bookname} ${data[0].chapter}:${data[0].verse} - ${data[0].text}`;
 				} else {
-					// Handle the case where data might not be in the expected format or is empty
+					// Handle the case where data might not be in the expected format or is empty.
 					verseOfTheDay = 'No verse found.';
 				}
 			})
 			.catch((error) => {
-				// Handle any errors that occurred during the fetch
+				// Handle any errors that occurred during the fetch.
 				verseOfTheDay = 'Failed to load verse.';
-				// console.error(verseOfTheDay, error);
+				console.error(verseOfTheDay, error);
 			});
 	}
 
@@ -107,17 +107,17 @@
 		Revelation: 22
 	};
 
-	let sortOrder = 'Traditional'; // Added variable to store the sort order
+	let sortOrder = 'Traditional'; // Added variable to store the sort order.
 
-	// Reactive statement to update the order of the books based on sortOrder
+	// Reactive statement to update the order of the books based on sortOrder.
 	$: orderedBooks = sortOrder === 'Traditional' ? Object.keys(bible) : Object.keys(bible).sort();
 
-	// Function to update sortOrder when radio buttons change
+	// Function to update sortOrder when radio buttons change.
 	// @ts-ignore
 	function updateSortOrder(order) {
 		sortOrder = order;
 
-		// Update button styles based on sortOrder
+		// Update button styles based on sortOrder.
 		const tradButton = document.getElementById('trad');
       	const alphButton = document.getElementById('alph');
 
@@ -125,12 +125,12 @@
 			// @ts-ignore
         	tradButton.style.backgroundColor = 'var(--slctcolor)';
         	// @ts-ignore
-			alphButton.style.backgroundColor = ''; // Reset Alphabetical button color
+			alphButton.style.backgroundColor = ''; // Reset Alphabetical button color.
       	} else {
 			// @ts-ignore
         	alphButton.style.backgroundColor = 'var(--slctcolor)';
         	// @ts-ignore
-			tradButton.style.backgroundColor = ''; // Reset Traditional button color
+			tradButton.style.backgroundColor = ''; // Reset Traditional button color.
       	}
 	}
 
@@ -164,7 +164,6 @@
 		if (selectedBookChaps) {
 			for (let i = 1; i <= selectedBookChaps; i++) {
 				allChaps.push(`Chapter ${i}`);
-				// console.log(allChaps);
 			}
 		}
 	}
@@ -216,7 +215,7 @@
 
 <div class="page-wrap">
 	<img class="page-bg" src="{bgImage}" alt="Image of road surrounded by a vast forrest with a cloudy
-	sky" />
+	sky." />
 
 	<div class="page-content">
 
@@ -292,30 +291,24 @@
 		left: 0;
 		bottom: 0;
 		width: 100%;
-		/* height: 20px; */
 		height: 2.5vh;
 		text-align: center;	
 		z-index: 1;
 	}
 	.title {
-		/* text-align: center; */
 		color: var(--gold);
-		/* color: #d7ceaf; */
 		font-weight: 900;
 		font-family: 'Varela Round', sans-serif;
 	}
 
 	.title h1 {
-		/* margin-top: 60px; */
 		font-size: 50px;
-		/* margin-top: 290px; */
 		margin-top: 30vh;
 		margin-bottom: 0vh;
 		text-shadow: 3px 1px black;
 	}
 
 	.title h2 {
-		/* margin-top: 15px; */
 		margin-top: 2vh;
 		font-size: 30px;
 		text-shadow: 3px 1px black;
@@ -325,18 +318,10 @@
 		text-align: center;
 	}
 
-	.selection-container {
-		/* margin-top: 20px;
-		background-color: #eee5cf; */
-	}
-
 	.align {
 		display: flex;
-		/* Align horizontally */
 		align-items: center; 
-		/* Align vertically */
 		justify-content:center;
-		/* padding-right: 55px; */
 		padding-right: 10vh;
 	}
 
@@ -384,13 +369,11 @@
 		-webkit-appearance: none;
   		-moz-appearance: none;
   		text-indent: 5px;
-  		/* text-overflow: ''; */
 	}
 
 	.search-button button {
 		height: 40px;
 		width: 300px;
-		/* margin: 20px 0 0 20px; */
 		margin: 4vh 4.5vh 1vh 4vh;
 	}
 
@@ -410,7 +393,6 @@
 	.bible-order button:hover,
 	select:hover,
 	.search-button button:hover {
-		/* background-color: var(--hovcolor); */
 		background-color: var(--slctcolor);
 		cursor: pointer;
 	}
@@ -438,21 +420,11 @@
 
 
 	#verse-of-the-day {
-		/* color: #d4ccc3; */
-		/*
-		padding: 20px;
-		background-color: rgb(39, 34, 34);
-		border-radius: 15px;
-		margin: 150px;
-		margin: 90px; */
-
 		color: var(--slctcolor);
-		/* color: #d7ceaf; */
 		font-size: 20px;
 		font-weight: 900;
 		text-shadow: 2px 1px black;
 		border-radius: 15px;
-		/* margin: 110px; */
 		margin: 14vh;
 		background-color: rgb(39, 34, 34, 0.7);
 	}
@@ -477,7 +449,6 @@
 
 		select {
 			width: 155px;
-			/* margin: 0px 10px 0 10px; */
 		}
 
 		.search-button button {

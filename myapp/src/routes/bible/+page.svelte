@@ -203,31 +203,31 @@
 	//@ts-ignore
 	function addNoteForVerse(selectedVerse, verseIndex) {
 		//@ts-ignore
-		// Check if a note already exists for this verse
+		// Check if a note already exists for this verse.
 		if (verseNotes[verseIndex].length > 0) {
-			// Prompt the user to decide on overwriting the note or cancelling
+			// Prompt the user to decide on overwriting the note or cancelling.
 			const overwrite = confirm(
 				'A note already exists for this verse. Do you want to overwrite it?'
 			);
 			if (!overwrite) {
-				return; // Exit the function if the user chooses not to overwrite
+				return; // Exit the function if the user chooses not to overwrite.
 			}
 		}
 
-		// Prompt for the new note
+		// Prompt for the new note.
 		const note = prompt(
 			`What note would you like to add for ${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber}?`
 		);
 
 		if (note != null && note.trim() != '') {
-			// Get current date to use as a time stamp
+			// Get current date to use as a time stamp.
 			var today = new Date();
 			var month = today.getMonth() + 1;
 			var day = today.getDate();
 			var year = today.getFullYear();
 			var newDate = month + '-' + day + '-' + year;
 
-			// Replace the existing note or add a new one
+			// Replace the existing note or add a new one.
 			verseNotes[verseIndex] = [
 				`<em><sup> Note added: ${newDate}</sup></em> <br />${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`
 			];
@@ -235,45 +235,37 @@
 			updateNotesPanel();
 		}
 	}
-	// Add an array that stores all the highlights taken
+	//@ts-ignore
+	// Add an array that stores all the highlights taken.
 	let verseHighlights = [];
 
 	// Add a variable to store the selected highlight color.
 	let selectedHighlightColor = '#ff9fae';
 
-	// 	//@ts-ignore
-	// 	 // Update the highlightVerse and unhighlightVerse functions.
-	// 	 function highlightVerse(verseElement) {
-	//         verseElement.classList.add('highlighted');
-	//         verseElement.style.backgroundColor = selectedHighlightColor;
-	//     }
-
-	// 	//@ts-ignore
-	//     function unhighlightVerse(verseElement) {
-	//         verseElement.classList.remove('highlighted');
-	//         verseElement.style.backgroundColor = '';
-	//     }
-
+	//@ts-ignore
 	// Update the highlightVerse and unhighlightVerse functions.
 	function highlightVerse(verseElement, verseIndex) {
 		verseElement.classList.add('highlighted');
 		verseElement.style.backgroundColor = selectedHighlightColor;
 
-		// Save the highlight information
+		// Save the highlight information.
 		verseHighlights[verseIndex] = selectedHighlightColor;
 		saveHighlightsToLocalStorage();
 	}
 
+	//@ts-ignore
 	function unhighlightVerse(verseElement, verseIndex) {
 		verseElement.classList.remove('highlighted');
 		verseElement.style.backgroundColor = '';
 
-		// Remove the highlight information
+		//@ts-ignore
+		// Remove the highlight information.
 		delete verseHighlights[verseIndex];
 		saveHighlightsToLocalStorage();
 	}
 
 	function saveHighlightsToLocalStorage() {
+		//@ts-ignore
 		localStorage.setItem(`verseHighlights-${book}-${chapter}`, JSON.stringify(verseHighlights));
 	}
 
@@ -291,11 +283,13 @@
 	}
 
 	function applySavedHighlights() {
+		//@ts-ignore
 		verseHighlights.forEach((color, index) => {
 			if (color) {
 				const verseElement = document.querySelector(`[data-index="${index}"]`);
 				if (verseElement) {
 					verseElement.classList.add('highlighted');
+					//@ts-ignore
 					verseElement.style.backgroundColor = color;
 				}
 			}
@@ -400,12 +394,11 @@
 				}
 			});
 
-			// Select all of the edit elements
+			// Select all of the edit elements.
 			const editElements = document.querySelectorAll('.edit');
 
 			// @ts-ignore
 			function handleEditHover(event) {
-				// event.target.style.backgroundColor = '#AFE1AF';
 				event.target.style.backgroundColor = '#b1b9ae';
 				event.target.style.cursor = 'pointer';
 			}
@@ -488,25 +481,25 @@
 		// @ts-ignore
 		const selectedVerse = versesArray[verseIndex];
 
-		// Retrieve the existing note content from local storage
+		// Retrieve the existing note content from local storage.
 		const savedNotes = localStorage.getItem(`verseNotes-${book}-${chapter}`);
 		let existingNotes = [];
 		if (savedNotes) {
 			existingNotes = JSON.parse(savedNotes);
 		}
 
-		// Get the existing note content
+		// Get the existing note content.
 		const existingNote = existingNotes[verseIndex][noteIndex];
 		const existingNoteContent = existingNote.split(' - ')[1];
 
-		// Allow the user to edit the note content
+		// Allow the user to edit the note content.
 		const newNoteContent = prompt(
 			`Edit your note for ${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber}`,
 			existingNoteContent
 		);
 
 		if (newNoteContent != null) {
-			// Get current date to use as a time stamp
+			// Get current date to use as a time stamp.
 			var today = new Date();
 			var month = today.getMonth() + 1;
 			var day = today.getDate();
@@ -534,7 +527,7 @@
 		// @ts-ignore
 		const selectedNote = verseNotes[selectedVerseIndex];
 
-		// Remove the note based on the provided index
+		// Remove the note based on the provided index.
 		selectedNote.splice(noteIndex, 1);
 
 		/*
@@ -544,16 +537,6 @@
 		deleteNoteFromLocalStorage(selectedVerseIndex, noteIndex);
 		updateNotesPanel();
 	}
-
-	// localStorage.clear();
-
-	// Run in console to see what is in local storage
-
-	// for (let i = 0; i < localStorage.length; i++) {
-	// 	const key = localStorage.key(i);
-	// 	const value = localStorage.getItem(key);
-	// 	console.log(`${key}-${value}`);
-	// }
 
 	/**
 	 * @type {Object.<string, number>}
@@ -853,10 +836,9 @@
 	<div id="notes-panel">
 		<header>
 			<p id="notes-header">Notes: Click on a verse to start</p>
-			<!-- <p>Click on a verse to start taking notes !</p> -->
 			<div class="highlight-color-options">
 				<label>
-					<!-- Highlight Color: -->
+					<!-- Highlight Colors: -->
 					<div class="color-buttons">
 						<button
 							class="color-button"
@@ -961,7 +943,6 @@
 
 	footer {
 		background-color: var(--hdrcolor);
-		/* position:fixed; */
 		left: 0;
 		bottom: 0;
 		width: 100%;
@@ -973,7 +954,6 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		/* gap: 10px; */
 	}
 
 	.bible-order {
@@ -981,16 +961,12 @@
 		margin-left: 15px;
 	}
 
-	/*   Div for me   */
 	.bible-order button {
-		display: block; /* Display radio buttons on top of each other */
-		margin: 5px; /* Space between top and bottom button */
+		display: block;
+		margin: 5px;
 		width: 70px;
-		/* margin: 15px 70px 15px 70px; */
-		/* margin: 15px 10px 0px -200px; */
 	}
 	select {
-		/* width: 200px; */
 		width: 170px;
 		text-align: center;
 		margin: 0;
@@ -1003,7 +979,6 @@
 	.bible-order button:hover,
 	select:hover,
 	.search-button button:hover {
-		/* background-color: var(--hovcolor); */
 		background-color: var(--slctcolor);
 		cursor: pointer;
 	}
@@ -1021,18 +996,16 @@
 		background-color: var(--hdrcolor);
 	}
 
-	/* Style for highlighted verses */
 	.highlighted {
 		background-color: var(--highlight-color) !important;
 	}
 	.page-container {
 		display: flex;
-		height: 95vh; /* Set the height of the container */
+		height: 95vh;
 		width: 100vw;
 		border-radius: 15px;
 	}
 
-	/* Styles API fetched verses */
 	#passage-body {
 		letter-spacing: 1px;
 		padding-bottom: 50px;
@@ -1040,10 +1013,9 @@
 
 	#bible-passage,
 	#notes-panel {
-		/* width: 50%; Divids container into two equal parts */
-		height: 100%; /* Fills entire height of the container */
-		box-sizing: border-box; /* Include borders in width calculation */
-		overflow: auto; /* Enable scrolling if content overflows */
+		height: 100%; 
+		box-sizing: border-box;
+		overflow: auto;
 		border-radius: 15px;
 	}
 
@@ -1130,7 +1102,6 @@
 
 	/* Adds smoother transition from larger to smaller screens */
 	@media (min-width: 630px) {
-		/* 656px */
 		#bible-passage header {
 			height: 30px;
 		}

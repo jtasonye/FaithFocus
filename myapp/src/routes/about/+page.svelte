@@ -108,24 +108,8 @@
     
     .card1, .card2, .card3 {
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-      /* margin: 8px; */
       margin: 8px 8px 50px 8px;
     }
-
-    /* .card1 img {
-        width: 300px;
-        height: 250px;
-    } */
-
-    /* .card2 img {
-      width: 300px;
-      height: 250px;
-    } */
-
-    /* .card3 img {
-        width: 300px;
-        height: 250px;
-    } */
     
     .about-section {
       padding: 50px;

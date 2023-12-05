@@ -4,7 +4,6 @@
   // Menu for mobile devices
   let showMenu = false;
 
-  
   function onMenuClick() {
     showMenu = !showMenu;
   }
@@ -65,7 +64,6 @@
   }
 
   header a:hover {
-    /* background-color: var(--bgcolor); */
     background-color: var(--slctcolor);
   }
 
@@ -103,7 +101,6 @@
   }
 
   @media (max-width: 730px) {
-
     header {
       padding: 1px;
     }

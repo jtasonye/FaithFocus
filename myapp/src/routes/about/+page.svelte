@@ -110,6 +110,11 @@
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
       margin: 8px 8px 50px 8px;
     }
+
+    .card1 img, .card2 img, .card3 img{
+      width: 800px;
+      height: 400px;
+    }
     
     .about-section {
       padding: 50px;

@@ -229,9 +229,7 @@
 
 			// Replace the existing note or add a new one.
 			verseNotes[verseIndex] = [
-				// `<em><sup> Note added: ${newDate}</sup></em> <br />${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`
-				`${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`
-
+				`<em><sup> Note added: ${newDate}</sup></em> <br />${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`
 			];
 			saveNotesToLocalStorage();
 			updateNotesPanel();

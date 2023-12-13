@@ -228,8 +228,12 @@
 			var newDate = month + '-' + day + '-' + year;
 
 			// Replace the existing note or add a new one.
+			// Update the note formatting
 			verseNotes[verseIndex] = [
-				`<em><sup> Note added: ${newDate}</sup></em> <br />${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${note}`
+				`<div class="note-meta"><em>Note added: ${newDate}</em></div>
+             <div class="note-content">
+                 <strong>${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber}</strong> - ${note}
+             </div>`
 			];
 			saveNotesToLocalStorage();
 			updateNotesPanel();
@@ -1013,7 +1017,7 @@
 
 	#bible-passage,
 	#notes-panel {
-		height: 100%; 
+		height: 100%;
 		box-sizing: border-box;
 		overflow: auto;
 		border-radius: 15px;

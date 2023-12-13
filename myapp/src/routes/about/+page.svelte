@@ -111,9 +111,10 @@
       margin: 8px 8px 50px 8px;
     }
 
-    .card1 img, .card2 img, .card3 img{
-      width: 800px;
-      height: 400px;
+    .card1 img, .card2 img, .card3 img {
+      width: 500px;
+      height: 500px;
+      object-fit: cover;
     }
     
     .about-section {
@@ -133,11 +134,15 @@
       display: table;
     }
 
-    
     @media screen and (max-width: 650px) {
       .column {
         width: 100%;
         display: block;
+      }
+
+      .card1 img, .card2 img, .card3 img {
+        width: 500px;
+        height: 500px;
       }
     }
 </style>

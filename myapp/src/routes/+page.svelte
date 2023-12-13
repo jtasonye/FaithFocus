@@ -6,7 +6,7 @@
 
 	// Function to fetch the verse of the day.
 	function fetchVerse() {
-		fetch('https://labs.bible.org/api/?passage=votd&type=json')
+		fetch('https://labs.bible.org/api/?passage=votd&type=json&formatting=plain')
 			.then((response) => response.json())
 			.then((data) => {
 				// The API might return a list of verses, so we ensure we're accessing the first one.

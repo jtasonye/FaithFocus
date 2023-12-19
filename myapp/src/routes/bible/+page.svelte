@@ -231,9 +231,7 @@
 			// Update the note formatting
 			verseNotes[verseIndex] = [
 				`<div class="note-meta"><em>Note added: ${newDate}</em></div>
-             <div class="note-content">
-                 <strong>${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber}</strong> - ${note}
-             </div>`
+             	<div class="note-content"><strong>${selectedVerse.book} ${selectedVerse.chapter}:${selectedVerse.verseNumber}</strong> - ${note} - </div>`
 			];
 			saveNotesToLocalStorage();
 			updateNotesPanel();
@@ -373,7 +371,7 @@
             		   <p note-index="${noteIndex}">${note}</p>
             		   <button class="edit" data-index="${noteIndex}">Edit Note</button>
             		   <button class="delete" data-index="${noteIndex}">Delete Note</button>
-        			</div>`;
+        					</div>`;
 				});
 			});
 
@@ -514,7 +512,7 @@
 			existingNotes[verseIndex][
 				noteIndex
 			] = `<sup> Note edited: ${newDate}</sup> <br />${selectedVerse.book} 
-			${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${newNoteContent}`;
+			${selectedVerse.chapter}:${selectedVerse.verseNumber} - ${newNoteContent} - `;
 
 			// Save the updated notes back to local storage.
 			localStorage.setItem(`verseNotes-${book}-${chapter}`, JSON.stringify(existingNotes));

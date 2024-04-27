@@ -1,1 +1,1 @@
-Check to see that this branch can be pushed up.
+Web application for displaying api fetched bible pages and dynamically generated notes, side by side.
